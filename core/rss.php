@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.6-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -75,7 +75,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
     echo'<item>'.
       '<title>'.$r['title'].' - '.ucfirst($r['contentType']).' - '.$config['seoTitle'].'</title>'.
       '<description>'.($r['seoCaption']==""?preg_replace('/\s+/',' ',strip_tags(rawurldecode($r['notes']))):$r['seoCaption']).'</description>'.
-      '<link>'.URL.$r['contentType'].'/'.urlencode(str_replace(' ','-',$r['title'])).'/'.'</link>'.
+      '<link>'.URL.$r['contentType'].'/'.strtolower($r['urlSlug']).'/'.'</link>'.
       '<pubDate>'.strftime("%a, %d %b %Y %T %Z",$r['ti']).'</pubDate>'.
       '<enclosure url="'.$img.'" length="'.$length.'" type="'.$filetype.'"/>'.
     '</item>';

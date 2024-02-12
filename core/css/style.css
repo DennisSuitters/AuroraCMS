@@ -107,7 +107,6 @@ section.content .card-footer .quickeditbtn,
 section.content .card-footer .reviews,
 section.content .card-footer .share,
 section.content .card-footer .views,
-section.content .card-header .badger,
 section.content.list .card-footer .quickitemsbtn,
 section.content.list .card-image .image-toolbar{display:none!important}
 section.content .status,
@@ -232,6 +231,7 @@ section.content .card-footer{
   background-size:100% 100% }
 
 .breadcrumb{
+  position:relative;
   flex-wrap:wrap;
   background-color:transparent;
   padding:.75rem 1rem;
@@ -247,13 +247,16 @@ section.content .card-footer{
   content:"/" }
 
 .breadcrumb-item.active{color:var(--color-muted)}
+.breadcrumb-dropdown{
+  position:relative;
+}
 .breadcrumb-dropdown:hover .breadcrumb-dropper{display:block!important}
 
 .breadcrumb-dropper{
   display:none;
   position:absolute;
   top:15px;
-  left:0;
+  left:15px;
   z-index:1200;
   box-shadow:var(--box-shadow-x) var(--box-shadow-y) var(--box-shadow-spread) var(--box-shadow-spread) var(--box-shadow-color);
   border:var(--border-width) var(--border-style) var(--menu-dropdown-border-color);
@@ -1183,18 +1186,6 @@ nav[role=menubar] ul li.active a{color:var(--menu-link-color-active)}
 #google-title a:hover{
   color:var(--search-item-link-color-hover)!important;
   text-decoration:underline }
-
-#google-title.contentType:before{
-  position:absolute;
-  top:0;
-  right:auto;
-  bottom:auto;
-  left:-95px;
-  width:90px;
-  color:#ccc;
-  font-size:10px;
-  text-align:right;
-  content:attr(data-contentType) }
 
 #google-link{
   color:var(--search-item-url)!important;

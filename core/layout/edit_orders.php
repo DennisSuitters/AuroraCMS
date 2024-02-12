@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-4
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -72,7 +72,7 @@ else{?>
                 </ol>
               </div>
               <div class="col-12 col-md text-right">
-                <div class="btn-group">
+                <div class="btn-group d-inline">
                   <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').
                   '<button data-tooltip="left" aria-label="Print Order" onclick="$(`#sp`).load(`core/email_order.php?id='.$r['id'].'&act=print`);return false;"><i class="i">print</i></button>'.
                   '<button data-tooltip="left" aria-label="Email Order" onclick="$(`#sp`).load(`core/email_order.php?id='.$r['id'].'&act=`);return false;"><i class="i">email-send</i></button>'.

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -48,7 +48,7 @@ else{
                 </ol>
               </div>
               <div class="col-12 col-sm-2 text-right">
-                <div class="btn-group">
+                <div class="btn-group d-inline">
                   <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').
                   ($user['options'][7]==1?'<a data-tooltip="left" href="'.URL.$settings['system']['admin'].'/agronomy/settings" role="button" aria-label="Agronomy Settings"><i class="i">settings</i></a>':'');?>
                 </div>

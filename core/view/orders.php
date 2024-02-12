@@ -204,8 +204,8 @@ if(isset($args[0])&&$args[0]!=''){
         'zebra'.$zebra.' '.($oir['status']=='back order'||$oir['status']=='pre order'?'bg-warning':''),
         htmlspecialchars($i['code'],ENT_QUOTES,'UTF-8'),
         ($oir['status']=='back order'||$oir['status']=='pre order'?ucwords($oir['status']).': ':'').htmlspecialchars($i['title'],ENT_QUOTES,'UTF-8'),
-        ($i['weight']==''?'':'<br><small>Weight: '.$i['weight'].$i['weightunit']),
-        ($i['width']==''?'':'<br><small>W: '.$i['width'].$i['widthunit'].' L: '.$i['length'].$i['lengthunit'].' H: '.$i['height'].$i['heightunit'].'</small>'),
+        (isset($i['weight'])&&$i['weight']==''?'':'<br><small>Weight: '.$i['weight'].$i['weightunit']),
+        (isset($i['width'])&&$i['width']==''?'':'<br><small>W: '.$i['width'].$i['widthunit'].' L: '.$i['length'].$i['lengthunit'].' H: '.$i['height'].$i['heightunit'].'</small>'),
         isset($c['title'])?htmlspecialchars($c['title'],ENT_QUOTES,'UTF-8'):'',
         htmlspecialchars($oir['quantity'],ENT_QUOTES,'UTF-8'),
         htmlspecialchars($oir['cost'],ENT_QUOTES,'UTF-8'),
@@ -216,16 +216,16 @@ if(isset($args[0])&&$args[0]!=''){
         $total=$total+($oir['cost']*$oir['quantity'])+$gst;
       if(isset($i['weightunit'])&&$i['weightunit']!='kg')
         $i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
-			$weight=(int)$weight+((int)$i['weight']*(int)$oir['quantity']);
+      $weight=(isset($i['weight'])?(int)$weight+((int)$i['weight'] * (int)$oir['quantity']):0);
 			if(isset($i['widthunit'])&&$i['widthunit']!='cm')
         $i['width']=length_converter($i['width'],$i['widthunit'],'cm');
 			if(isset($i['lengthunit'])&&$i['lengthunit']!='cm')
         $i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
 			if(isset($i['heightunit'])&&$i['heightunit']!='cm')
         $i['height']=length_converter($i['height'],$i['heightunit'],'cm');
-			if($i['width']>$dimW)$dimW=$i['width'];
-			if($i['length']>$dimL)$dimL=$i['length'];
-			$dimH=(int)$dimH+((int)$i['height']*(int)$oir['quantity']);
+      $dimW=(isset($i['width'])?(int)$i['width']:0);
+      $dimL=(isset($i['length'])?(int)$i['length']:0);
+			$dimH=(isset($i['height'])?(int)$dimH+((int)$i['height'] * (int)$oir['quantity']):0);
       $outitems.=$item;
       $zebra=$zebra==2?$zebra=1:$zebra=2;
     }

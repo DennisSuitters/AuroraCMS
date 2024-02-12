@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-4
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -389,9 +389,9 @@
           lang:'en-US',
           toolbar:[
             ['save',['save']],
-            ['clipboard', ['undo', 'redo']],
             ['style', ['block','inline']],
             ['custom',['cleaner','findnreplace','blocks',<?=$view=='newsletters'?",'pageTemplates'":"";?>]],
+            ['clipboard', ['undo', 'redo','cut', 'paste']],
 //            ['custom',['cleaner','findnreplace']],
 //            ['style',['style']],
             ['font',['bold','italic','underline','strikethrough','superscript','subscript','clear']],

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-2
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -46,11 +46,15 @@ if($skip==false){
   $seoCaption=escaper($r['seoCaption']==''?$r['seoCaption']:$page['seoCaption']);
   $seoDescription=escaper($r['seoDescription']!=''?$r['seoDescription']:($r['seoCaption']!=''?$r['seoCaption']:substr(strip_tags($r['notes']),0,160)));
   $seoKeywords=$r['seoKeywords']==''?$r['seoKeywords']:$page['seoKeywords'];
-  $su=$db->prepare("UPDATE `".$prefix."content` SET `views`=:views WHERE `id`=:id");
-  $su->execute([
-    ':views'=>$r['views']+1,
-    ':id'=>$r['id']
-  ]);
+  $smi=", `views_direct`=`views_direct`+1";
+  if(stristr($current_ref,'google.com',))$smi=", `views_google`=`views_google`+1";
+  if(stristr($current_ref,'facebook.com'||stristr($current_ref,'fblid=')))$smi=", `views_facebook`=`views_facebook`+1";
+  if(stristr($current_ref,'instagram.com'))$smi=", `views_instagram`=`views_instagram`+1";
+  if(stristr($current_ref,'twitter.com')||stristr($current_ref,'x.com'))$smi=", `views_twitter`=`views_twitter`+1";
+  if(stristr($current_ref,'linkedin.com'))$smi=", `views_linkedin`=`views_linkedin`+1";
+  if(stristr($current_ref,'duckduckgo.com'))$smi=", `views_duckduckgo`=`views_duckduckgo`+1";
+  if(stristr($current_ref,'bing.com'))$smi=", `views_bing`=`views_bing`+1";
+  $su=$db->prepare("UPDATE `".$prefix."content` SET `views`=`views`+1".$smi." WHERE `id`=:id")->execute([':id'=>$r['id']]);
   $us=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:uid");
   $us->execute([':uid'=>$r['uid']]);
   $ua=$us->fetch(PDO::FETCH_ASSOC);
@@ -511,6 +515,65 @@ if($skip==false){
     }else
       $item=preg_replace('~<countdown>.*?<\/countdown>~is','',$item);
 
+    if(stristr($item,'<faq>')){
+      if(in_array($r['contentType'],['inventory','service','course','article'])){
+        $sf=$db->prepare("SELECT `title`,`notes`,`value` FROM `".$prefix."choices` WHERE `rid`=:rid AND `contentType`='faq' AND `type`=:cT ORDER BY ord ASC,ti ASC");
+        $sf->execute([
+          ':rid'=>$r['id'],
+          ':cT'=>$r['contentType']
+        ]);
+        if($sf->rowCount()>0){
+          preg_match('/<faq>([\w\W]*?)<\/faq>/',$item,$matches);
+          $faq=$matches[1];
+          preg_match('/<faqitems>([\w\W]*?)<\/faqitems>/',$faq,$matches);
+          $fitems=$matches[1];
+          $fout='';
+          $faqjsonld='<script type="application/ld+json">'.
+            '{'.
+              '"@context":"https://schema.org",'.
+                '"@type":"FAQPage",'.
+                '"mainEntity":[';
+          $faqqty=$sf->rowCount();
+          $faqcnt=1;
+          while($rf=$sf->fetch(PDO::FETCH_ASSOC)){
+            $faqjsonld.='{'.
+              '"@type":"Question",'.
+              '"name":"'.$rf['title'].'",'.
+              '"acceptedAnswer":{'.
+                '"@type":"Answer",'.
+                '"text":"'.strip_tags($rf['notes']).'"'.
+              '}'.
+            '}'.($faqcnt!=$faqqty?',':'');
+            $faqcnt++;
+            $fout.=preg_replace([
+              '/<print open>/',
+              '/<print question>/',
+              '/<print answer>/',
+            ],[
+              ($rf['value']==1?' open':''),
+              $rf['title'],
+              strip_tags($rf['notes']),
+            ],$fitems);
+          }
+          $faqjsonld.=''.
+              ']'.
+            '}'.
+          '</script>';
+          $item=preg_replace([
+            '/<[\/]?faq>/',
+            '/<faqjsonld>/',
+            '~<faqitems>.*?<\/faqitems>~is'
+          ],[
+            '',
+            $faqjsonld,
+            $fout
+          ],$item);
+        }else
+          $item=preg_replace('~<faq>.*?<\/faq>~is','',$item);
+      }else
+        $item=preg_replace('~<faq>.*?<\/faq>~is','',$item);
+    }
+
     if($r['contentType']=='inventory'){
       if(stristr($item,'<options>')){
         $so=$db->prepare("SELECT DISTINCT(`category`) AS 'category' FROM `".$prefix."choices` WHERE `rid`=:rid AND `contentType`='option' AND `status`='available' ORDER BY `ord` ASC");
@@ -912,17 +975,7 @@ if($skip==false){
         '"mpn":"'.($r['barcode']==''?$r['id']:$r['barcode']).'",'.
         '"sku":"'.($r['fccid']==''?$r['id']:$r['fccid']).'",'.
         '"brand":{"@type":"Brand","name":"'.($r['brand']!=''?$r['brand']:$config['business']).'"},';
-        $jss=$db->prepare("SELECT AVG(`cid`) as rate, COUNT(`id`) as cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid AND `status`='approved'");
-        $jss->execute([':rid'=>$r['id']]);
-        $jrr=$jss->fetch(PDO::FETCH_ASSOC);
-        if($jrr['cnt']>0){
-          $jsonld.=
-          '"aggregateRating":{'.
-            '"@type":"aggregateRating",'.
-            '"ratingValue":"'.($jrr['rate']==''?'1':$jrr['rate']).'",'.
-            '"reviewCount":"'.($jrr['cnt']==0?'1':$jrr['cnt']).'"'.
-          '},';
-        }
+
         $jss=$db->prepare("SELECT * FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid AND `status`='approved' ORDER BY `ti` DESC");
         $jss->execute([':rid'=>$r['id']]);
         if($jss->rowCount()>0){
@@ -933,7 +986,7 @@ if($skip==false){
               '"@type":"Review",'.
               '"reviewRating":{'.
                 '"@type":"Rating",'.
-                '"ratingValue":"'.$jrr['cid'].'"'.
+                '"ratingValue":"'.($jrr['cid']!=0?$jrr['cid']:1).'"'.
               '},'.
               '"name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'",'.
               '"author":{'.
@@ -951,20 +1004,74 @@ if($skip==false){
           }
           $jsonld.='],';
         }
+        $jss=$db->prepare("SELECT AVG(`cid`) as rate, COUNT(`id`) as cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid AND `status`='approved'");
+        $jss->execute([':rid'=>$r['id']]);
+        if($jss->rowCount()>0){
+          $jrr=$jss->fetch(PDO::FETCH_ASSOC);
+          $jsonld.='"aggregateRating":{'.
+            '"@type":"aggregateRating",'.
+            '"ratingValue":"'.($jrr['rate']==''?'1':$jrr['rate']).'",'.
+            '"bestRating":"100",'.
+            '"reviewCount":"'.($jrr['cnt']==0?'1':$jrr['cnt']).'"'.
+          '},';
+        }
         $jsonld.='"offers":{'.
           '"@type":"Offer",'.
           '"url":"'.$canonical.'",';
-        if(is_numeric($r['cost'])||is_numeric($r['rCost'])){
-          if(is_numeric($r['rCost'])&&$r['rCost']!=0){
-            $jsonld.='"priceCurrency":"AUD",'.
-              '"price":"'.$r['rCost'].'",'.
-              '"priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'",';
-          }elseif(is_numeric($r['cost'])&&$r['cost']!=0){
-            $jsonld.='"priceCurrency":"AUD",'.
-              '"price":"'.$r['cost'].'",'.
-              '"priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'",';
+          if(is_numeric($r['cost'])||is_numeric($r['rCost'])){
+            if(is_numeric($r['rCost'])&&$r['rCost']!=0){
+              $jsonld.='"priceCurrency":"AUD",'.
+                '"price":"'.$r['rCost'].'",'.
+                '"priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'",';
+            }elseif(is_numeric($r['cost'])&&$r['cost']!=0){
+              $jsonld.='"priceCurrency":"AUD",'.
+                '"price":"'.$r['cost'].'",'.
+                '"priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'",';
+            }
           }
-        }
+          $jsonld.='"hasMerchantReturnPolicy":{'.
+            '"@type":"MerchantReturnPolicy",'.
+            '"applicableCountry":"AU",'.
+            '"returnPolicyCategory":"https://schema.org/'.$config['returnPolicyCategory'].'",'.
+            '"merchantReturnDays":'.$config['merchantReturnDays'].','.
+            '"returnMethod":"https://schema.org/'.$config['returnMethod'].'",'.
+            '"returnFees":"https://schema.org/'.$config['returnFees'].'",'.
+            (in_array($config['returnFees'],['OriginalShippingFees','RestockingFees','ReturnFeesCustomerResponsibility','ReturnShippingFees'],true)?
+              '"returnShippingFeesAmount":{'.
+                '"@type":"MonetaryAmount",'.
+                '"value":'.($config['returnShippingFeesAmount']>0?$config['returnShippingFeesAmount']:1).','.
+                '"currency":"AUD"'.
+              '}'
+            :
+              '').
+          '},'.
+          '"shippingDetails":{'.
+          '"@type":"OfferShippingDetails",'.
+          '"shippingRate":{'.
+            '"@type":"MonetaryAmount",'.
+            '"value":'.$config['shippingRate'].','.
+            '"currency":"AUD"'.
+          '},'.
+          '"shippingDestination":{'.
+            '"@type":"DefinedRegion",'.
+            '"addressCountry":"AU"'.
+          '},'.
+          '"deliveryTime":{'.
+            '"@type":"ShippingDeliveryTime",'.
+            '"handlingTime":{'.
+              '"@type":"QuantitativeValue",'.
+              '"minValue":'.$config['handlingTimeMin'].','.
+              '"maxValue":'.$config['handlingTimeMax'].','.
+              '"unitCode":"DAY"'.
+            '},'.
+            '"transitTime":{'.
+              '"@type":"QuantitativeValue",'.
+              '"minValue":'.$config['transitTimeMin'].','.
+              '"maxValue":'.$config['transitTimeMax'].','.
+              '"unitCode":"DAY"'.
+            '}'.
+          '}'.
+        '},';
         if($r['stockStatus']!='none'){
           if($r['stockStatus']!=''){
             $jsonld.='"availability":"'.($r['stockStatus']=='quantity'?($r['quantity']>0?'http://schema.org/InStock':'http://schema.org/OutOfStock'):'http://schema.org/'.str_replace(' ','',ucwords($r['stockStatus']))).'",'.

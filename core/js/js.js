@@ -173,7 +173,7 @@ document.addEventListener('click',function(event){
       }else if(j=='wholesaleoutside'){
         alert('Wholesale purchasing is restricted only to items in your account rank!');
 			}else{
-				document.querySelector('.cart').innerHTML=j;
+				document.querySelector('.shoppingcart').innerHTML=j;
 				var cartage=document.querySelector('#cartage');
 				var sidecart=document.querySelector('#sidecart')
 				if(cartage.hasChildNodes()){

@@ -2,12 +2,12 @@
 /**
  * AuroraCMS - Copyright (C) Diemen Design 2019
  *
- * @category   Administration - Parser Item
- * @package    core/parser_item.php
+ * @category   Administration - Parser Items
+ * @package    core/parser_items.php
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -484,6 +484,7 @@ $html=preg_replace([
 ],'',$html);
 if(stristr($html,'<pagination')){
 	$pagination='';
+	$totalItems=0;
 	if($itemCount>0){
 		require_once'core/pagination.php';
 		$totalItems=$rowCount;

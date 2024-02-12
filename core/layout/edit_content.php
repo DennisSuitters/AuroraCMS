@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-4
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -76,6 +76,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
             <div class="row">
               <div class="col-12 col-sm-6">
                 <ol class="breadcrumb m-0 pl-0 pt-0">
+                  <li class="breadcrumb-item active"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
                   <li class="breadcrumb-item active"><?=($r['contentType']!='list'?'<a href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'">'.ucfirst($r['contentType']).(in_array($r['contentType'],array('article'))?'s':'').'</a>':'List');?></li>
                   <li class="breadcrumb-item active"><?=$user['options'][1]==1?'Edit':'View';?></li>
                   <li class="breadcrumb-item active"><?=$r['title'];?></li>
@@ -106,6 +107,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
             ($r['contentType']=='events'?'<input class="tab-control" id="tab1-10" name="tabs" type="radio"><label for="tab1-10">Bookings</label>':'').
             (!in_array($r['contentType'],['testimonials','list'])?'<input class="tab-control" id="tab1-11" name="tabs" type="radio"><label for="tab1-11">Template</label>':'').
             ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-12" name="tabs" type="radio"><label for="tab1-12">Purchases</label>':'').
+            (in_array($r['contentType'],['events','inventory','service','course','article'])?'<input class="tab-control" id="tab1-15" name="tabs" type="radio"><label for="tab1-15" data-tooltip="tooltip" aria-label="Frequently Asked Questions">FAQ</label>':'').
             ($r['contentType']=='article'?'<input class="tab-control" id="tab1-13" name="tabs" type="radio"><label for="tab1-13">List</label>':'').
             '<input class="tab-control" id="tab1-14" name="tabs" type="radio"><label for="tab1-14">Analytics</label>';?>
 <?php /* Content */?>
@@ -561,8 +563,9 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                 </div>
               <?php }?>
               <div class="row mt-4<?=$seo['contentNotes']!=''||$seo['contentNotesHeading']!=''||$seo['contentImagesNotes']!=''?' border-danger border-2':'';?>">
-                <div class="wysiwyg-toolbar">
-                  <?php if($user['options'][1]==1){?>
+                <?php echo($seo['contentNotes']!=''||$seo['contentNotesHeading']||$seo['contentImagesNotes']!=''?'<div class="alert alert-warning m-0">'.$seo['contentNotesHeading'].$seo['contentNotes'].$seo['contentImagesNotes'].'</div>':'');
+                if($user['options'][1]==1){?>
+                  <div class="wysiwyg-toolbar">
                     <div class="btn-group d-flex justify-content-end">
                       <?php if($r['suggestions']==1){
                         $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
@@ -572,33 +575,32 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                           ':c'=>'notes'
                         ]);
                         echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=notes" data-tooltip="tooltip" aria-label="Editing Suggestions"><i class="i text-success">lightbulb</i></button>':'';
-                      }
-                      echo'<button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Content.md" data-type="content" data-tooltip="tooltip" aria-label="SEO Content Information"><i class="i">seo</i></button>'.
-                      '<button data-tooltip="tooltip" aria-label="Show Element Blocks" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;"><i class="i">blocks</i></button>'.
-                      '<input class="col-1" id="ipsumc" value="5">'.
-                      '<button data-tooltip="tooltip" aria-label="Add Aussie Lorem Ipsum" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;"><i class="i">loremipsum</i></button>'.
-                      '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=notes" data-tooltip="tooltip" aria-label="Add Suggestions"><i class="i">idea</i></button>'.
-                      ($seo['contentNotes']!=''||$seo['contentNotesHeading']||$seo['contentImagesNotes']!=''?'<div class="alert alert-warning m-0">'.$seo['contentNotesHeading'].$seo['contentNotes'].$seo['contentImagesNotes'].'</div>':'');?>
+                      }?>
+                      <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Content.md" data-type="content" data-tooltip="tooltip" aria-label="SEO Content Information"><i class="i">seo</i></button>
+                      <button data-tooltip="tooltip" aria-label="Show Element Blocks" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;"><i class="i">blocks</i></button>
+                      <input class="col-1" id="ipsumc" value="5">
+                      <button data-tooltip="tooltip" aria-label="Add Aussie Lorem Ipsum" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;"><i class="i">loremipsum</i></button>
+                      <button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id=<?=$r['id'];?>&t=content&c=notes" data-tooltip="tooltip" aria-label="Add Suggestions"><i class="i">idea</i></button>
                     </div>
-                    <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="notes"></div>
-                    <form id="summernote" target="sp" method="post" action="core/update.php" enctype="multipart/form-data">
-                      <input name="id" type="hidden" value="<?=$r['id'];?>">
-                      <input name="t" type="hidden" value="content">
-                      <input name="c" type="hidden" value="notes">
-                      <textarea class="summernote" id="notes" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="notes" name="da"><?= rawurldecode($r['notes']);?></textarea>
-                    </form>
-                  <?php }else{?>
-                    <div class="note-editor note-frame">
-                      <div class="note-editing-area">
-                        <div class="note-viewport-area">
-                          <div class="note-editable"><?= rawurldecode($r['notes']);?></div>
-                        </div>
+                  </div>
+                  <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="notes"></div>
+                  <form id="summernote" target="sp" method="post" action="core/update.php" enctype="multipart/form-data">
+                    <input name="id" type="hidden" value="<?=$r['id'];?>">
+                    <input name="t" type="hidden" value="content">
+                    <input name="c" type="hidden" value="notes">
+                    <textarea class="summernote" id="notes" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="notes" name="da"><?= rawurldecode($r['notes']);?></textarea>
+                  </form>
+                <?php }else{?>
+                  <div class="note-editor note-frame">
+                    <div class="note-editing-area">
+                      <div class="note-viewport-area">
+                        <div class="note-editable"><?= rawurldecode($r['notes']);?></div>
                       </div>
                     </div>
-                  <?php }?>
-                </div>
-                <div class="form-text small text-muted">Edited: <?=($r['eti']==0?'Never':date($config['dateFormat'],$r['eti']).' by '.$r['login_user']);?></div>
+                  </div>
+                <?php }?>
               </div>
+              <div class="form-text small text-muted">Edited: <?=($r['eti']==0?'Never':date($config['dateFormat'],$r['eti']).' by '.$r['login_user']);?></div>
             </div>
 <?php /* Pricing */?>
             <?php if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='events'||$r['contentType']=='activities'){?>
@@ -642,7 +644,9 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                       </div>
                       <?php if(in_array($r['contentType'],['activities','events','inventory','service'])){?>
                         <div class="col-12 col-sm pl-sm-3">
-                          <label for="expense" data-tooltip="tooltip" aria-label="Expenses Cost">Expense</label>
+                          <div class="form-row">
+                            <label for="expense" data-tooltip="tooltip" aria-label="Expenses Total Cost">Expense</label>
+                          </div>
                           <div class="form-row">
                             <div class="input-text">$</div>
                             <input class="textinput" id="expense" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="expense" type="text" value="<?=$r['expense'];?>"<?=$user['options'][1]==1?' placeholder="Enter an Expenses Value..."':' readonly';?>>
@@ -2225,12 +2229,12 @@ if(!in_array($r['contentType'],['testimonials','list'])){
             if($r['contentType']!='testimonials'){?>
               <div class="tab1-11 border p-3" data-tabid="tab1-11" role="tabpanel">
                 <section class="content overflow-visible theme-chooser" id="templates">
-                  <article class="card m-1 overflow-visible theme<?=$r['templatelist']==0?' theme-selected':'';?>" id="l_0" data-template="0">
-                    <figure class="card-image position-relative overflow-visible">
+                  <article class="card m-1 m-sm-2 card-list theme<?=$r['templatelist']==0?' theme-selected':'';?>" id="l_0" data-template="0">
+                    <figure class="card-image">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 180" fill="none"></svg>
                       <div class="image-toolbar overflow-visible"><i class="i icon enable text-white i-4x pt-2 pr-1">approve</i></div>
                     </figure>
-                    <div class="card-header w-auto">Theme Generated</div>
+                    <div class="card-header line-clamp">Theme Generated</div>
                     <div class="card-body no-clamp">
                       <p class="small"><small>This selection uses the item template in the theme file.</small></p>
                     </div>
@@ -2238,12 +2242,12 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                   <?php $st=$db->prepare("SELECT * FROM `".$prefix."templates` WHERE `contentType`='all' ORDER BY `contentType` ASC, `section` ASC");
                   $st->execute();
                   while($rt=$st->fetch(PDO::FETCH_ASSOC)){?>
-                    <article class="card m-1 overflow-visible theme<?=$rt['id']==$r['templatelist']?' theme-selected':'';?>" id="l_<?=$rt['id'];?>" data-template="<?=$rt['id'];?>">
-                      <figure class="card-image position-relative overflow-visible">
+                    <article class="card m-1 m-sm-2 card-list theme<?=$rt['id']==$r['templatelist']?' theme-selected':'';?>" id="l_<?=$rt['id'];?>" data-template="<?=$rt['id'];?>">
+                      <figure class="card-image">
                         <?=$rt['image'];?>
                         <div class="image-toolbar overflow-visible"><i class="i icon enable text-white i-4x pt-2 pr-1">approve</i></div>
                       </figure>
-                      <div class="card-header w-auto"><?=$rt['title'];?></div>
+                      <div class="card-header line-clamp"><?=$rt['title'];?></div>
                       <div class="card-body no-clamp">
                         <p class="small"><small><?=$rt['notes'];?></small></p>
                       </div>
@@ -2321,6 +2325,127 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                     <?php }
                   }?>
                 </section>
+              </div>
+            <?php }
+/* FAQ */
+            if(in_array($r['contentType'],['events','inventory','service','course','article'])){?>
+              <div class="tab1-15 border" data-tabid="tab1-15" role="tabpanel">
+                <div class="row">
+                  <article class="card mb-0 p-0 overflow-visible card-list card-list-header shadow">
+                    <div class="row py-2">
+                      <div class="col-12 col-md pl-2">Question</div>
+                      <div class="col-12 col-md-1 text-center">Open</div>
+                    </div>
+                    <?php if($user['options'][1]==1){?>
+                      <form target="sp" method="post" action="core/add_contentfaq.php">
+                        <input name="rid" type="hidden" value="<?=$r['id'];?>">
+                        <input name="c" type="hidden" value="<?=$r['contentType'];?>">
+                        <div class="row">
+                          <div class="col-12 col-md">
+                            <input id="title" name="t" type="text" value="" placeholder="Enter FAQ Title/Question...">
+                          </div>
+                          <div class="col-12 col-md-1 py-2 text-center">
+                            <input id="open" name="open" type="checkbox" value="1" checked>
+                          </div>
+                        </div>
+                        <div class="row py-2">
+                          <div class="col-12 col-md pl-2">Answer</div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12 col-md">
+                            <textarea class="summernote2" id="da" name="da"></textarea>
+                          </div>
+                          <div class="col-12 col-md-1 text-right align-bottom">
+                            <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
+                          </div>
+                        </div>
+                      </form>
+                      <script>
+                        $('.summernote2').summernote({
+                          placeholder:'Enter Answer...',
+                          toolbar:[
+                            ['insert',['link']],
+                          ],
+                          linkList:[
+                            <?php $sl=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=0 AND `menu`!='none' AND `active`=1 ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
+                            $sl->execute();
+                            while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
+                              echo'['.
+                                '"'.$rl['title'].'",'.
+                                '"'.URL.$rl['contentType'].'/'.$rl['url'].'",'.
+                                '"'.ucwords($rl['contentType']).' - '.$rl['title'].'",'.
+                              '],';
+                            }
+                            $sl=$db->query("SELECT `id`,`title`,`urlSlug`,`contentType` FROM `".$prefix."content` WHERE `contentType`!='testimonials' AND `contentType`!='faq' AND `contentType`!='booking' AND `status`='published' ORDER BY `contentType` ASC");
+                            $sl->execute();
+                            while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
+                              echo'['.
+                                '"'.$rl['title'].'",'.
+                                '"'.URL.$rl['contentType'].'/'.$rl['urlSlug'].'/",'.
+                                '"'.ucwords($rl['contentType']).' - '.$rl['title'].'",'.
+                              '],';
+                            }?>
+                          ],
+                          callbacks:{
+                            onInit:function(){
+                              $('body > .note-popover').appendTo(".note-editing-area");
+                            }
+                          }
+                        });
+                      </script>
+                    <?php }?>
+                  </article>
+                </div>
+                <div id="faqs">
+                  <?php $sf=$db->prepare("SELECT `id`,`title`,`notes`,`value` FROM `".$prefix."choices` WHERE `rid`=:rid AND `contentType`='faq' AND `type`=:cT ORDER BY `ord` ASC, `ti` ASC");
+                  $sf->execute([
+                    ':rid'=>$r['id'],
+                    ':cT'=>$r['contentType']
+                  ]);
+                  while($rf=$sf->fetch(PDO::FETCH_ASSOC)){?>
+                    <div class="card mt-1" id="l_<?=$rf['id'];?>">
+                      <div class="row p-2">
+                        <details open>
+                          <summary>
+                            <?=$rf['title'];?>
+                            <div class="col-3 float-right text-right">
+                              <input id="faqvalue0<?=$rf['id'];?>" data-dbid="<?=$rf['id'];?>" data-dbt="choices" data-dbc="value" data-dbb="0" type="checkbox"<?=($rf['value']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                              <label for="faqvalue0<?=$rf['id'];?>">Display as Open</label>
+                              <?=($user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$rf['id'].'`,`choices`);"><i class="i">trash</i></button><span class="btn orderhandle" data-tooltip="tooltip" aria-label="Drag to Reorder"><i class="i">drag</i></span>':'');?>
+                            </div>
+                          </summary>
+                          <div class="ml-4">
+                            <?=strip_tags($rf['notes']);?>
+                          </div>
+                        </details>
+                      </div>
+                    </div>
+                  <?php }?>
+                </div>
+                <script>
+                  $('#faqs').sortable({
+                    items:".card",
+                    handle:'.orderhandle',
+                    placeholder:".ghost",
+                    helper:fixWidthHelper,
+                    axis:"y",
+                    update:function(e,ui){
+                      var order=$("#faqs").sortable("serialize");
+                      $.ajax({
+                        type:"POST",
+                        dataType:"json",
+                        url:"core/reorderfaq.php",
+                        data:order
+                      });
+                    }
+                  }).disableSelection();
+                  function fixWidthHelper(e,ui){
+                    ui.children().each(function(){
+                      $(this).width($(this).width());
+                    });
+                    return ui;
+                  }
+                </script>
               </div>
             <?php }
 /* List */
@@ -2489,23 +2614,125 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                   return ui;
                 }
               </script>
-            <?php }?>
+              <?php }
+              $smurl=$r['urlSlug'];?>
             <div class="tab1-14 border p-3" data-tabid="tab1-14" role="tabpanel">
-              <div class="alert alert-info">The Analytics is a Work In Progress at the moment.</div>
-              <label for="views" class="mt-0">Views</label>
-              <div class="form-row">
-                <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
-                <?=$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);"><i class="i">eraser</i></button>'.
-                '<button class="save" id="saveviews" data-dbid="views" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+              <div class="row mt-3 justify-content-center">
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-direct`).html(`0`);update(`'.$r['id'].'`,`content`,`views_direct`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Direct</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-direct"><?=short_number($r['views_direct']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-5x">browser-general</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-google`).html(`0`);update(`'.$r['id'].'`,`content`,`views_google`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Google</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-google"><?=short_number($r['views_google']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-google i-5x">social-google</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-duckduckgo`).html(`0`);update(`'.$r['id'].'`,`content`,`views_duckduckgo`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">DuckDuckGo</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-duckduckgo"><?=short_number($r['views_duckduckgo']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-duckduckgo i-5x">social-duckduckgo</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-bing`).html(`0`);update(`'.$r['id'].'`,`content`,`views_bing`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Bing</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-bing"><?=short_number($r['views_bing']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-bing i-5x">social-bing</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-facebook`).html(`0`);update(`'.$r['id'].'`,`content`,`views_facebook`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Facebook</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-facebook"><?=short_number($r['views_facebook']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-facebook i-5x">social-facebook</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-instagram`).html(`0`);update(`'.$r['id'].'`,`content`,`views_instagram`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Instagram</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-instagram"><?=short_number($r['views_instagram']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-instagram i-5x">social-instagram</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-twitter`).html(`0`);update(`'.$r['id'].'`,`content`,`views_twitter`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Twitter</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-twitter"><?=short_number($r['views_twitter']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-twitter i-5x">social-twitter</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-linkedin`).html(`0`);update(`'.$r['id'].'`,`content`,`views_linkedin`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Linkedin</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-linkedin"><?=short_number($r['views_linkedin']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-linkedin i-5x">social-linkedin</i></span>
+                </div>
               </div>
-              <?php if($r['contentType']=='inventory'){
-                echo'<div class="row">'.
-                  '<div class="col-12 col-sm-6">'.
-                    '<label class="p-0">Sales</label>';
-                    include'core/layout/widget-contentstats.php';
-                  echo'</div>'.
-                '</div>';
-              }?>
+              <div class="row mt-3 justify-content-center">
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).html(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Views</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="views"><?=short_number($r['views']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-5x">views</i></span>
+                </div>
+                <?php if($r['contentType']=='inventory'){?>
+                  <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                    <span class="h6 text-muted">Earnings</span>
+                    <span class="px-0 py-2">
+                      <span class="text-3x" id="analytics-earnings">0</span>
+                    </span>
+                    <span class="icon"><i class="i i-5x">money</i></span>
+                  </div>
+                  <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                    <span class="h6 text-muted">Net Profit</span>
+                    <span class="px-0 py-2">
+                      <span class="text-3x" id="analytics-profit">0</span>
+                    </span>
+                    <span class="icon"><i class="i i-5x">money</i></span>
+                  </div>
+                  <?php $ss=$db->prepare("SELECT SUM(`quantity`) AS `cnt` FROM `".$prefix."orderitems` WHERE `iid`=:iid");
+                  $ss->execute([
+                    ':iid'=>$r['id']
+                  ]);
+                  $rs=$ss->fetch(PDO::FETCH_ASSOC);?>
+                  <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                    <span class="h6 text-muted">Total Sales</span>
+                    <span class="px-0 py-2">
+                      <span class="text-3x"><?=number_format($rs['cnt']);?></span>
+                    </span>
+                    <span class="icon"><i class="i i-5x">shipping</i></span>
+                  </div>
+                <?php }?>
+              </div>
+              <?php if($r['contentType']=='inventory'){?>
+                <div class="row mt-4">
+                  <div class="col-12 col-sm-6 pr-sm-2">
+                    <?php include'core/layout/widget-inventoryitemstats.php';?>
+                  </div>
+                  <div class="col-12 col-sm-6 mt-4 mt-sm-0 pl-sm-2">
+                    <?php include'core/layout/widget-inventoryitemprofit.php';?>
+                  </div>
+                </div>
+              <?php }?>
+              <div class="row mt-4">
+              </div>
             </div>
           </div>
         </div>

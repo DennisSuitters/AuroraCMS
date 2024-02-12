@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -92,34 +92,15 @@ $my12s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats`
 $my12s->execute([':tis'=>$times[12][2],':tie'=>$times[12][3]]);
 $my12r=$my12s->fetch(PDO::FETCH_ASSOC);?>
 <div class="item resize m-0 p-0 col-12 col-sm-<?=$rw['width_sm'];?> col-md-<?=$rw['width_md'];?> col-lg-<?=$rw['width_lg'];?> col-xl-<?=$rw['width_xl'];?> col-xxl-<?=$rw['width_xxl'];?>" data-dbid="<?=$rw['id'];?>" data-smmin="6" data-smmax="12" data-mdmin="3" data-mdmax="12" data-lgmin="1" data-lgmax="12" data-xlmin="5" data-xlmax="12" data-xxlmin="3" data-xxlmax="6" id="l_<?=$rw['id'];?>">
-  <div class="alert widget m-3 p-0">
-    <div class="toolbar px-2 py-1 handle">
-      <?=$rw['title'];?>
-      <div class="btn-group">
-        <button class="btn btn-sm btn-ghost close-widget" data-dbid="<?=$rw['id'];?>" data-dbref="dashboard" data-tooltip="left" aria-label="Close"><i class="i">close</i></button>
-      </div>
-    </div>
+  <div class="alert widget bg-white m-3 p-0 handle">
+    <button class="btn btn-sm btn-ghost close-widget" style="position:absolute;top:0;right:0;" data-dbid="<?=$rw['id'];?>" data-dbref="dashboard" data-tooltip="left" aria-label="Close"><i class="i">close</i></button>
     <div class="mx-2 my-1 small">
-      <canvas id="barChart" style="min-height:220px;height:220px;max-height:220px;max-width:100%;"></canvas>
-      <div class="d-flex flex-row justify-content-end my-2">
-        <span class="mr-3"><i class="i" style="background-color:var(--graph-background-color-prev);color:var(--graph-color-prev);">square</i> Last year</span>
-        <span><i class="i" style="background-color:var(--graph-background-color-current);color:var(--graph-color-current);">square</i> This year</span>
-      </div>
+      <canvas id="dashSalesChart" style="min-height:220px;height:220px;max-height:220px;max-width:100%;"></canvas>
     </div>
   </div>
 </div>
 <script>
-  var ticksStyle={
-    fontColor:'#495057',
-    fontStyle:'bold'
-  }
-  var mode='index';
-  var intersect=true;
-  var bgColorCurrent=getComputedStyle(document.body).getPropertyValue('--graph-color-current');
-  var colorCurrent=getComputedStyle(document.body).getPropertyValue('--graph-color-current');
-  var bgColorPrev=getComputedStyle(document.body).getPropertyValue('--graph-color-prev');
-  var colorPrev=getComputedStyle(document.body).getPropertyValue('--graph-color-prev');
-  var areaChartData={
+  var dashSalesChartData={
     labels:[
       '<?= date("M",$times[1][0]);?>',
       '<?= date("M",$times[2][0]);?>',
@@ -136,16 +117,7 @@ $my12r=$my12s->fetch(PDO::FETCH_ASSOC);?>
     ],
     datasets:[
       {
-        backgroundColor:'transparent',
-        borderColor:bgColorCurrent,
-        pointBackgroundColor:"transparent",
-        pointHoverBackgroundColor:bgColorCurrent,
-        pointBorderColor:"transparent",
-        pointHoverBorderColor:"rgba(0,0,0,.15)",
-        pointHoverBorderWidth:5,
-        pointBorderWidth:5,
-        pointRadius:8,
-        pointHoverRadius:8,
+        label: 'This Year',
         data:[
           <?=$m1r['cnt']>0?$m1r['cnt']:0;?>,
           <?=$m2r['cnt']>0?$m2r['cnt']:0;?>,
@@ -162,16 +134,7 @@ $my12r=$my12s->fetch(PDO::FETCH_ASSOC);?>
         ]
       },
       {
-        backgroundColor:'transparent',
-        borderColor:bgColorPrev,
-        pointBackgroundColor:"transparent",
-        pointHoverBackgroundColor:bgColorPrev,
-        pointBorderColor:"transparent",
-        pointHoverBorderColor:"rgba(0,0,0,.15)",
-        pointHoverBorderWidth:5,
-        pointBorderWidth:5,
-        pointRadius:8,
-        pointHoverRadius:8,
+        label: 'Last Year',
         data:[
           <?=$my1r['cnt']>0?$my1r['cnt']:0;?>,
           <?=$my2r['cnt']>0?$my2r['cnt']:0;?>,
@@ -189,73 +152,22 @@ $my12r=$my12s->fetch(PDO::FETCH_ASSOC);?>
       }
     ]
   }
-  var barChartCanvas=$('#barChart').get(0).getContext('2d');
-  var barChartData=$.extend(true,{},areaChartData);
-  var temp0=areaChartData.datasets[0];
-  barChartData.datasets[0]=temp0;
-  var barChartOptions={
-    responsive:true,
-    maintainAspectRatio:false,
-    datasetFill:false,
-    tooltips:{
-      intersect:false,
-      titleFontSize:12,
-      bodyFontStyle:"bold",
-      bodyFontSize:16,
-      multiKeyBackground:"transparent",
-      displayColors:false,
-      xPadding:30,
-      yPadding:10,
-      bodyAlign:"center",
-      titleAlign:"center",
-    },
-    hover:{
-      mode:mode,
-      intersect:intersect
-    },
-    title:{
-      display:false
-    },
-    legend:{
-      display:false
-    },
-    scales:{
-      yAxes:[
-        {
-          gridLines:{
-            display:false,
-            drawTicks:false,
-            drawBorder:false,
-          },
-          ticks:$.extend({
-            beginAtZero:true,
-            callback:function(value){
-              if(value>=1000){
-                value /= 1000;
-                value+='k';
-              }
-              return value
-            }
-          },ticksStyle)
+  var dashSalesChartCanvas=$('#dashSalesChart').get(0).getContext('2d');
+  var dashSalesChartData=$.extend(true,{},dashSalesChartData);
+  new Chart(dashSalesChartCanvas,{
+    type:'bar',
+    data:dashSalesChartData,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
         },
-      ],
-      xAxes:[
-        {
-          gridLines:{
-            drawBorder:false,
-            color:"rgba(143,146,161,.1)",
-            zeroLineColor:"rgba(143,146,161,.1)",
-          },
-          ticks:{
-            padding:20,
-          },
-        },
-      ],
+        title: {
+          display: true,
+          text: 'Sales'
+        }
+      },
     },
-  }
-  new Chart(barChartCanvas,{
-    type:'line',
-    data:barChartData,
-    options:barChartOptions
   });
 </script>

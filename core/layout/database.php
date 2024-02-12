@@ -7,20 +7,19 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-4
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='52'");
-$sv->execute();?>
+$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='52'")->execute();?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
     <div class="container-fluid">
       <div class="card bg-transparent border-0 overflow-visible">
         <div class="card-actions">
           <ol class="breadcrumb m-0 mt-3 pl-0 pt-0">
-            <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/settings';?>">Settings</a></li>
             <li class="breadcrumb-item active">Database</li>
+            <li class="breadcrumb-item active"><a href="<?= URL.$settings['system']['admin'].'/settings';?>">Settings</a></li>
           </ol>
         </div>
         <div class="tabs" role="tablist">

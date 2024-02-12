@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-4
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -92,7 +92,7 @@ if($r['heading']==''){
               </ol>
             </div>
             <div class="col-12 col-sm-2 text-right">
-              <div class="btn-group">
+              <div class="btn-group d-inline">
                 <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').
                 ($user['options'][1]==1?'<button class="saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>':'');?>
               </div>
@@ -174,31 +174,42 @@ if($r['heading']==''){
               </div>
             <?php }?>
             <div class="row mt-3<?=$seo['contentNotes']!=''||$seo['contentNotesHeading']!=''||$seo['contentImagesNotes']!=''?' border-danger border-2':'';?>" id="pageNotes">
-              <?php if($user['options'][1]==1){
-                echo'<div class="wysiwyg-toolbar"><div class="btn-group d-flex justify-content-end">';
-                if($r['suggestions']==1){
-                  $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
-                  $ss->execute([
-                    ':rid'=>$r['id'],
-                    ':t'=>'menu',
-                    ':c'=>'notes'
-                  ]);
-                  echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=menu&c=notes" data-dbgid="notesda" data-tooltip="tooltip" aria-label="Editing Suggestions"><i class="i">lightbulb</i></button>':'';
-                }
-                echo'<button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Content.md" data-type="content" data-tooltip="tooltip" aria-label="SEO Content Information"><i class="i">seo</i></button>'.
-                '<button data-tooltip="tooltip" aria-label="Show Element Blocks" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;"><i class="i">blocks</i></button>'.
-                '<input class="col-1" id="ipsumc" value="5">'.
-                '<button data-tooltip="tooltip" aria-label="Add Aussie Lorem Ipsum" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;"><i class="i">loremipsum</i></button>'.
-                '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=notes" data-tooltip="tooltip" aria-label="Add Suggestion"><i class="i">idea</i></button>'.
-                '</div></div>'.
-                ($seo['contentNotes']!=''||$seo['contentNotesHeading']!=''||$seo['contentImagesNotes']!=''?'<div class="alert alert-warning m-0">'.$seo['contentNotesHeading'].$seo['contentNotes'].$seo['contentImagesNotes'].'</div>':'');?>
-                <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="notes"></div>
-                <form id="summernote" data-dbid="summernote" method="post" target="sp" action="core/update.php" enctype="multipart/form-data">
-                  <input name="id" type="hidden" value="<?=$r['id'];?>">
-                  <input name="t" type="hidden" value="menu">
-                  <input name="c" type="hidden" value="notes">
-                  <textarea class="summernote" id="notes" name="da" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="notes"><?= rawurldecode($r['notes']);?></textarea>
-                </form>
+              <?php echo($seo['contentNotes']!=''||$seo['contentNotesHeading']!=''||$seo['contentImagesNotes']!=''?'<div class="alert alert-warning m-0">'.$seo['contentNotesHeading'].$seo['contentNotes'].$seo['contentImagesNotes'].'</div>':'');
+              if($user['options'][1]==1){?>
+                <div class="wysiwyg-toolbar">
+                  <div class="btn-group d-flex justify-content-end">
+                    <?php if($r['suggestions']==1){
+                      $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
+                      $ss->execute([
+                        ':rid'=>$r['id'],
+                        ':t'=>'menu',
+                        ':c'=>'notes'
+                      ]);
+                      echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=menu&c=notes" data-dbgid="notesda" data-tooltip="tooltip" aria-label="Editing Suggestions"><i class="i">lightbulb</i></button>':'';
+                    }?>
+                    <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Content.md" data-type="content" data-tooltip="tooltip" aria-label="SEO Content Information"><i class="i">seo</i></button>
+                    <button data-tooltip="tooltip" aria-label="Show Element Blocks" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;"><i class="i">blocks</i></button>'.
+                    <input class="col-1" id="ipsumc" value="5">
+                    <button data-tooltip="tooltip" aria-label="Add Aussie Lorem Ipsum" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;"><i class="i">loremipsum</i></button>
+                    <button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=notes" data-tooltip="tooltip" aria-label="Add Suggestion"><i class="i">idea</i></button>
+                  </div>
+                  <div class="form-text">Tokens:
+                    <a class="badger badge-secondary" href="#" onclick="$('#notes').summernote('insertText','{business}');return false;">{business}</a>
+                    <a class="badger badge-secondary" href="#" onclick="$('#notes').summernote('insertText','{url}');return false;">{url}</a>
+                    <a class="badger badge-secondary" href="#" onclick="$('#notes').summernote('insertText','{merchantReturnDaysText}');return false;">{merchantReturnDaysText}</a>
+                    <a class="badger badge-secondary" href="#" onclick="$('#notes').summernote('insertText','{merchantReturnDaysNumber}');return false;">{merchantReturnDaysNumber}</a>
+                    <a class="badger badge-secondary" href="#" onclick="$('#notes').summernote('insertText','{returnShippingFeesAmount}');return false;">{returnShippingFeesAmount}</a>
+                    <a class="badger badge-secondary" href="#" onclick="$('#notes').summernote('insertText','{lastEdited}');return false;">{lastEdited}</a>
+                  </div>
+                </div>
+
+              <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="notes"></div>
+              <form id="summernote" data-dbid="summernote" method="post" target="sp" action="core/update.php" enctype="multipart/form-data">
+                <input name="id" type="hidden" value="<?=$r['id'];?>">
+                <input name="t" type="hidden" value="menu">
+                <input name="c" type="hidden" value="notes">
+                <textarea class="summernote" id="notes" name="da" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="notes"><?= rawurldecode($r['notes']);?></textarea>
+              </form>
               <?php }else{?>
                 <div class="note-admin">
                   <div class="note-editor note-frame">
@@ -773,11 +784,81 @@ if($r['heading']==''){
             <?php }
 /* Analytics */?>
             <div class="tab1-6 border p-3" data-tabid="tab1-6" role="tabpanel">
-              <div class="alert alert-info">The Analytics is a Work In Progress at the moment.</div>
-              <label for="views" class="mt-0">Views</label>
-              <div class="form-row">
-                <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
-                <?=($user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`menu`,`views`,`0`);"><i class="i">eraser</i></button><button class="save" id="saveviews" data-dbid="views" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+              <div class="row mt-3 justify-content-center">
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-direct`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_direct`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Direct</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-direct"><?=short_number($r['views_direct']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-5x">browser-general</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-google`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_google`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Google</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-google"><?=short_number($r['views_google']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-google i-5x">social-google</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-duckduckgo`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_duckduckgo`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">DuckDuckGo</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-duckduckgo"><?=short_number($r['views_duckduckgo']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-duckduckgo i-5x">social-duckduckgo</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-bing`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_bing`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Bing</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-bing"><?=short_number($r['views_bing']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-bing i-5x">social-bing</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-facebook`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_facebook`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Facebook</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-facebook"><?=short_number($r['views_facebook']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-facebook i-5x">social-facebook</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-instagram`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_instagram`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Instagram</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-instagram"><?=short_number($r['views_instagram']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-instagram i-5x">social-instagram</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-twitter`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_twitter`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Twitter</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-twitter"><?=short_number($r['views_twitter']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-twitter i-5x">social-twitter</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-linkedin`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_linkedin`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Linkedin</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-linkedin"><?=short_number($r['views_linkedin']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-linkedin i-5x">social-linkedin</i></span>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).html(`0`);update(`'.$r['id'].'`,`menu`,`views`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Views</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="views"><?=short_number($r['views']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-5x">views</i></span>
+                </div>
               </div>
             </div>
           </div>

@@ -7,12 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-4
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='61'");
-$sv->execute();
+$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='61'")->execute();
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
@@ -29,7 +28,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 </ol>
               </div>
               <div class="col-12 col-sm-6 text-right">
-                <div class="btn-group">
+                <div class="btn-group d-inline">
                   <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').'<button class="'.($r['status']=='published'?'':' hidden').'" data-social-share="'.URL.'course/'.$r['urlSlug'].'" data-social-desc="'.($r['seoDescription']?$r['seoDescription']:$r['title']).'" data-tooltip="left" aria-label="Share on Social Media"><i class="i">share</i></button>'.($user['options'][0]==1?'<a class="add" href="'.URL.$settings['system']['admin'].'/add/course" role="button" data-tooltip="left" aria-label="Add Course"><i class="i">add</i></a>':'').($user['options'][1]==1?'<button class="saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>':'');?>
                 </div>
               </div>
@@ -710,11 +709,115 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
 <?php /* Analytics */ ?>
             <div class="tab1-9 border p-3" data-tabid="tab1-9" role="tabpanel">
-              <div class="alert alert-info">The Analytics is a Work In Progress at the moment.</div>
-              <label for="views" class="mt-0">Views</label>
-              <div class="form-row">
-                <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
-                <?=($user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);"><i class="i">eraser</i></button><button class="save" id="saveviews" data-dbid="views" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+              <div class="row mt-3 justify-content-center">
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-direct`).html(`0`);update(`'.$r['id'].'`,`content`,`views_direct`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Direct</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-direct"><?=short_number($r['views_direct']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-5x">browser-general</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-google`).html(`0`);update(`'.$r['id'].'`,`content`,`views_google`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Google</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-google"><?=short_number($r['views_google']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-google i-5x">social-google</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-duckduckgo`).html(`0`);update(`'.$r['id'].'`,`content`,`views_duckduckgo`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">DuckDuckGo</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-duckduckgo"><?=short_number($r['views_duckduckgo']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-duckduckgo i-5x">social-duckduckgo</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-bing`).html(`0`);update(`'.$r['id'].'`,`content`,`views_bing`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Bing</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-bing"><?=short_number($r['views_bing']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-bing i-5x">social-bing</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-facebook`).html(`0`);update(`'.$r['id'].'`,`content`,`views_facebook`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Facebook</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-facebook"><?=short_number($r['views_facebook']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-facebook i-5x">social-facebook</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-instagram`).html(`0`);update(`'.$r['id'].'`,`content`,`views_instagram`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Instagram</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-instagram"><?=short_number($r['views_instagram']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-instagram i-5x">social-instagram</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-twitter`).html(`0`);update(`'.$r['id'].'`,`content`,`views_twitter`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Twitter</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-twitter"><?=short_number($r['views_twitter']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-twitter i-5x">social-twitter</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-linkedin`).html(`0`);update(`'.$r['id'].'`,`content`,`views_linkedin`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Linkedin</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-linkedin"><?=short_number($r['views_linkedin']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-social social-linkedin i-5x">social-linkedin</i></span>
+                </div>
+              </div>
+              <div class="row mt-3 justify-content-center">
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).html(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);"><i class="i">eraser</i></button>':'');?>
+                  <span class="h6 text-muted">Views</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="views"><?=short_number($r['views']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-5x">views</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <span class="h6 text-muted">Earnings</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="analytics-earnings">0</span>
+                  </span>
+                  <span class="icon"><i class="i i-5x">money</i></span>
+                </div>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <span class="h6 text-muted">Net Profit</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="analytics-profit">0</span>
+                  </span>
+                  <span class="icon"><i class="i i-5x">money</i></span>
+                </div>
+                <?php $ss=$db->prepare("SELECT SUM(`quantity`) AS `cnt` FROM `".$prefix."orderitems` WHERE `iid`=:iid");
+                $ss->execute([
+                  ':iid'=>$r['id']
+                ]);
+                $rs=$ss->fetch(PDO::FETCH_ASSOC);?>
+                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
+                  <span class="h6 text-muted">Total Sales</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x"><?=number_format($rs['cnt']);?></span>
+                  </span>
+                  <span class="icon"><i class="i i-5x">shipping</i></span>
+                </div>
+              </div>
+              <div class="row mt-4">
+                <div class="col-12 col-sm-6 pr-sm-2">
+                  <?php include'core/layout/widget-inventoryitemstats.php';?>
+                </div>
+                <div class="col-12 col-sm-6 pl-sm-2">
+                  <?php include'core/layout/widget-inventoryitemprofit.php';?>
+                </div>
               </div>
             </div>
           </div>

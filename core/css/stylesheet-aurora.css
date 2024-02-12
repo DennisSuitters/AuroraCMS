@@ -403,7 +403,7 @@ footer [role="menu"] li.active a{
   font-family:Arial!important;
   text-shadow:none!important }
 
-.cart{
+.shoppingcart{
   display:inline-block;
   position:absolute;
   top:-5px;
@@ -417,7 +417,7 @@ footer [role="menu"] li.active a{
   color:var(--badge-color);
   white-space:nowrap }
 
-.cart:empty{
+.shoppingcart:empty{
   display:none }
 
 .navbar-cart{

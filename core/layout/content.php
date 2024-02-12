@@ -7,12 +7,11 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-4
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='3'");
-$sv->execute();
+$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='3'")->execute();
 $rank=0;
 $show='categories';
 if(isset($args[0])&&$args[0]=='scheduler')require'core/layout/scheduler.php';
@@ -170,6 +169,9 @@ else{
                 <div class="row">
                   <div class="col-12 col-sm-6">
                     <ol class="breadcrumb m-0 pl-0 pt-0">
+                      <li class="breadcrumb-item active">
+                        <a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a>
+                      </li>
                       <li class="breadcrumb-item active breadcrumb-dropdown">
                         <?= isset($args[1])&&$args[1]!=''?ucfirst($args[1]):'All';?><span class="breadcrumb-dropdown ml-2"><i class="i">chevron-down</i></span>
                         <ul class="breadcrumb-dropper">
@@ -255,7 +257,7 @@ else{
                     </div>
                     <div class="col-12 col-sm-6 text-right">
                       <?php if(isset($args[1])&&$args[1]=='events'){?>
-                        <form class="form-row justify-content-end" method="get" action="">
+                        <form class="form-row justify-content-end mr-4" method="get" action="">
                           <div class="input-text">Display&nbsp;Events&nbsp;By</div>
                           <select id="eventfield" name="field">
                             <option value="tis"<?=(isset($_GET['field'])&&$_GET['field']=='tis'?' selected':'');?>>Start Date</option>

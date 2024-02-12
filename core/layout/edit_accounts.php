@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-4
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -28,7 +28,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               </ol>
             </div>
             <div class="col-12 col-sm-6 text-right">
-              <div class="btn-group">
+              <div class="btn-group d-inline">
                 <?=(isset($_SERVER['HTTP_REFERER'])?'<a data-tooltip="left" href="'.$_SERVER['HTTP_REFERER'].'" role="button" aria-label="Back"><i class="i">back</i></a>':'').
                 ($user['options'][5]==1?'<button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>':'');?>
               </div>

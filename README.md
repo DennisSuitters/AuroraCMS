@@ -2,7 +2,7 @@
 
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.26-4
+Current version is v0.2.26-5
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
@@ -61,6 +61,7 @@ Current version is v0.2.26-4
     - User accessible area.
   - Services.
 - FAQ's.
+  - Including adding FAQ question and answers to content, also generate schema markup.
 - Gallery.
 - Client Proofs.
 - Messages.
@@ -140,19 +141,12 @@ Current version is v0.2.26-4
   - Address location Map can be displayed on Home Page, Contact Us, and Event Items.
 - Dashboard Widgets, that can be enabled/disabled, resized, and repositioned.
   - AuroraCMS Updates, changelog of the CMS updates.
-  - Browsers, browsers count used to access website.
-  - Devices, devices count used to access website.
   - Recent Admin Activity
-  - Referrers, popular referrers, such as Google, Duck Duck Go, and other popular places.
   - Sale Content, uses current date to determine known Australian popular Sales periods, and selects Inventory that was published at the same time on previous year minus 1 month.
-  - SEO links, links to resources to learn SEO for DIY.
-  - SEO Unsolicited Tips, Unsolicited tips from Candour on LinkedIn.
-  - Top Keywords, search keywords used via the front end search (on site search, not from Search Engines).
   - Viewed pages, top ten viewed pages, and their view count.
   - Visitor Stats, some visitors stats, like new bookings, orders, calls when clicking linked phone numbers.
   - Weather, takes Longitude and Latitude values from Map Position to find weather for that area (usually business location), if not set, tries to get approximate location via Browser Connection Information.
 - Content Widgets, that can be enabled/disabled.
-  - Text Analysis, uses the Hemmingway Javascript implementation to analyse text and gives ratings.
   - SEO Content Help, links to handy tools for writing content, or to get inspiration.
 - Advertisements.
   - Home page for Horizontal Banners, Side Menu for Vertical Banners.
@@ -160,11 +154,11 @@ Current version is v0.2.26-4
   - Count Impressions of times Advertisement has been displayed.
   - Count Clicks.
   - Date restriction for start displaying advertisements, and end date.
-- Agronomy for managing Farms.
+- Agronomy for managing Farms. (WIP)
   - Area map plotting for managing pasture/paddock areas.
   - Livestock management, incl. selecting which area they are currently in.
   - Cropping for crop management, incl. whole paddock area cropping as well as small plots.
-  - Logging for area, livestock and crop history. (WIP)
+  - Logging for area, livestock and crop history.
 - Multiple Custom Summernote (WYSIWYG Editor) Addons, created by Diemen Design.
   - [summernote-audio](https://github.com/DiemenDesign/summernote-audio)
   - [summernote-checkbox](https://github.com/DiemenDesign/summernote-checkbox)
@@ -180,8 +174,8 @@ Current version is v0.2.26-4
 You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https://github.com/DiemenDesign/AuroraCMS-themes)
 
 ### Dependencies
-- PHP > 7.0 - Must have PDO, and Password Compat support. If you have tried AuroraCMS with a higher version, please report your experiences.
-- Works with PHP 7+. Please make sure PHP Libraries are installed before reporting Issues.
+PHP 8 is our current recommended minimum for AuroraCMS to be used on.
+
 - Works with PHP 8+. Please make sure PHP Libraries are installed before reporting Issues.
 - mod_rewrite or rewrite.
 - mbstring.
@@ -190,6 +184,10 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
 - mail services - Are needed for mail notification sending, Orders Sending and for the Newsletters.
 
 #### Integrated Projects:
+- [jQuery](https://jquery.com/)
+- [jSignature](https://github.com/willowsystems/jSignature)
+- [Leaflet](https://leafletjs.com
+- [Tagify](https://github.com/yairEO/tagify)
 - [iCONS](https://github.com/DiemenDesign/iCONS)
 - [Summernote](https://github.com/summernote/summernote) Skunkworks Version (In Development)
   - [summernote-audio](https://github.com/DiemenDesign/summernote-audio)
@@ -203,8 +201,10 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
   - [summernote-text-findnreplace](https://github.com/DiemenDesign/summernote-text-findnreplace)
   - [summernote-video-attributes](https://github.com/DiemenDesign/summernote-video-attributes)
 - [CodeMirror](https://github.com/codemirror/CodeMirror)
+- [Chart.js](https://www.chartjs.org)
 - [FullCalendar](https://github.com/fullcalendar/fullcalendar)
 - [PHPMailer](https://github.com/PHPMailer/PHPMailer)
+- [Project Honeypot](https://www.projecthoneypot.org/)
 - [Zebra_Image](https://github.com/stefangabos/Zebra_Image)
 - [kses](https://github.com/RichardVasquez/kses)
 - [elFinder](https://github.com/Studio-42/elFinder)
@@ -239,8 +239,8 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
 - [Diemen Design](https://diemendesign.com.au/)
 - [EntertainMe](https://entertainme.net.au/)
 - [Fast Track Business Club](https://www.fasttrackbusinessclub.com.au/)
-- [Happy Valley Free Rang Farm](https://happyvalleyfarm.com.au/)
-- [Hays Technologies](https://haystechnologies.com.au/)
+- [Happy Valley Free Range Farm](https://happyvalleyfarm.com.au/)
 - [Live Lightly Centre](https://livelightlycentre.com.au/)
 - [Lone Wolf Anime](https://lonewolfanime.com.au/)
-- [Raycraft Computer Services](https://www.raycraft.com.au/)
+- [Raycraft Computer Services](https://raycraft.com.au/)
+- [Retro Anime Republic](https://retroanimerepublic.com.au/)

@@ -7,50 +7,51 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-3
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 require'db.php';
+$current_ref=$_SERVER['REQUEST_URI'];
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 if($config['php_options'][6]==1){
 	$s=$db->prepare("DELETE FROM `".$prefix."iplist` WHERE `permanent`!=1 AND `ti`<:ti");
 	$s->execute([':ti'=>time()-2592000]);
 }
-if(stristr($_SERVER['REQUEST_URI'],'security.txt')||stristr($_SERVER['REQUEST_URI'],'sellers.json')){
+if(stristr($current_ref,'security.txt')||stristr($current_ref,'sellers.json')){
 	echo'# Report Security Issues at the AuroraCMS GitHub Repository: https://github.com/DiemenDesign/AuroraCMS';
 	die();
 }
-if(stristr($_SERVER['REQUEST_URI'],'ads.txt')||stristr($_SERVER['REQUEST_URI'],'sellers.json')){
+if(stristr($current_ref,'ads.txt')||stristr($current_ref,'sellers.json')){
 	echo'We don\'t use or promote the use of advertising, your search for ads.txt or sellers.json is futile, go look elsewhere!';
 	die();
 }
 if(isset($config['php_options'])&&$config['php_options'][5]==1){
-	if(stristr($_SERVER['REQUEST_URI'],'/wp')||stristr($_SERVER['REQUEST_URI'],'/wordpress/')||stristr($_SERVER['REQUEST_URI'],'old-wp')){
+	if(stristr($current_ref,'/wp')||stristr($current_ref,'/wordpress/')||stristr($current_ref,'old-wp')){
 		echo'You know, not every fecking Website uses WordPress!';
 		$msg='Trying to access WordPress folder';
 		require'core/xmlrpc.php';
 		die();
 	}
-	if(stristr($_SERVER['REQUEST_URI'],'xmlrpc.php')){
+	if(stristr($current_ref,'xmlrpc.php')){
 		echo'You know, not every fecking Website uses WordPress!';
 		$msg='Trying to access WordPress xmlrpc.php';
 		require'core/xmlrpc.php';
 		die();
 	}
-	if(stristr($_SERVER['REQUEST_URI'],'dup-installer')){
+	if(stristr($current_ref,'dup-installer')){
 		echo'You know, not every fecking Website uses WordPress!';
 		$msg='Trying to access WordPress installer';
 		require'core/xmlrpc.php';
 		die();
 	}
-	if(stristr($_SERVER['REQUEST_URI'],'eval-stdin.php')){
+	if(stristr($current_ref,'eval-stdin.php')){
 		echo'Bit of an old school hacking attempt isn\'t it?';
 		$msg='Trying to use the eval-stdin exploit!';
 		require'core/xmlrpc.php';
 		die();
 	}
-	if(stristr($_SERVER['REQUEST_URI'],'panels.txt')){
+	if(stristr($current_ref,'panels.txt')){
 		echo'Go away you DorkScanner User!<br>';
 		$msg='Using DorkScanner seeing if we are vulnerable!';
 		require'core/xmlrpc.php';
@@ -62,19 +63,19 @@ if(isset($config['php_options'])&&$config['php_options'][5]==1){
 		require'core/xmlrpc.php';
 		die();
 	}
-	if(stristr($_SERVER['REQUEST_URI'],'magento')){
+	if(stristr($current_ref,'magento')){
 		echo'Nope NOT Magento!<br>';
 		$msg='Trying to access Magento folder';
 		require'core/xmlrpc.php';
 		die();
 	}
-	if(stristr($_SERVER['REQUEST_URI'],'.aspx')){
+	if(stristr($current_ref,'.aspx')){
 		echo'Nope doesn\'t run on ASP, blergh!<br>Damn it! Now I have to get the taste of Microsoft out of my interpreter!<br>';
 		$msg='Trying to access .aspx files';
 		require'core/xmlrpc.php';
 		die();
 	}
-	if(stristr($_SERVER['REQUEST_URI'],'aws/')){
+	if(stristr($current_ref,'aws/')){
 		echo'Nope doesn\'t use AWS!';
 		$msg='Trying to access Amazon Web Services';
 		require'core/xmlrpc.php';
@@ -90,10 +91,10 @@ $s=$db->prepare("UPDATE `".$prefix."login` SET `hti`=:ti,`hostStatus`='overdue' 
 $s->execute([':ti'=>$ti]);
 $s=$db->prepare("UPDATE `".$prefix."login` SET `sti`=:ti,`siteStatus`='overdue' WHERE `sti`<:ti AND `siteStatus`='outstanding'");
 $s->execute([':ti'=>$ti]);
-if($config['options'][11]==1){
+/* if($config['options'][11]==1){
 	$s=$db->prepare("DELETE FROM `".$prefix."tracker` WHERE `ti`<:ti");
 	$s->execute([':ti'=>time()-2592000]);
-}
+} */
 if(file_exists(THEME.'/images/favicon.png')){
 	define('FAVICON',THEME.'/images/favicon.png');
 	define('FAVICONTYPE','image/png');
@@ -306,6 +307,69 @@ function short_number($num){
     $num /= 1000;
   }
   return round($num,1).$units[$i];
+}
+function convertToString($number, $caps=false, $blankIfZero=true){
+	$strRep="";
+	$n=intval($number);
+	$one2twenty=array("one","two","three","four","five","six","seven","eight","nine","ten", "eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen");
+	$twenty2ninty=array("twenty","thirty","fourty","fifty","sixty","seventy","eighty","ninety");
+	$hundred="hundred";
+	$thousand="thousand";
+	$million="million";
+	$billion="billion";
+	switch($n){
+		case 0:
+			if($blankIfZero==true){
+				$strRep=$strRep."";
+				break;
+			}else{
+				$strRep=$strRep."zero";
+				break;
+			}
+		case $n >0 && $n <20:
+			$strRep=$strRep." ".$one2twenty[($n-1)];
+			break;
+		case $n >=20 && $n < 100:
+			$strRep=$strRep." ".$twenty2ninty[(($n/10) - 2)];
+			$strRep.=convertToString($n%10);
+			break;
+		case $n >= 100 && $n <= 999:
+			$strRep=$strRep.$one2twenty[(($n/100)-1)]." ".$hundred." ";
+			$strRep.=convertToString($n%100);
+			break;
+		case $n >= 1000 && $n < 100000:
+			if($n < 20000){
+				$strRep=$strRep.$one2twenty[(($n/1000)-1)]." ".$thousand." ";
+				$strRep.=convertToString($n%1000);
+				break;
+			}else{
+				$strRep=$strRep.$twenty2ninty[(($n/10000) - 2)];
+				$strRep.=convertToString($n%10000);
+				break;
+			}
+		case $n >= 100000 && $n < 1000000:
+			$strRep.=convertToString($n/1000)." ".$thousand." ";
+			$strRep.=convertToString(($n%100000)%1000);
+			break;
+		case $n >= 1000000 && $n <  10000000:
+			$strRep=$strRep.$one2twenty[(($n/1000000) - 1)]." ".$million." ";
+			$strRep.=convertToString($n%1000000);
+			break;
+		case $n >= 10000000 && $n < 10000000000:
+			$strRep.=convertToString($n/1000000)." ".$million." ";
+			$strRep.=convertToString(($n%1000000));
+			break;
+	}
+	return($caps==true?ucwords($strRep):$strRep);
+}
+function parseCurrency($v){
+  if(intval($v)==$v){
+		$r=number_format($v,0,".",",");
+	}else{
+		$r=number_format($v,2,".",",");
+//		$r=rtrim($r,0);
+	}
+	return$r;
 }
 function tomoment($f){
   $r=['d'=>'DD','D'=>'ddd','j'=>'D','l'=>'dddd','N'=>'E','S'=>'o','w'=>'e','z'=>'DDD','W'=>'W','F'=>'MMMM','m'=>'MM','M'=>'MMM','n'=>'M','t'=>'','L'=>'','o'=>'YYYY','Y'=>'YYYY','y'=>'YY','a'=>'a','A'=>'A','B'=>'','g'=>'h','G'=>'H','h'=>'hh','H'=>'HH','i'=>'mm','s'=>'ss','u'=>'SSS','e'=>'zz','I'=>'','O'=>'','P'=>'','T'=>'','Z'=>'','c'=>'','r'=>'','U'=>'X'];

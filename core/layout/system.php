@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-4
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -20,12 +20,12 @@ $sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='65
           <div class="row">
             <div class="col-12 col-sm-6">
               <ol class="breadcrumb m-0 pl-0 pt-0">
-                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/settings';?>">Settings</a></li>
                 <li class="breadcrumb-item active">System</li>
+                <li class="breadcrumb-item active"><a href="<?= URL.$settings['system']['admin'].'/settings';?>">Settings</a></li>
               </ol>
             </div>
             <div class="col-12 col-sm-6 text-right">
-              <div class="btn-group">
+              <div class="btn-group d-inline">
                 <?=($user['options'][7]==1?'<button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>':'');?>
               </div>
             </div>
@@ -35,7 +35,9 @@ $sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='65
           <?='<input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>'.
           '<label for="tab1-1">Options</label>'.
           '<input class="tab-control" id="tab1-2" name="tabs" type="radio">'.
-          '<label for="tab1-2">Update</label>';?>
+          '<label for="tab1-2">Update</label>'.
+          '<input class="tab-control" id="tab1-3" name="tabs" type="radio">'.
+          '<label for="tab1-3">AuroraCMS Changelog</label>';?>
 <?php /* Options */ ?>
           <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
             <div class="form-row">
@@ -187,6 +189,9 @@ $sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='65
               <?=($user['options'][7]==1?'<button class="save" id="saveupdate_url" data-dbid="update_url" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
             </div>
 */ ?>
+          </div>
+          <div class="tab1-3 border" data-tabid="tab1-3" role="tabpanel">
+            <?php include'core/layout/widget-auroracmsupdates.php';?>
           </div>
         </div>
       </div>

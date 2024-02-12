@@ -7,12 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='33'");
-$sv->execute();
+$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='33'")->execute();
 if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_livechat.php';
 else{?>
   <main>
@@ -27,7 +26,7 @@ else{?>
                 </ol>
               </div>
               <div class="col-12 col-sm-2 text-right">
-                <div class="btn-group">
+                <div class="btn-group d-inline">
                   <?=$user['options'][7]==1?'<a href="'.URL.$settings['system']['admin'].'/livechat/settings" role="button"  data-tooltip="left" aria-label="Live Chat Settings"><i class="i">settings</i></a>':'';?>
                 </div>
               </div>

@@ -7,16 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-3
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * https://auspost.com.au/forms/pacpcs-registration.html
  * https://github.com/fontis/auspost-api-php
  */
-$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='41'");
-$sv->execute();
-$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='32'");
-$sv->execute();?>
+$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id` IN ('32','41')")->execute();?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
     <div class="container-fluid">
@@ -25,12 +22,12 @@ $sv->execute();?>
           <div class="row">
             <div class="col-12 col-sm-6">
               <ol class="breadcrumb m-0 pl-0 pt-0">
-                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/settings';?>">Settings</a></li>
                 <li class="breadcrumb-item active"><a href="<?= URL.$settings['system']['admin'].'/orders';?>">Orders</a></li>
+                <li class="breadcrumb-item active"><a href="<?= URL.$settings['system']['admin'].'/settings';?>">Settings</a></li>
               </ol>
             </div>
             <div class="col-12 col-sm-6 text-right">
-              <div class="btn-group">
+              <div class="btn-group d-inline">
                 <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').
                 '<button class="saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save</i></button>';?>
               </div>
@@ -43,7 +40,9 @@ $sv->execute();?>
           '<input class="tab-control" id="tab1-2" name="tabs" type="radio">'.
           '<label for="tab1-2">Payment</label>'.
           '<input class="tab-control" id="tab1-3" name="tabs" type="radio">'.
-          '<label for="tab1-3">Processing</label>';?>
+          '<label for="tab1-3">Processing</label>'.
+          '<input class="tab-control" id="tab1-4" name="tabs" type="radio">'.
+          '<label for="tab1-4">Returns</label>';?>
 <?php /* Tab 1 Postage */ ?>
           <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
             <legend>Holding Options</legend>
@@ -82,7 +81,7 @@ $sv->execute();?>
               </form>
             <?php }?>
             <div id="holdoptions">
-              <?php $sh=$db->prepare("SELECT `id`,`title`,`postcodeFrom`,`postcodeFrom`,`value`,`tie` FROM `".$prefix."choices` WHERE `contentType`='holdoption' ORDER BY `title` ASC");
+              <?php $sh=$db->prepare("SELECT `id`,`title`,`postcodeFrom`,`postcodeTo`,`value`,`tie` FROM `".$prefix."choices` WHERE `contentType`='holdoption' ORDER BY `title` ASC");
               $sh->execute();
               while($rh=$sh->fetch(PDO::FETCH_ASSOC)){?>
                 <article id="l_<?=$rh['id'];?>" class="card col-12 zebra m-0 p-0 overflow-visible card-list item shadow">
@@ -163,6 +162,44 @@ $sv->execute();?>
                   </div>
                 </div>
               <?php }?>
+            </div>
+            <div class="row">
+              <div class="col-6 col-sm">
+                <label for="shippingRate">Shipping Rate</label>
+                <div class="form-row">
+                  <div class="input-text">&dollar;</div>
+                  <input class="textinput" id="shippingRate" data-dbid="1" data-dbt="config" data-dbc="shippingRate" type="text" value="<?=$config['shippingRate'];?>">
+                  <button class="save" id="saveshippingRate" data-dbid="shippingRate" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+                </div>
+              </div>
+              <div class="col-6 col-sm pl-sm-3">
+                <label for="handlingTimeMin">Handling Time Min</label>
+                <div class="form-row">
+                  <input class="textinput" id="handlingTimeMin" data-dbid="1" data-dbt="config" data-dbc="handlingTimeMin" type="text" value="<?=$config['handlingTimeMin'];?>">
+                  <button class="save" id="savehandlingTimeMin" data-dbid="handlingTimeMin" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+                </div>
+              </div>
+              <div class="col-6 col-sm pl-sm-3">
+                <label for="handlingTimeMax">Handling Time Max</label>
+                <div class="form-row">
+                  <input class="textinput" id="handlingTimeMax" data-dbid="1" data-dbt="config" data-dbc="handlingTimeMax" type="text" value="<?=$config['handlingTimeMax'];?>">
+                  <button class="save" id="savehandlingTimeMax" data-dbid="handlingTimeMax" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+                </div>
+              </div>
+              <div class="col-6 col-sm pl-sm-3">
+                <label for="transitTimeMin">Transit Time Min</label>
+                <div class="form-row">
+                  <input class="textinput" id="transitTimeMin" data-dbid="1" data-dbt="config" data-dbc="transitTimeMin" type="text" value="<?=$config['transitTimeMin'];?>">
+                  <button class="save" id="savetransitTimeMin" data-dbid="transitTimeMin" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+                </div>
+              </div>
+              <div class="col-6 col-sm pl-sm-3">
+                <label for="transitTimeMax">Transit Time Max</label>
+                <div class="form-row">
+                  <input class="textinput" id="transitTimeMax" data-dbid="1" data-dbt="config" data-dbc="transitTimeMax" type="text" value="<?=$config['transitTimeMax'];?>">
+                  <button class="save" id="savetransitTimeMax" data-dbid="transitTimeMax" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+                </div>
+              </div>
             </div>
             <hr>
             <legend>Tracking Options</legend>
@@ -431,6 +468,64 @@ $sv->execute();?>
                 <input name="c" type="hidden" value="orderEmailLayout">
                 <textarea class="summernote" id="oEL" name="da"><?= rawurldecode($config['orderEmailLayout']);?></textarea>
               </form>
+            </div>
+          </div>
+<?php /* Returns */ ?>
+          <div class="tab1-4 border p-3" data-tabid="tab1-4" role="tabpanel">
+            <div class="row">
+              <div class="col-12 col-sm-6">
+                <label for="returnPolicyCategory" class="mt-0">Return Policy Category</label>
+                <div class="form-row">
+                  <select id="returnPolicyCategory" data-dbid="1" data-dbt="config" data-dbc="returnPolicyCategory" onchange="update('1','config','returnPolicyCategory',$(this).val(),'select');">
+                    <option value="MerchantReturnFiniteReturnWindow"<?=($config['returnPolicyCategory']=='MerchantReturnFiniteReturnWindow'?' selected':'');?>>Merchant Return Finite Return Window</option>
+                    <option value="MerchantReturnNotPermitted"<?=($config['returnPolicyCategory']=='MerchantReturnNotPermitted'?' selected':'');?>>Merchant Return Not Permitted</option>
+                    <option value="MerchantReturnUnlimitedWindow"<?=($config['returnPolicyCategory']==7?' MerchantReturnUnlimitedWindow':'');?>>Merchant Return Unlimited Window</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 pl-sm-3">
+                <label for="merchantReturnDays" class="mt-sm-0">Returnable Day Allowance</label>
+                <div class="form-row">
+                  <select id="merchantReturnDays" data-dbid="1" data-dbt="config" data-dbc="merchantReturnDays" onchange="update('1','config','merchantReturnDays',$(this).val(),'select');">
+                    <option value="0"<?=($config['merchantReturnDays']==0?' selected':'');?>>0 Days</option>
+                    <option value="7"<?=($config['merchantReturnDays']==7?' selected':'');?>>7 Days</option>
+                    <option value="14"<?=($config['merchantReturnDays']==14?' selected':'');?>>14 Days</option>
+                    <option value="30"<?=($config['merchantReturnDays']==30?' selected':'');?>>30 Days</option>
+                    <option value="60"<?=($config['merchantReturnDays']==60?' selected':'');?>>60 Days</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 col-sm-6">
+                <label for="returnMethod">Return Method (<?=$config['returnMethod'];?>)</label>
+                <div class="form-row">
+                  <select id="returnMethod" data-dbid="1" data-dbt="config" data-dbc="returnMethod" onchange="update('1','config','returnMethod',$(this).val(),'select');">
+                    <option value="ReturnInStore"<?=($config['returnMethod']=='ReturnInStore'?' selected':'');?>>Return In Store</option>
+                    <option value="KeepProduct"<?=($config['returnMethod']=='KeepProduct'?' selected':'');?>>Keep Product</option>
+                    <option value="ReturnAtKiosk"<?=($config['returnMethod']=='ReturnAtKiosk'?' selected':'');?>>Return At Kiosk</option>
+                    <option value="ReturnByMail"<?=($config['returnMethod']=='ReturnByMail'?' selected':'');?>>Return By Mail</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 pl-sm-3">
+                <label for="returnFees">Return Fees</label>
+                <div class="form-row">
+                  <select id="returnFees" data-dbid="1" data-dbt="config" data-dbc="returnFees" onchange="update('1','config','returnFees',$(this).val(),'select');">
+                    <option value="RestockingFees"<?=($config['returnFees']=='RestockingFees'?' selected':'');?>">Restocking Fees</option>
+                    <option value="FreeReturn"<?=($config['returnFees']=='FreeReturn'?' selected':'');?>>Free Return</option>
+                    <option value="OriginalShippingFees"<?=($config['returnFees']=='OriginalShippingFees'?' selected':'');?>>Original Shipping Fees</option>
+                    <option value="ReturnFeesCustomerResponsibility"<?=($config['returnFees']=='ReturnFeesCustomerResponsibility'?' selected':'');?>>Return Fees Customer Responsibility</option>
+                    <option value="ReturnShippingFees"<?=($config['returnFees']=='ReturnShippingFees'?' selected':'');?>>Return Shipping Fees</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <label for="returnShippingFeesAmount">Return Shipping Fee Amount</label>
+            <div class="form-row">
+              <div class="input-text">&dollar;</div>
+              <input class="textinput" id="returnShippingFeesAmount" data-dbid="1" data-dbt="config" data-dbc="returnShippingFeesAmount" type="text" value="<?=$config['returnShippingFeesAmount'];?>">
+              <button class="save" id="savereturnShippingFeesAmount" data-dbid="returnShippingFeesAmount" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
         </div>

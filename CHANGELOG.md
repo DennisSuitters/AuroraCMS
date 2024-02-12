@@ -1,4 +1,24 @@
-### v0.2.26-4
+#### v0.2.26-5
+- Move AuroraCMS Changelog to "Settings/System/" area, to improve Dashboard page speed.
+- Remove Theme Changelog from Dashboard widgets, to improve Dashboard page speed. Theme Changelog is viewable from the Theme Selector.
+- Fix Administrations top buttons styling.
+- Fix Administration breadcrumb dropdown styling.
+- Fix JSON-LD optional fields showing errors in Google Search Console for AggregateRating, and Reviews.
+- Add JSON-LD optional fields for hasMerchantReturnPolicy and shippingDetails for returns.
+- Add options in Inventory for return policies information to fill out Schema information.
+- Add parsing to themes to show return policy information to go along with Schema requirements and for compliancy of information to be shown to customers before purchasing.
+- Fix wrong database field being retreived for holding options in Administration settings for Orders.
+- Add function to convert numbers to their text equivalents.
+- Update Chartjs, improve existing charts.
+- Add database fields for recording social media and google clicks to page and content.
+- Add Analytics to Content, to show user interaction, clicks from social media, and sales/earnings/profits for Inventory & Courses.
+- Remove Tracker table from Database, in preparation of exploring if the same data can be extracted from server logs if they're accessible easily.
+- Remove Widgets that accessed the Tracker table.
+- Add FAQ editing to content in Administration.
+- Add FAQ parsing in themes, including json-ld schema.
+- Fix capitilisation URL issue in RSS feed, reported as 404 errors by Google Search Console.
+
+#### v0.2.26-4
 - Fix tab spacing on pages with multiple tabs in Administration.
 - Update Summernote WYSIWYG Editor.
 - Fix ShareImage not showing when sharing to Social Media.

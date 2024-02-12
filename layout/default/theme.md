@@ -1,6 +1,10 @@
 # Default Changelog
 
-### v0.2.2
+### v0.2.3
+- Fix shopping cart main menu interaction and class.
+- Add FAQ parsing markup.
+
+#### v0.2.2
 - Add Order Process Status to Orders page.
 - Improve Cart layout, add easier editing for items.
 - Add warning for cart when items exceed inventory quantity.

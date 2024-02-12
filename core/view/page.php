@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.20
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,12 +18,28 @@ $page['notes']=preg_replace([
   '/{business}/',
   '/&lbrace;business&rcub;/',
   '/{url}/',
-  '/&lbrace;url&rcub;/'
+  '/&lbrace;url&rcub;/',
+  '/{merchantReturnDaysText}/',
+  '/&lbrace;merchantReturnDaysText&rcub;/',
+  '/{merchantReturnDaysNumber}/',
+  '/&lbrace;merchantReturnDaysNumber&rcub;/',
+  '/{returnShippingFeesAmount}/',
+  '/&lbrace;returnShippingFeesAmount&rcub/',
+  '/{lastEdited}/',
+  '/&lbrace;lastEdited&rcub;/',
 ],[
   $config['business'],
   $config['business'],
   URL,
   URL,
+  convertToString($config['merchantReturnDays']),
+  convertToString($config['merchantReturnDays']),
+  $config['merchantReturnDays'],
+  $config['merchantReturnDays'],
+  $config['returnShippingFeesAmount'],
+  $config['returnShippingFeesAmount'],
+  date('nS M Y',$page['eti']),
+  date('nS M Y',$page['eti']),
 ],$page['notes']);
 if(!isset($args[0])){
   $page['id']=0;

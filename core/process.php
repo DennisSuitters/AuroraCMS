@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-4
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -60,8 +60,16 @@ $seoCaption=isset($page['seoCaption'])?$page['seoCaption']:'';
 $seoDescription=isset($r['seoDescription'])?$r['seoDescription']:$page['seoDescription'];
 $seoKeywords=isset($page['seoKeywords'])?$page['seoKeywords']:'';
 if(isset($page['id'])){
-  $pu=$db->prepare("UPDATE `".$prefix."menu` SET `views`=`views`+1 WHERE `id`=:id");
-  $pu->execute([':id'=>$page['id']]);
+  $current_ref=$_SERVER['REQUEST_URI'];
+  $smi=", `views_direct`=`views_direct`+1";
+  if(stristr($current_ref,'google.com',))$smi=", `views_google`=`views_google`+1";
+  if(stristr($current_ref,'facebook.com')||stristr($current_ref,'fblid='))$smi=", `views_facebook`=`views_facebook`+1";
+  if(stristr($current_ref,'instagram.com'))$smi=", `views_instagram`=`views_instagram`+1";
+  if(stristr($current_ref,'twitter.com')||stristr($current_ref,'x.com'))$smi=", `views_twitter`=`views_twitter`+1";
+  if(stristr($current_ref,'linkedin.com'))$smi=", `views_linkedin`=`views_linkedin`+1";
+  if(stristr($current_ref,'duckduckgo.com'))$smi=", `views_duckduckgo`=`views_duckduckgo`+1";
+  if(stristr($current_ref,'bing.com'))$smi=", `views_bing`=`views_bing`+1";
+  $pu=$db->prepare("UPDATE `".$prefix."menu` SET `views`=`views`+1".$smi." WHERE `id`=:id")->execute([':id'=>$page['id']]);
 }
 if(isset($act)&&$act=='logout')require'core/login.php';
 require'core/cart_quantity.php';
@@ -296,6 +304,7 @@ $ws=$db->prepare("SELECT `options` FROM `".$prefix."login` WHERE `userIP`=:ip");
 $ws->execute([':ip'=>$ip]);
 if($ws->rowCount()>0)$wr=$ws->fetch(PDO::FETCH_ASSOC);
 else$wr=Array('options'=>'00000000000000000000000000000000');
+/*
 if($wr['options'][18]==0){
   if($config['options'][11]==1){
     $current_page=PROTOCOL.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
@@ -337,7 +346,7 @@ if($wr['options'][18]==0){
       }
     }
   }
-}
+} */
 function getDevice($ua,$ch){
   $osd='Unknown';
   if(isset($ch['sec-ch-ua-mobile'])){

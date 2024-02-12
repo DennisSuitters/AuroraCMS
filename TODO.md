@@ -5,6 +5,13 @@ This is a quick list of things what need to be fixed or worked on to help those 
 - Explore adding an account time based rewards feature.
 - Explore adding Referral Codes on SignUp forms.
 - Explore allowing user to set price/tip/buy me a coffee.
+- Explore adding a Employee Roster System.
+  - Add checkbox to indicate User Account belongs to an employee.
+  - Add checkbox to indicate Employee agrees to receive notifications about new shifts.
+  - Create database table to track employees shifts.
+  - Create Front End Page to show Roster to Employee, including possible extra shifts that employee can agree to.
+  - Create a Notification via Email system to notify employees when available shifts are added.
+  - Create Administration pages for administering work shifts and assigning them to single or multiple employees.
 - Administration.
   - Add instructional walk through on pages explaining what fields do, step by step.
   - Config database, add how to adjust total costs for items, by percentage, fixed value, or multiplying value.

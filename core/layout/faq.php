@@ -22,75 +22,74 @@ $sv->execute();?>
             <li class="breadcrumb-item active">Frequently Asked Questions (FAQ's)</li>
           </ol>
         </div>
-        <div class="">
-          <div class="row">
-            <article class="card mb-0 p-0 overflow-visible card-list card-list-header shadow">
-              <div class="row py-2">
-                <div class="col-12 col-md pl-2">Category</div>
-                <div class="col-12 col-md pl-2">Question</div>
-                <div class="col-12 col-md-1 text-center">Open</div>
-              </div>
-              <?php if($user['options'][1]==1){?>
-                <form target="sp" method="post" action="core/add_faq.php">
-                  <div class="row">
-                    <div class="col-12 col-md">
-                      <input id="c" name="c" type="text" placeholder="Enter a Category...">
-                    </div>
-                    <div class="col-12 col-md">
-                      <input id="title" name="t" type="text" placeholder="Enter FAQ Title/Question...">
-                    </div>
-                    <div class="col-12 col-md-1 py-2 text-center">
-                      <input id="open" name="open" type="checkbox" value="1" checked>
-                    </div>
+        <div class="row">
+          <article class="card mb-0 p-0 overflow-visible card-list card-list-header shadow">
+            <div class="row py-2">
+              <div class="col-12 col-md pl-2">Category</div>
+              <div class="col-12 col-md pl-2">Question</div>
+              <div class="col-12 col-md-1 text-center">Open</div>
+            </div>
+            <?php if($user['options'][1]==1){?>
+              <form target="sp" method="post" action="core/add_faq.php">
+                <div class="row">
+                  <div class="col-12 col-md">
+                    <input id="c" name="c" type="text" placeholder="Enter a Category...">
                   </div>
-                  <div class="row py-2">
-                    <div class="col-12 col-md pl-2">Answer</div>
+                  <div class="col-12 col-md">
+                    <input id="title" name="t" type="text" placeholder="Enter FAQ Title/Question...">
                   </div>
-                  <div class="row">
-                    <div class="col-12 col-md">
-                      <textarea class="summernote2" id="da" name="da"></textarea>
-                    </div>
-                    <div class="col-12 col-md-1 text-right align-bottom">
-                      <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
-                    </div>
+                  <div class="col-12 col-md-1 py-2 text-center">
+                    <input id="open" name="open" type="checkbox" value="1" checked>
                   </div>
-                </form>
-                <script>
-                  $('.summernote2').summernote({
-                    toolbar:[
-                      ['insert',['link']],
-                    ],
-                    linkList:[
-                      <?php $sl=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=0 AND `menu`!='none' AND `active`=1 ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
-                      $sl->execute();
-                      while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
-                        echo'['.
-                          '"'.$rl['title'].'",'.
-                          '"'.URL.$rl['contentType'].'/'.$rl['url'].'",'.
-                          '"'.ucwords($rl['contentType']).' - '.$rl['title'].'",'.
-                        '],';
-                      }
-                      $sl=$db->query("SELECT `id`,`title`,`urlSlug`,`contentType` FROM `".$prefix."content` WHERE `contentType`!='testimonials' AND `contentType`!='faq' AND `contentType`!='booking' AND `status`='published' ORDER BY `contentType` ASC");
-                      $sl->execute();
-                      while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
-                        echo'['.
-                          '"'.$rl['title'].'",'.
-                          '"'.URL.$rl['contentType'].'/'.$rl['urlSlug'].'/",'.
-                          '"'.ucwords($rl['contentType']).' - '.$rl['title'].'",'.
-                        '],';
-                      }?>
-                    ],
-                    callbacks:{
-                      onInit:function(){
-                        $('body > .note-popover').appendTo(".note-editing-area");
-                      }
+                </div>
+                <div class="row py-2">
+                  <div class="col-12 col-md pl-2">Answer</div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-md">
+                    <textarea class="summernote2" id="da" name="da"></textarea>
+                  </div>
+                  <div class="col-12 col-md-1 text-right align-bottom">
+                    <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
+                  </div>
+                </div>
+              </form>
+              <script>
+                $('.summernote2').summernote({
+                  toolbar:[
+                    ['insert',['link']],
+                  ],
+                  linkList:[
+                    <?php $sl=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=0 AND `menu`!='none' AND `active`=1 ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
+                    $sl->execute();
+                    while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
+                      echo'['.
+                        '"'.$rl['title'].'",'.
+                        '"'.URL.$rl['contentType'].'/'.$rl['url'].'",'.
+                        '"'.ucwords($rl['contentType']).' - '.$rl['title'].'",'.
+                      '],';
                     }
-                  });
-                </script>
-              <?php }?>
-            </article>
-          </div>
-          <hr>
+                    $sl=$db->query("SELECT `id`,`title`,`urlSlug`,`contentType` FROM `".$prefix."content` WHERE `contentType`!='testimonials' AND `contentType`!='faq' AND `contentType`!='booking' AND `status`='published' ORDER BY `contentType` ASC");
+                    $sl->execute();
+                    while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
+                      echo'['.
+                        '"'.$rl['title'].'",'.
+                        '"'.URL.$rl['contentType'].'/'.$rl['urlSlug'].'/",'.
+                        '"'.ucwords($rl['contentType']).' - '.$rl['title'].'",'.
+                      '],';
+                    }?>
+                  ],
+                  callbacks:{
+                    onInit:function(){
+                      $('body > .note-popover').appendTo(".note-editing-area");
+                    }
+                  }
+                });
+              </script>
+            <?php }?>
+          </article>
+        </div>
+        <hr>
         <div id="faqs">
           <?php $sf=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='faq' ORDER BY `category_1` ASC, `title` ASC");
           $sf->execute();
@@ -116,7 +115,6 @@ $sv->execute();?>
             <hr>
           <?php }?>
         </div>
-      </div>
       <?php require'core/layout/footer.php';?>
     </div>
   </section>

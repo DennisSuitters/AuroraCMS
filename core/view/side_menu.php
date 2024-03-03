@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -261,7 +261,6 @@ if(file_exists(THEME.'/side_menu.html')){
 						'<option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option>'.
 						'<option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option>'.
 						'<option value="best"'.(isset($sort)&&$sort=='best'?' selected':'').'>Best Selling</option>'.
-						'<option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option>'.
 						'<option value="priceh"'.(isset($sort)&&$sort=='priceh'?' selected':'').'>Price: High to low</option>'.
 						'<option value="pricel"'.(isset($sort)&&$sort=='pricel'?' selected':'').'>Price: Low to High</option>';
 				}
@@ -271,7 +270,6 @@ if(file_exists(THEME.'/side_menu.html')){
 						'<option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option>'.
 						'<option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option>'.
 						'<option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option>'.
-						'<option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option>'.
 						'<option value="priceh"'.(isset($sort)&&$sort=='priceh'?' selected':'').'>Price: High to low</option>'.
 						'<option value="pricel"'.(isset($sort)&&$sort=='pricel'?' selected':'').'>Price: Low to High</option>';
 				}
@@ -280,16 +278,14 @@ if(file_exists(THEME.'/side_menu.html')){
 						'<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option>'.
 						'<option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option>'.
 						'<option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option>'.
-						'<option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option>'.
-						'<option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option>';
+						'<option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option>';
 				}
 				if($view=='portfolio'||$view=='gallery'){
 					$sortOptions=
 						'<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option>'.
 						'<option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option>'.
 						'<option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option>'.
-						'<option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option>'.
-						'<option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option>';
+						'<option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option>';
 				}
 				$sideTemp=preg_replace([
 					'/<[\/]?sort>/',

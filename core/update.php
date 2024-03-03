@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2021 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -54,7 +54,8 @@ if(
 		'login',
 		'modules',
 		'menu',
-		'orders'
+		'orders',
+		'roster'
 	])&&in_array($col,[
 		'accountActivationLayout',
 		'bookingAutoReplyLayout',
@@ -91,7 +92,8 @@ if(
 		'tis',
 		'tie',
 		'trackNumber',
-		'trackOption'
+		'trackOption',
+		'uid'
 ])){
 	$da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'da',FILTER_UNSAFE_RAW);
 	if($col=='messengerFBCode')$da=rawurldecode($da);

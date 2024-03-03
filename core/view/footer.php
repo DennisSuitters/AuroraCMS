@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -48,7 +48,7 @@ $html=preg_replace([
 	'/<print theme>/',
 	$config['payPalClientID']==''?'~<paypal>.*?</paypal>~is':'/<[\/]?paypal>/',
 	$config['options'][16]==0?'~<afterpay>.*?</afterpay>~is':'/<[\/]?afterpay>/',
-	$config['stripe_publishkey']==''?'~<creditcards>.*?</creditcards>~is':'/<[\/]?creditcards>/'
+	(isset($config['stripe_publishkey'])&&$config['stripe_publishkey']==''?'~<creditcards>.*?</creditcards>~is':'/<[\/]?creditcards>/')
 ],[
 	$config['options'][3]==1?'':'',
 	isset($_SESSION['rank'])&&$_SESSION['rank']>899?'<li role="menuitem"><a target="_blank" href="'.$settings['system']['admin'].'/">Administration</a></li>':'',

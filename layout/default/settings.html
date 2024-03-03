@@ -112,14 +112,63 @@
 			</form>
 		</article>
 		<article class="col-12 col-md-7">
+			<employeeroster>
+				<div class="card mb-3 p-3">
+					<h4 class="mb-4">Employee Roster Settings</h4>
+					<rosterNotification>
+					<form method="post" action="settings">
+						<input type="hidden" name="act" value="updateRoster">
+						<input type="hidden" name="uid" value="<print user=id>">
+						<div class="row">
+							<div class="col-12 col-sm">
+								<label for="rosterExtraShifts">Display Extra Shifts</label>
+								<div class="form-row">
+									<select id="rosterExtraShifts" name="rES">
+										<rosterExtraShiftsOptions>
+									</select>
+								</div>
+							</div>
+							<div class="col-12 col-sm pl-sm-3">
+								<label for="rosterDayName">Display Day Name</label>
+								<div class="form-row">
+									<select id="rosterDayName" name="rDN">
+										<rosterDayNameOptions>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12 col-sm">
+								<label for="rosterTimeDisplay">Display Times as</label>
+								<div class="form-row">
+									<select id="rosterTimeDisplay" name="rTD">
+										<rosterTimeDisplayOptions>
+									</select>
+								</div>
+							</div>
+							<div class="col-12 col-sm pl-sm-3">
+								<label for="rosterShowWeeks">Number of Weeks to Show</label>
+								<div class="form-row">
+									<select id="rosterShowWeeks" name="rSW">
+										<rosterShowWeeksOptions>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-row justify-content-end mt-3">
+							<button class="btn" type="submit">Save</button>
+						</div>
+					</form>
+				</div>
+			</employeeroster>
 			<div class="card mb-3 p-3">
 				<h4>Rewards</h4>
-				<div class="row">
-					<div class="card col-6 col-sm m-3 py-5 text-center">
+				<div class="row justify-content-center">
+					<div class="card col-5 col-sm m-1 m-sm-3 py-5 text-center">
 						<div>Spent</div>
 						<div class="text-2x">&dollar;<print user="spent"></div>
 					</div>
-					<div class="card col-6 col-sm m-3 py-5 text-center">
+					<div class="card col-5 col-sm m-1 m-sm-3 py-5 text-center">
 						<div>Points</div>
 						<div class="text-2x"><print user="points"></div>
 					</div>
@@ -229,20 +278,20 @@
 			</div>
 			<div class="card mb-3 p-3">
 				<h4>Forum</h4>
-				<div class="row">
-					<div class="card col-6 col-sm m-3 py-5 text-center">
+				<div class="row justify-content-center">
+					<div class="card col-5 col-sm m-1 m-sm-3 py-5 text-center">
 						<div>Posts</div>
 						<div class="text-2x"><print forum="posts"></div>
 					</div>
-					<div class="card col-6 col-sm m-3 py-5 text-center">
+					<div class="card col-5 col-sm m-1 m-sm-3 py-5 text-center">
 						<div>Comments</div>
 						<div class="text-2x"><print forum="comments"></div>
 					</div>
-					<div class="card col-6 col-sm m-3 py-5 text-center">
+					<div class="card col-5 col-sm m-1 m-sm-3 py-5 text-center">
 						<div>Views</div>
 						<div class="text-2x"><print forum="views"></div>
 					</div>
-					<div class="card col-6 col-sm m-3 py-5 text-center">
+					<div class="card col-5 col-sm m-1 m-sm-3 py-5 text-center">
 						<div>Tickets</div>
 						<div class="text-2x"><print forum="tickets"></div>
 					</div>

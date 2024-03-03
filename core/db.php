@@ -8,7 +8,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -48,12 +48,12 @@ try{
   $db->exec("SET NAMES 'utf8mb4'");
 //  $db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
   $db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-  if($settings['system']['devmode']==true){
-    error_reporting(E_ALL);
-    ini_set('display_errors','On');
+  if(isset($settings['system']['devmod'])&&$settings['system']['devmode']==true){
+    error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+    ini_set('display_errors',1);
   }else{
-    error_reporting(E_ALL);
-    ini_set('display_errors','Off');
+    error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+    ini_set('display_errors',0);
     ini_set('log_errors','On');
     ini_set('error_log','../media/cache/error.log');
   }

@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 require'core/db.php';
+$npi=false;
 if(isset($headerType))header($headerType);
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 if(file_exists(THEME.'/theme.ini'))$theme=parse_ini_file(THEME.'/theme.ini',TRUE);
@@ -53,24 +54,13 @@ elseif(file_exists(THEME.'/images/favicon-512.ico'))
 	$shareImage=URL.THEME.'/images/favicon-512.ico';
 else
 	$shareImage=URL.'core/images/shareicon.jpg';
-
+if(stristr($shareImage,'.avif'))$shareImage=str_replace('.avif','.jpg',$shareImage);
 $seoTitle=isset($page['seoTitle'])?$page['seoTitle']:'';
 $metaRobots=isset($page['metaRobots'])?$page['metaRobots']:'';
 $seoCaption=isset($page['seoCaption'])?$page['seoCaption']:'';
 $seoDescription=isset($r['seoDescription'])?$r['seoDescription']:$page['seoDescription'];
 $seoKeywords=isset($page['seoKeywords'])?$page['seoKeywords']:'';
-if(isset($page['id'])){
-  $current_ref=$_SERVER['REQUEST_URI'];
-  $smi=", `views_direct`=`views_direct`+1";
-  if(stristr($current_ref,'google.com',))$smi=", `views_google`=`views_google`+1";
-  if(stristr($current_ref,'facebook.com')||stristr($current_ref,'fblid='))$smi=", `views_facebook`=`views_facebook`+1";
-  if(stristr($current_ref,'instagram.com'))$smi=", `views_instagram`=`views_instagram`+1";
-  if(stristr($current_ref,'twitter.com')||stristr($current_ref,'x.com'))$smi=", `views_twitter`=`views_twitter`+1";
-  if(stristr($current_ref,'linkedin.com'))$smi=", `views_linkedin`=`views_linkedin`+1";
-  if(stristr($current_ref,'duckduckgo.com'))$smi=", `views_duckduckgo`=`views_duckduckgo`+1";
-  if(stristr($current_ref,'bing.com'))$smi=", `views_bing`=`views_bing`+1";
-  $pu=$db->prepare("UPDATE `".$prefix."menu` SET `views`=`views`+1".$smi." WHERE `id`=:id")->execute([':id'=>$page['id']]);
-}
+
 if(isset($act)&&$act=='logout')require'core/login.php';
 require'core/cart_quantity.php';
 $status=isset($_SESSON['rank'])&&$_SESSION['rank']>699?"%":"published";
@@ -177,17 +167,17 @@ $head=preg_replace([
 	'/<print geo>/',
   '/<print saleClass>/'
 ],[
-  trim($config['business']),
-  trim($theme['title']),
-  trim($theme['creator']),
-  trim($theme['creator_url']),
-  trim($metaRobots),
-  trim($seoTitle),
-  trim($seoCaption),
-  trim($seoDescription),
-  trim($seoCaption),
-  trim($seoDescription),
-  trim($seoKeywords),
+  trim((string)$config['business']),
+  trim((string)$theme['title']),
+  trim((string)$theme['creator']),
+  trim((string)$theme['creator_url']),
+  trim((string)$metaRobots),
+  trim((string)$seoTitle),
+  trim((string)$seoCaption),
+  trim((string)$seoDescription),
+  trim((string)$seoCaption),
+  trim((string)$seoDescription),
+  trim((string)$seoKeywords),
   $contentTime,
   $canonical,
   URL,
@@ -198,7 +188,7 @@ $head=preg_replace([
   FAVICON,
   microid($config['email'],$canonical),
   isset($r['name'])?$r['name']:$config['business'],
-  THEME,
+  THEME.'/css/style'.($config['development']==1?'-dev':'').'.css',
   ($config['ga_verification']!=''?'<meta name="google-site-verification" content="'.$config['ga_verification'].'">':'').
     ($config['seo_msvalidate']!=''?'<meta name="msvalidate.01" content="'.$config['seo_msvalidate'].'">':'').
     ($config['seo_yandexverification']!=''?'<meta name="yandex-verification" content="'.$config['seo_yandexverification'].'">':'').
@@ -262,12 +252,12 @@ $content=preg_replace([
   base64_encode(time())
 ],$content);
 $schemaWebsite='<script type="application/ld+json">{"@context":"http://schema.org","@type":"WebSite","url":"'.$canonical.'","name":"'.$seoTitle.'","author":{"@type":"Person","name":"'.(isset($r['name'])&&$r['name']?$r['name']:$config['business']).'"},"description":"'.htmlspecialchars($seoDescription,ENT_QUOTES).'","publisher":"'.$seoTitle.'","potentialAction":{"@type":"SearchAction","target":"'.URL.'search/{search_term}","query-input":"required name=search_term"}}</script>';
-$schemaOrganization='<script type="application/ld+json">{"@context":"http://schema.org","@type":"Organization","name":"'.$config['business'].'","url":"'.URL.'"';
+$schemaOrg='<script type="application/ld+json">{"@context":"http://schema.org","@type":"Organization","name":"'.$config['business'].'","url":"'.URL.'"';
 if($config['phone']!=''||$config['mobile']!=''){
-  $schemaOrganization.=',"contactPoint":[{"@type":"ContactPoint","telephone":"'.($config['phone']!=''?$config['phone']:$config['mobile']).'","contactType":"customer service"}]';
+  $schemaOrg.=',"contactPoint":[{"@type":"ContactPoint","telephone":"'.($config['phone']!=''?$config['phone']:$config['mobile']).'","contactType":"customer service"}]';
 }
 if($config['address']!=''){
-  $schemaOrganization.=',"address":{"@type":"PostalAddress","streetAddress":"'.$config['address'].'"'.
+  $schemaOrg.=',"address":{"@type":"PostalAddress","streetAddress":"'.$config['address'].'"'.
     ($config['city']!=''?',"addressLocality":"'.$config['city'].'"':'').
     ($config['suburb']!=''?',"addressRegion":"'.$config['suburb'].'"':'').
     ($config['postcode']!=''||$config['postcode']>0?',"postalCode":"'.$config['postcode'].'"':'').
@@ -276,15 +266,15 @@ if($config['address']!=''){
 }
 $sO=$db->query("SELECT `url` FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=0 ORDER BY `url` ASC");
 if($sO->rowCount()>0){
-  $schemaOrganization.=',"sameAs":[';
+  $schemaOrg.=',"sameAs":[';
   $scnt=$sO->rowCount() - 1;
   while($rO=$sO->fetch(PDO::FETCH_ASSOC)){
-    $schemaOrganization.='"'.$rO['url'].'"'.($scnt>0?',':'');
+    $schemaOrg.='"'.$rO['url'].'"'.($scnt>0?',':'');
     $scnt--;
   }
-  $schemaOrganization.=']';
+  $schemaOrg.=']';
 }
-$schemaOrganization.='}</script>';
+$schemaOrg.='}</script>';
 $head=preg_replace([
   '/<google_analytics>/',
   '/<google_tagmanager>/',
@@ -297,56 +287,74 @@ $head=preg_replace([
   (isset($config['ga_tagmanager'])&&$config['ga_tagmanager']!=''?'<noscript><iframe src="https://www.googletagmanager.com/ns.html?id='.$config['ga_tagmanager'].'"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>':''),
   $schemaWebsite,
-  $schemaOrganization
+  $schemaOrg
 ],$head);
 print$head.$content;
+if($npi!=true&&$config['options'][11]==1){
+  if(isset($page['metaRobots'])&&($page['metaRobots']==''||preg_match("/(index|follow)/i",$page['metaRobots'],'noindex'))){
+    $current_ref=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
+    if(str_contains($_SERVER['HTTP_REFERER'],URL)){$current_ref='';}
+    $today=date('d-m-Y',$ti);
+    $vs=$db->prepare("SELECT `id` FROM `".$prefix."visit_tracker` WHERE `type`='page' AND `rid`=:rid AND `textdate`=:textdate");
+    $vs->execute([
+      ':rid'=>$page['id'],
+      ':textdate'=>$today
+    ]);
+    if($vs->rowCount()==1){
+      $vr=$vs->fetch(PDO::FETCH_ASSOC);
+      $smi=" `direct`=`direct` + 1";
+      if($current_ref!=''){
+        if(stristr($current_ref,'google.com',))$smi=" `google`=`google` + 1";
+        if(stristr($current_ref,'reddit.com',))$smi=" `reddit`=`reddit` + 1";
+        if(stristr($current_ref,'facebook.com'))$smi=" `facebook`=`facebook` + 1";
+        if(stristr($current_ref,'threads.net'))$smi=" `threads`=`threads` + 1";
+        if(stristr($current_ref,'instagram.com'))$smi=" `instagram`=`instagram` + 1";
+        if(stristr($current_ref,'twitter.com'))$smi=" `twitter`=`twitter` + 1";
+        if(stristr($current_ref,'x.com'))$smi=" `twitter`=`twitter` + 1";
+        if(stristr($current_ref,'linkedin.com'))$smi=" `linkedin`=`linkedin` + 1";
+        if(stristr($current_ref,'duckduckgo.com'))$smi=" `duckduckgo`=`duckduckgo` + 1";
+        if(stristr($current_ref,'bing.com'))$smi=" `bing`=`bing` + 1";
+      }
+      $su=$db->prepare("UPDATE `".$prefix."visit_tracker` SET".$smi." WHERE `id`=:id");
+      $su->execute([
+        ':id'=>$vr['id']
+      ]);
+    }else{
+      $smi="direct";
+      if($current_ref!=''){
+        if(stristr($current_ref,'google.com',))$smi="google";
+        if(stristr($current_ref,'reddit.com',))$smi="reddit";
+        if(stristr($current_ref,'facebook.com')||stristr($current_ref,'fblid='))$smi="facebook";
+        if(stristr($current_ref,'threads.net'))$smi="threads";
+        if(stristr($current_ref,'instagram.com'))$smi="instagram";
+        if(stristr($current_ref,'twitter.com')||stristr($current_ref,'x.com'))$smi="twitter";
+        if(stristr($current_ref,'linkedin.com'))$smi="linkedin";
+        if(stristr($current_ref,'duckduckgo.com'))$smi="duckduckgo";
+        if(stristr($current_ref,'bing.com'))$smi="bing";
+      }
+      $su=$db->prepare("INSERT IGNORE INTO `".$prefix."visit_tracker` (`rid`,`type`,`direct`,`google`,`reddit`,`facebook`,`instagram`,`threads`,`twitter`,`linkedin`,`duckduckgo`,`bing`,`textdate`,`ti`) VALUES (:rid,'page',:direct,:google,:reddit,:facebook,:instagram,:threads,:twitter,:linkedin,:duckduckgo,:bing,:today,:ti)");
+      $su->execute([
+        ':rid'=>$page['id'],
+        ':direct'=>($smi=='direct'?1:0),
+        ':google'=>($smi=='google'?1:0),
+        ':reddit'=>($smi=='reddit'?1:0),
+        ':facebook'=>($smi=='facebook'?1:0),
+        ':instagram'=>($smi=='instagram'?1:0),
+        ':threads'=>($smi=='threads'?1:0),
+        ':twitter'=>($smi=='twitter'?1:0),
+        ':linkedin'=>($smi=='linkedin'?1:0),
+        ':duckduckgo'=>($smi=='duckduckgo'?1:0),
+        ':bing'=>($smi=='bing'?1:0),
+        ':today'=>$today,
+        ':ti'=>$ti
+      ]);
+    }
+  }
+}
 $ws=$db->prepare("SELECT `options` FROM `".$prefix."login` WHERE `userIP`=:ip");
 $ws->execute([':ip'=>$ip]);
 if($ws->rowCount()>0)$wr=$ws->fetch(PDO::FETCH_ASSOC);
 else$wr=Array('options'=>'00000000000000000000000000000000');
-/*
-if($wr['options'][18]==0){
-  if($config['options'][11]==1){
-    $current_page=PROTOCOL.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-    if(!isset($_SESSION['current_page'])||(isset($_SESSION['current_page'])&&(stristr($_SESSION['current_page'],'search')||$_SESSION['current_page']!=$current_page))){
-      if(!stristr($current_page,'/core/')||
-        !stristr($current_page,'/admin/')||
-        !stristr($current_page,'/layout/')||
-        !stristr($current_page,'/media/')||
-        !stristr($current_page,'.js')||
-        !stristr($current_page,'.css')||
-        !stristr($current_page,'.map')||
-        !stristr($current_page,'.jpg')||
-        !stristr($current_page,'.jpeg')||
-        !stristr($current_page,'.png')||
-        !stristr($current_page,'.gif')||
-        !stristr($current_page,'.svg')||
-        !stristr($current_page,'.webp')
-      ){
-        $useragent=$_SERVER['HTTP_USER_AGENT'];
-        $clienthints=getallheaders();
-        $s=$db->prepare("INSERT IGNORE INTO `".$prefix."tracker` (`pid`,`urlDest`,`urlFrom`,`userAgent`,`keywords`,`ip`,`host`,`browser`,`device`,`viewportwidth`,`os`,`sid`,`ti`) VALUES (:pid,:urlDest,:urlFrom,:userAgent,:keywords,:ip,:host,:browser,:device,:viewportwidth,:os,:sid,:ti)");
-        $hr=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
-        $s->execute([
-          ':pid'=>isset($page['id'])?$page['id']:0,
-          ':urlDest'=>$current_page,
-          ':urlFrom'=>$hr,
-          ':userAgent'=>(isset($clienthints['User-Agent'])?$clienthints['User-Agent']:$_SERVER['HTTP_USER_AGENT']),
-          ':keywords'=>isset($search)&&($search!='%'||$search!='')?ltrim(rtrim(str_replace([' ','%'],',',$search),','),','):'',
-          ':ip'=>$ip,
-          ':host'=>(isset($clienthints['Host'])?$clienthints['Host']:$ip),
-          ':browser'=>getBrowser($useragent,$clienthints),
-          ':device'=>getDevice($useragent,$clienthints),
-          ':viewportwidth'=>(isset($clienthints['viewport-width'])?$clienthints['viewport-width']:'N/A'),
-          ':os'=>getOS($useragent,$clienthints),
-          ':sid'=>session_id(),
-          ':ti'=>time()
-        ]);
-        $_SESSION['current_page']=$current_page;
-      }
-    }
-  }
-} */
 function getDevice($ua,$ch){
   $osd='Unknown';
   if(isset($ch['sec-ch-ua-mobile'])){

@@ -6,7 +6,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -34,7 +34,7 @@ if($s->rowCount()>0){
   }
 }?>
 <div class="item resize m-0 p-0 col-12 col-sm-<?=$rw['width_sm'];?> col-md-<?=$rw['width_md'];?> col-lg-<?=$rw['width_lg'];?> col-xl-<?=$rw['width_xl'];?> col-xxl-<?=$rw['width_xxl'];?>" data-dbid="<?=$rw['id'];?>" data-smmin="6" data-smmax="12" data-mdmin="6" data-mdmax="12" data-lgmin="1" data-lgmax="12" data-xlmin="5" data-xlmax="12" data-xxlmin="4" data-xxlmax="6" id="l_<?=$rw['id'];?>">
-  <div class="alert widget widget-limit m-3 p-0" id="widgetviewedpages<?=$rw['id'];?>">
+  <div class="alert widget widget-limit m-1 p-0" id="widgetviewedpages<?=$rw['id'];?>">
     <div class="toolbar px-2 py-1 handle">
       <?=$rw['title'];?>
       <div class="btn-group">

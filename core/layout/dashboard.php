@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-3
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -59,25 +59,25 @@ else{?>
           $sseo=$db->prepare("SELECT `id`,`cover`,`fileALT`,`seoTitle`,`seoDescription`,`heading`,`notes` FROM `".$prefix."menu`");
           $sseo->execute();
           while($rseo=$sseo->fetch(PDO::FETCH_ASSOC)){
-            if(strlen($rseo['seoTitle'])<50||strlen($rseo['seoTitle'])>70)$seopageerrors++;
-            if(strlen($rseo['seoDescription'])<1||strlen($rseo['seoDescription'])>70)$seopageerrors++;
+            if(strlen((string)$rseo['seoTitle'])<50||strlen((string)$rseo['seoTitle'])>70)$seopageerrors++;
+            if(strlen((string)$rseo['seoDescription'])<1||strlen((string)$rseo['seoDescription'])>70)$seopageerrors++;
             if($rseo['cover']!=''){
-              if(strlen($rseo['fileALT'])<1)$seopageerrors++;
+              if(strlen((string)$rseo['fileALT'])<1)$seopageerrors++;
             }
             if($rseo['heading']=='')$seopageerrors++;
-            if(strlen(strip_tags($rseo['notes']))<100)$seopageerrors++;
+            if(strlen((string)strip_tags((string)$rseo['notes']))<100)$seopageerrors++;
             preg_match('~<h1>([^{]*)</h1>~i',$rseo['notes'],$h1);
             if(isset($h1[1]))$seopageerrors++;
           }
           $sseo=$db->prepare("SELECT `file`,`fileALT`,`seoTitle`,`seoDescription`,`notes` FROM `".$prefix."content` WHERE `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'newsletter%' AND `contentType`!='list' AND `contentType`!='advert' AND `contentType`!='booking'");
           $sseo->execute();
           while($rseo=$sseo->fetch(PDO::FETCH_ASSOC)){
-            if(strlen($rseo['seoTitle'])<50||strlen($rseo['seoTitle'])>70)$seocontenterrors++;
-            if(strlen($rseo['seoDescription'])<1||strlen($rseo['seoDescription'])>70)$seocontenterrors++;
+            if(strlen((string)$rseo['seoTitle'])<50||strlen((string)$rseo['seoTitle'])>70)$seocontenterrors++;
+            if(strlen((string)$rseo['seoDescription'])<1||strlen((string)$rseo['seoDescription'])>70)$seocontenterrors++;
             if($rseo['file']!=''){
-              if(strlen($rseo['fileALT'])<1)$seocontenterrors++;
+              if(strlen((string)$rseo['fileALT'])<1)$seocontenterrors++;
             }
-            if(strlen(strip_tags($rseo['notes']))<100)$seocontenterrors++;
+            if(strlen(strip_tags((string)$rseo['notes']))<100)$seocontenterrors++;
             preg_match('~<h1>([^{]*)</h1>~i',$rseo['notes'],$h1);
             if(isset($h1[1]))$seocontenterrors++;
           }

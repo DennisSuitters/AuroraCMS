@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -25,7 +25,7 @@ if($config['options'][28]==1){
     ]);
     if($so->rowCount()>0){?>
       <div class="item m-0 p-0 col-12" id="l_<?=$rw['id'];?>">
-        <div class="alert widget m-3 p-0">
+        <div class="alert widget m-1 p-0">
           <div class="toolbar px-2 py-1 handle">
             Sale Content Suggestions <small>(Items that sold during this Sales Period that aren't included in the current Sale)</small>
             <div class="btn-group">

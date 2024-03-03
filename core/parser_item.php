@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -46,15 +46,66 @@ if($skip==false){
   $seoCaption=escaper($r['seoCaption']==''?$r['seoCaption']:$page['seoCaption']);
   $seoDescription=escaper($r['seoDescription']!=''?$r['seoDescription']:($r['seoCaption']!=''?$r['seoCaption']:substr(strip_tags($r['notes']),0,160)));
   $seoKeywords=$r['seoKeywords']==''?$r['seoKeywords']:$page['seoKeywords'];
-  $smi=", `views_direct`=`views_direct`+1";
-  if(stristr($current_ref,'google.com',))$smi=", `views_google`=`views_google`+1";
-  if(stristr($current_ref,'facebook.com'||stristr($current_ref,'fblid=')))$smi=", `views_facebook`=`views_facebook`+1";
-  if(stristr($current_ref,'instagram.com'))$smi=", `views_instagram`=`views_instagram`+1";
-  if(stristr($current_ref,'twitter.com')||stristr($current_ref,'x.com'))$smi=", `views_twitter`=`views_twitter`+1";
-  if(stristr($current_ref,'linkedin.com'))$smi=", `views_linkedin`=`views_linkedin`+1";
-  if(stristr($current_ref,'duckduckgo.com'))$smi=", `views_duckduckgo`=`views_duckduckgo`+1";
-  if(stristr($current_ref,'bing.com'))$smi=", `views_bing`=`views_bing`+1";
-  $su=$db->prepare("UPDATE `".$prefix."content` SET `views`=`views`+1".$smi." WHERE `id`=:id")->execute([':id'=>$r['id']]);
+  $current_ref=$_SERVER['HTTP_REFERER'];
+  if(str_contains($_SERVER['HTTP_REFERER'],URL)){$current_ref='';}
+  $today=date('d-m-Y',$ti);
+  if($config['options'][11]==1){
+    $npi=true;
+    $vs=$db->prepare("SELECT `id` FROM `".$prefix."visit_tracker` WHERE `type`='content' AND `rid`=:rid AND `textdate`=:textdate");
+    $vs->execute([
+      ':rid'=>$r['id'],
+      ':textdate'=>$today
+    ]);
+    if($vs->rowCount()==1){
+      $vr=$vs->fetch(PDO::FETCH_ASSOC);
+      $smi=" `direct`=`direct` + 1";
+      if($current_ref!=''){
+        if(stristr($current_ref,'google.com',))$smi=" `google`=`google` + 1";
+        if(stristr($current_ref,'reddit.com',))$smi=" `reddit`=`reddit` + 1";
+        if(stristr($current_ref,'facebook.com'))$smi=" `facebook`=`facebook` + 1";
+        if(stristr($current_ref,'threads.net'))$smi=" `threads`=`threads` + 1";
+        if(stristr($current_ref,'instagram.com'))$smi=" `instagram`=`instagram` + 1";
+        if(stristr($current_ref,'twitter.com'))$smi=" `twitter`=`twitter` + 1";
+        if(stristr($current_ref,'x.com'))$smi=" `twitter`=`twitter` + 1";
+        if(stristr($current_ref,'linkedin.com'))$smi=" `linkedin`=`linkedin` + 1";
+        if(stristr($current_ref,'duckduckgo.com'))$smi=" `duckduckgo`=`duckduckgo` + 1";
+        if(stristr($current_ref,'bing.com'))$smi=" `bing`=`bing` + 1";
+      }
+      $su=$db->prepare("UPDATE `".$prefix."visit_tracker` SET".$smi." WHERE `id`=:id");
+      $su->execute([
+        ':id'=>$vr['id']
+      ]);
+    }else{
+      $smi="direct";
+      if($current_ref!=''){
+        if(stristr($current_ref,'google.com',))$smi="google";
+        if(stristr($current_ref,'reddit.com',))$smi="reddit";
+        if(stristr($current_ref,'facebook.com')||stristr($current_ref,'fblid='))$smi="facebook";
+        if(stristr($current_ref,'threads.net'))$smi="threads";
+        if(stristr($current_ref,'instagram.com'))$smi="instagram";
+        if(stristr($current_ref,'twitter.com')||stristr($current_ref,'x.com'))$smi="twitter";
+        if(stristr($current_ref,'linkedin.com'))$smi="linkedin";
+        if(stristr($current_ref,'duckduckgo.com'))$smi="duckduckgo";
+        if(stristr($current_ref,'bing.com'))$smi="bing";
+      }
+      $su=$db->prepare("INSERT IGNORE INTO `".$prefix."visit_tracker` (`rid`,`type`,`direct`,`google`,`reddit`,`facebook`,`instagram`,`threads`,`twitter`,`linkedin`,`duckduckgo`,`bing`,`textdate`,`ti`) VALUES (:rid,'content',:direct,:google,:reddit,:facebook,:instagram,:threads,:twitter,:linkedin,:duckduckgo,:bing,:today,:ti)");
+      $su->execute([
+        ':rid'=>$r['id'],
+        ':direct'=>($smi=='direct'?1:0),
+        ':google'=>($smi=='google'?1:0),
+        ':reddit'=>($smi=='reddit'?1:0),
+        ':facebook'=>($smi=='facebook'?1:0),
+        ':instagram'=>($smi=='instagram'?1:0),
+        ':threads'=>($smi=='threads'?1:0),
+        ':twitter'=>($smi=='twitter'?1:0),
+        ':linkedin'=>($smi=='linkedin'?1:0),
+        ':duckduckgo'=>($smi=='duckduckgo'?1:0),
+        ':bing'=>($smi=='bing'?1:0),
+        ':today'=>$today,
+        ':ti'=>$ti
+      ]);
+    }
+  }
   $us=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:uid");
   $us->execute([':uid'=>$r['uid']]);
   $ua=$us->fetch(PDO::FETCH_ASSOC);
@@ -417,6 +468,7 @@ if($skip==false){
           $r['file']=rawurldecode($r['file']);
           $mediaitems=preg_replace([
             '/<print media=[\"\']?id[\"\']?>/',
+            '/<nolightbox>/',
             '/<print thumb=[\"\']?srcset[\"\']?>/',
             '/<print lightbox=[\"\']?srcset[\"\']?>/',
             '/<print media=[\"\']?thumb[\"\']?>/',
@@ -426,11 +478,12 @@ if($skip==false){
             '/<print media=[\"\']?title[\"\']?>/'
           ],[
             $r['id'],
+            ' nolightbox',
             'srcset="'.
               ($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file']).' '.$config['mediaMaxWidthThumb'].'w,':'').
               ($r['file']!=''&&file_exists('media/md/'.basename($r['file']))?'media/md/'.basename($r['file']).' 600w,':'').
               ($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file']).' 400w':'').'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" ',
-            ($r['file']!=''&&file_exists('media/'.basename($rm['file']))?'media/'.basename($r['file']).' '.$config['mediaMaxWidth'].'w, ':'').
+            ($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']).' '.$config['mediaMaxWidth'].'w, ':'').
               ($r['file']!=''&&file_exists('media/lg/'.basename($r['file']))?'media/lg/'.basename($r['file']).' 1000w,':'').
               ($r['file']!=''&&file_exists('media/md/'.basename($r['file']))?'media/md/'.basename($r['file']).' 600w,':'').
               ($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file']).' 400w':''),
@@ -448,6 +501,7 @@ if($skip==false){
           $rm['file']=rawurldecode($rm['file']);
           $mediaitems=preg_replace([
             '/<print media=[\"\']?id[\"\']?>/',
+            '/<nolightbox>/',
             '/<print thumb=[\"\']?srcset[\"\']?>/',
             '/<print lightbox=[\"\']?srcset[\"\']?>/',
             '/<print media=[\"\']?thumb[\"\']?>/',
@@ -457,6 +511,7 @@ if($skip==false){
             '/<print media=[\"\']?title[\"\']?>/'
           ],[
             $rm['id'],
+            ($config['options'][5]==1?'':' nolightbox'),
             'srcset="'.
               ($rm['file']!=''&&file_exists('media/sm/'.basename($rm['file']))?'media/sm/'.basename($rm['file']).' '.$config['mediaMaxWidthThumb'].'w,':'').
               ($rm['file']!=''&&file_exists('media/md/'.basename($rm['file']))?'media/md/'.basename($rm['file']).' 600w,':'').
@@ -1010,7 +1065,7 @@ if($skip==false){
           $jrr=$jss->fetch(PDO::FETCH_ASSOC);
           $jsonld.='"aggregateRating":{'.
             '"@type":"aggregateRating",'.
-            '"ratingValue":"'.($jrr['rate']==''?'1':$jrr['rate']).'",'.
+            '"ratingValue":"'.($jrr['rate']==0?'1':$jrr['rate']).'",'.
             '"bestRating":"100",'.
             '"reviewCount":"'.($jrr['cnt']==0?'1':$jrr['cnt']).'"'.
           '},';

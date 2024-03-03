@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -31,37 +31,37 @@ $seoerrors=0;
 if($r['seoTitle']==''){
   $seo['seoTitle']='<div>The <strong>Meta Title</strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!</div>';
   $seo['seocnt']++;
-}elseif(strlen($r['seoTitle'])<50){
+}elseif(strlen((string)$r['seoTitle'])<20){
   $seo['seoTitle']='<div>The <strong>Meta Title</strong> is less than <strong>50</strong> characters!</div>';
   $seo['seocnt']++;
-}elseif(strlen($r['seoTitle'])>70){
+}elseif(strlen((string)$r['seoTitle'])>70){
   $seo['seoTitle']='<div>The <strong>Meta Title</strong> is longer than <strong>70</strong> characters!</div>';
   $seo['seocnt']++;
 }
 if($r['seoDescription']==''){
   $seo['seoDescription']='<div>The <strong>Meta Description</strong> is empty, while AuroraCMS tries to autofill this entry when build the page, it is better to fill in this information yourself!</div>';
   $seo['seocnt']++;
-}elseif(strlen($r['seoDescription'])<1){
-  $seo['seoDescription']='<div>The <strong>Meta Description</strong> is empty!</div>';
+}elseif(strlen((string)$r['seoDescription'])<70){
+  $seo['seoDescription']='<div>The <strong>Meta Description</strong> is less than <strong>70</strong> characters!</div>';
   $seo['seocnt']++;
-}elseif(strlen($r['seoDescription'])>160){
+}elseif(strlen((string)$r['seoDescription'])>160){
   $seo['seoDescription']='<div>The <strong>Meta Description</strong> is longer than <strong>160</strong> characters!</div>';
   $seo['seocnt']++;
 }
 if($r['cover']!=''){
-  if(strlen($r['fileALT'])<1){
+  if(strlen((string)$r['fileALT'])<1){
     $seo['imagesALT']='<div>The <strong>Image ALT</strong> text is empty!</div>';
     $seo['imagescnt']++;
   }
 }
-if(strip_tags($r['notes'])==''){
+if(strip_tags((string)$r['notes'])==''){
   $seo['contentNotes']='<div>The <strong>Description</strong> is empty. At least <strong>100</strong> characters is recommended!</div>';
   $seo['contentcnt']++;
-}elseif(strlen(strip_tags($r['notes']))<100){
+}elseif(strlen(strip_tags((string)$r['notes']))<100){
   $seo['contentNotes']='<div>The <strong>Description</strong> test is less than <strong>100</strong> characters!</div>';
   $seo['contentcnt']++;
 }
-preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
+preg_match('~<h1>([^{]*)</h1>~i',(string)$r['notes'],$h1);
 if(isset($h1[1])){
   $seo['contentNotesHeading']='<div>Do not use <strong>H1</strong> headings in the <strong>Description</strong> Text, as AuroraCMS uses the <strong>Heading</strong> Field to place H1 headings on page, and uses them for other areas for SEO!</div>';
   $seo['contentcnt']++;
@@ -106,7 +106,7 @@ if($r['heading']==''){
           ($r['file']=='pricing'?'<input id="tab1-3" class="tab-control" name="tabs" type="radio"><label for="tab1-3">Price Items</label>':'').
           ($r['file']!='activate'&&$r['file']!='offline'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4"'.($seo['seocnt']>0?' class="badge" data-badge="'.$seo['seocnt'].'"':'').'>'.($seo['seocnt']>0?'<span data-tooltip="tooltip" aria-label="There'.($seo['seocnt']>1?' are '.$seo['seocnt'].' SEO related issues!':' is 1 SEO related issue!').'">SEO</span>':'SEO').'</label>':'').
           ($r['id']!=1&&$r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'').
-          '<input id="tab1-6" class="tab-control" name="tabs" type="radio"><label for="tab1-6">Analytics</label>';?>
+          ($config['options'][11]==1?'<input id="tab1-6" class="tab-control" name="tabs" type="radio"><label for="tab1-6">Analytics</label>':'');?>
 <?php /* Content */ ?>
           <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'&&$r['contentType']!='offline'){?>
@@ -137,13 +137,13 @@ if($r['heading']==''){
               <label for="urlSlug">URL Slug</label>
               <div class="form-row">
                 <div class="input-text col-12" id="urlSlug">
-                  <a id="genurl" target="_blank" href=<?= '"'.URL.($r['contentType']=='index'?'':$r['contentType'].($r['contentType']=='page'?'/'.strtolower(str_replace(' ','-',$r['title'])):'').'/').'">'.URL.($r['contentType']=='index'?'':$r['contentType'].($r['contentType']=='page'?'/'.strtolower(str_replace(' ','-',$r['title'])):'').'/').'</a>';?>
+                  <a id="genurl" target="_blank" href=<?= '"'.URL.($r['contentType']=='index'?'':$r['contentType'].($r['contentType']=='page'?'/'.strtolower(str_replace(' ','-',(string)$r['title'])):'').'/').'">'.URL.($r['contentType']=='index'?'':$r['contentType'].($r['contentType']=='page'?'/'.strtolower(str_replace(' ','-',$r['title'])):'').'/').'</a>';?>
                 </div>
               </div>
             <?php }?>
             <label for="heading">Page Heading</label>
             <div class="form-text">This text is normally used in the &lt;h1&gt; heading tag. If left empty, the SEO Meta Title will be used, otherwise an auto-generated text will be used.</div>
-            <?=$seo['contentHeading']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags($seo['contentHeading'],'<strong>').'</div>':'';?>
+            <?=$seo['contentHeading']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags((string)$seo['contentHeading'],'<strong>').'</div>':'';?>
             <div class="form-row<?=$seo['contentHeading']!=''?' border-danger border-2 border-top-0':'';?>">
               <?php if($user['options'][1]==1){
                 $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
@@ -208,7 +208,7 @@ if($r['heading']==''){
                 <input name="id" type="hidden" value="<?=$r['id'];?>">
                 <input name="t" type="hidden" value="menu">
                 <input name="c" type="hidden" value="notes">
-                <textarea class="summernote" id="notes" name="da" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="notes"><?= rawurldecode($r['notes']);?></textarea>
+                <textarea class="summernote" id="notes" name="da" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="notes"><?= rawurldecode((string)$r['notes']);?></textarea>
               </form>
               <?php }else{?>
                 <div class="note-admin">
@@ -241,10 +241,10 @@ if($r['heading']==''){
                   <label for="shareImage" class="mt-0">Share Image</label>
                   <div class="form-row mb-3">
                     <?php $w='';
-                    if(stristr($r['shareImage'],'/thumbs/'))$w='thumbs';
-                    if(stristr($r['shareImage'],'/lg/'))$w='lg';
-                    if(stristr($r['shareImage'],'/md/'))$w='md';
-                    if(stristr($r['shareImage'],'/sm/'))$w='sm';
+                    if(stristr((string)$r['shareImage'],'/thumbs/'))$w='thumbs';
+                    if(stristr((string)(string)$r['shareImage'],'/lg/'))$w='lg';
+                    if(stristr((string)$r['shareImage'],'/md/'))$w='md';
+                    if(stristr((string)(string)$r['shareImage'],'/sm/'))$w='sm';
                     if($r['shareImage']!='')
                       echo'<a data-fancybox="shareImage" data-type="image" href="'.$r['shareImage'].'"><img class="bg-white" id="shareimageimage" src="'.$r['shareImage'].'" alt="'.$r['title'].'"></a>';
                     else
@@ -271,10 +271,10 @@ if($r['heading']==''){
                 <?=($seo['imagesCover']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.$seo['imagesCover'].'</div>':'');?>
                 <div class="form-row<?=($seo['imagesCover']!=''?' border-danger border-2 border-top-0':'');?>">
                   <?php $w='';
-                  if(stristr($r['cover'],'/thumbs/'))$w='thumbs';
-                  if(stristr($r['cover'],'/lg/'))$w='lg';
-                  if(stristr($r['cover'],'/md/'))$w='md';
-                  if(stristr($r['cover'],'/sm/'))$w='sm';
+                  if(stristr((string)$r['cover'],'/thumbs/'))$w='thumbs';
+                  if(stristr((string)$r['cover'],'/lg/'))$w='lg';
+                  if(stristr((string)$r['cover'],'/md/'))$w='md';
+                  if(stristr((string)$r['cover'],'/sm/'))$w='sm';
                   if($r['cover']!='')
                     echo'<a data-fancybox="cover" data-type="image" href="'.$r['cover'].'"><img class="bg-white" id="coverimage" src="'.$r['cover'].'" alt="'.$r['title'].'"></a>';
                   else
@@ -297,7 +297,7 @@ if($r['heading']==''){
                 </div>
                 <div id="editcover"></div>
                 <label for="fileALT">Image ALT</label>
-                <?=$seo['imagesALT']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags($seo['imagesALT'],'<strong>').'</div>':'';?>
+                <?=$seo['imagesALT']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags((string)$seo['imagesALT'],'<strong>').'</div>':'';?>
                 <div class="form-row<?=$r['cover']!=''&&$seo['imagesALT']!=''?' border-danger border-2 border-top-0':'';?>">
                   <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Image-Alt-Text.md" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><i class="i">seo</i></button>
                   <div class="input-text" data-el="fileALT" contenteditable="<?=$user['options'][1]==1?'true':'false';?>"><?=$r['fileALT'];?></div>
@@ -645,11 +645,11 @@ if($r['heading']==''){
                 <div id="google-description" data-tooltip="tooltip" aria-label="This is what shows up in the search results under your clickable link. This is quite important, and is the first piece of text your customers will read about your brand. If the Meta Description below is empty, a truncated version of your content text with the HTML tags removed will be used. If that is empty then the text is taken from the default text set in preferences."><?=$r['seoDescription'];?></div>
               </div>
               <label for="seoTitle">Meta Title</label>
-              <div class="form-text">The recommended character count for Titles is a minimum of 50 and maximum of 70.</div>
-              <?=($seo['seoTitle']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags($seo['seoTitle'],'<strong>').'</div>':'');?>
+              <div class="form-text">The recommended character count for Titles is a minimum of 20 and maximum of 70.</div>
+              <?=($seo['seoTitle']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags((string)$seo['seoTitle'],'<strong>').'</div>':'');?>
               <div class="form-row<?=$seo['seoTitle']!=''?' border-danger border-2 border-top-0':'';?>">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><i class="i">seo</i></button>
-                <div id="seoTitlecnt" class="input-text text-success<?= strlen($r['seoTitle'])<1||strlen($r['seoTitle'])>65?' text-danger':'';?>"><?= strlen($r['seoTitle']);?></div>
+                <div id="seoTitlecnt" class="input-text<?= strlen((string)$r['seoTitle'])<20||strlen($r['seoTitle'])>70?' bg-danger text-white':'';?>"><?= strlen((string)$r['seoTitle']);?></div>
                 <?php if($user['options'][1]==1){
                   echo'<button onclick="removeStopWords(`seoTitle`,$(`#seoTitle`).val());" data-tooltip="tooltip" aria-label="Remove Stop Words"><i class="i">magic</i></button>';
                   $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
@@ -670,11 +670,11 @@ if($r['heading']==''){
                   '');?>
               </div>
               <label for="seoDescription">Meta Description</label>
-              <div class="form-text">The recommended character count for Descriptions is a minimum of 50 and a maximum of 160.</div>
-              <?=$seo['seoDescription']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags($seo['seoDescription'],'<strong>').'</div>':'';?>
+              <div class="form-text">The recommended character count for Descriptions is a minimum of 70 and a maximum of 160.</div>
+              <?=$seo['seoDescription']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags((string)$seo['seoDescription'],'<strong>').'</div>':'';?>
               <div class="form-row<?=$seo['seoDescription']!=''?' border-danger border-2 border-top-0':'';?>">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Meta-Description.md" data-tooltip="tooltip" aria-label="SEO Meta Description Information"><i class="i">seo</i></button>
-                <div id="seoDescriptioncnt" class="input-text text-success<?= strlen($r['seoDescription'])<50||strlen($r['seoDescription'])>160?' text-danger':'';?>"><?= strlen($r['seoDescription']);?></div>
+                <div id="seoDescriptioncnt" class="input-text<?= strlen((string)$r['seoDescription'])<70||strlen($r['seoDescription'])>160?' bg-danger text-white':'';?>"><?= strlen((string)$r['seoDescription']);?></div>
                 <?php if($user['options'][1]==1){
                   $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
                   $ss->execute([
@@ -782,85 +782,114 @@ if($r['heading']==''){
                 }?>
               </div>
             <?php }
-/* Analytics */?>
+/* Analytics */
+          if($config['options'][11]==1){?>
             <div class="tab1-6 border p-3" data-tabid="tab1-6" role="tabpanel">
+<?php         $week1start=strtotime("last sunday midnight this week");
+              $week1end=strtotime("saturday this week");
+              $sv=$db->prepare("SELECT SUM(`direct`) AS `direct`, SUM(`google`) AS `google`, SUM(`reddit`) AS `reddit`, SUM(`facebook`) AS `facebook`, SUM(`instagram`) AS `instagram`, SUM(`threads`) AS `threads`, SUM(`twitter`) AS `twitter`, SUM(`linkedin`) AS `linkedin`, SUM(`duckduckgo`) AS `duckduckgo`, SUM(`bing`) AS `bing` FROM `".$prefix."visit_tracker` WHERE `type`='page' AND `rid`=:rid AND `ti` >=:ti1 AND `ti` <= :ti2");
+              $sv->execute([
+                ':rid'=>$r['id'],
+                ':ti1'=>$week1start,
+                ':ti2'=>$week1end
+              ]);
+              $rv=$sv->fetch(PDO::FETCH_ASSOC);
+              $previous_week = strtotime("-1 week +1 day",$ti);
+              $week2start = strtotime("last sunday midnight",$previous_week);
+              $week2end = strtotime("next saturday",$week2start);
+              $sv2=$db->prepare("SELECT SUM(`direct`) AS `direct`, SUM(`google`) AS `google`, SUM(`reddit`) AS `reddit`, SUM(`facebook`) AS `facebook`, SUM(`instagram`) AS `instagram`, SUM(`threads`) AS `threads`, SUM(`twitter`) AS `twitter`, SUM(`linkedin`) AS `linkedin`, SUM(`duckduckgo`) AS `duckduckgo`, SUM(`bing`) AS `bing` FROM `".$prefix."visit_tracker` WHERE `type`='page' AND `rid`=:rid AND `ti` >=:ti1 AND `ti` <= :ti2");
+              $sv2->execute([
+                ':rid'=>$r['id'],
+                ':ti1'=>$week2start,
+                ':ti2'=>$week2end
+              ]);
+              $rv2=$sv2->fetch(PDO::FETCH_ASSOC);?>
               <div class="row mt-3 justify-content-center">
-                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
-                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-direct`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_direct`,`0`);"><i class="i">eraser</i></button>':'');?>
+                <div class="card stats col-11 col-sm p-1 m-1 text-center">
                   <span class="h6 text-muted">Direct</span>
-                  <span class="px-0 py-2">
-                    <span class="text-3x" id="social-direct"><?=short_number($r['views_direct']);?></span>
+                  <span class="px-0 py-1">
+                    <span class="text-3x" id="social-direct"><?=short_number($rv['direct']);?></span>
+                    <?=($rv2['direct']>0?($rv['direct']<$rv2['direct']?'<small class="text-danger">&darr;'.short_number($rv2['direct'] - $rv['direct']).'</small>':'').($rv2['direct']<$rv['direct']?'<small class="text-success">&uarr;'.short_number($rv['direct'] - $rv2['direct']).'</small>':''):'');?>
                   </span>
                   <span class="icon"><i class="i i-5x">browser-general</i></span>
                 </div>
-                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
-                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-google`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_google`,`0`);"><i class="i">eraser</i></button>':'');?>
+                <div class="card stats col-11 col-sm p-1 m-1 text-center">
                   <span class="h6 text-muted">Google</span>
                   <span class="px-0 py-2">
-                    <span class="text-3x" id="social-google"><?=short_number($r['views_google']);?></span>
+                    <span class="text-3x" id="social-google"><?=short_number($rv['google']);?></span>
+                    <?=($rv2['google']>0?($rv['google']<$rv2['google']?'<small class="text-danger">&darr;'.short_number($rv2['google'] - $rv['google']).'</small>':'').($rv2['google']<$rv['google']?'<small class="text-success">&uarr;'.short_number($rv['google'] - $rv2['google']).'</small>':''):'');?>
                   </span>
                   <span class="icon"><i class="i i-social social-google i-5x">social-google</i></span>
                 </div>
-                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
-                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-duckduckgo`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_duckduckgo`,`0`);"><i class="i">eraser</i></button>':'');?>
+                <div class="card stats col-11 col-sm p-1 m-1 text-center">
                   <span class="h6 text-muted">DuckDuckGo</span>
                   <span class="px-0 py-2">
-                    <span class="text-3x" id="social-duckduckgo"><?=short_number($r['views_duckduckgo']);?></span>
+                    <span class="text-3x" id="social-duckduckgo"><?=short_number($rv['duckduckgo']);?></span>
+                    <?=($rv2['duckduckgo']>0?($rv['duckduckgo']<$rv2['duckduckgo']?'<small class="text-danger">&darr;'.short_number($rv2['duckduckgo'] - $rv['duckduckgo']).'</small>':'').($rv2['duckduckgo']<$rv['duckduckgo']?'<small class="text-success">&uarr;'.short_number($rv['duckduckgo'] - $rv2['duckduckgo']).'</small>':''):'');?>
                   </span>
                   <span class="icon"><i class="i i-social social-duckduckgo i-5x">social-duckduckgo</i></span>
                 </div>
-                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
-                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-bing`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_bing`,`0`);"><i class="i">eraser</i></button>':'');?>
+                <div class="card stats col-11 col-sm p-1 m-1 text-center">
                   <span class="h6 text-muted">Bing</span>
                   <span class="px-0 py-2">
-                    <span class="text-3x" id="social-bing"><?=short_number($r['views_bing']);?></span>
+                    <span class="text-3x" id="social-bing"><?=short_number($rv['bing']);?></span>
+                    <?=($rv2['bing']>0?($rv['bing']<$rv2['bing']?'<small class="text-danger">&darr;'.short_number($rv2['bing'] - $rv['bing']).'</small>':'').($rv2['bing']<$rv['bing']?'<small class="text-success">&uarr;'.short_number($rv['bing'] - $rv2['bing']).'</small>':''):'');?>
                   </span>
                   <span class="icon"><i class="i i-social social-bing i-5x">social-bing</i></span>
                 </div>
-                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
-                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-facebook`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_facebook`,`0`);"><i class="i">eraser</i></button>':'');?>
+                <div class="card stats col-11 col-sm p-1 m-1 text-center">
+                  <span class="h6 text-muted">Reddit</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-reddit"><?=short_number($rv['reddit']);?></span>
+                    <?=($rv2['reddit']>0?($rv['reddit']<$rv2['reddit']?'<small class="text-danger">&darr;'.short_number($rv2['reddit'] - $rv['reddit']).'</small>':'').($rv2['reddit']<$rv['reddit']?'<small class="text-success">&uarr;'.short_number($rv['reddit'] - $rv2['reddit']).'</small>':''):'');?>
+                  </span>
+                  <span class="icon"><i class="i i-social social-reddit i-5x">social-reddit</i></span>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="card stats col-11 col-sm p-1 m-1 text-center">
                   <span class="h6 text-muted">Facebook</span>
                   <span class="px-0 py-2">
-                    <span class="text-3x" id="social-facebook"><?=short_number($r['views_facebook']);?></span>
+                    <span class="text-3x" id="social-facebook"><?=short_number($rv['facebook']);?></span>
+                    <?=($rv2['facebook']>0?($rv['facebook']<$rv2['facebook']?'<small class="text-danger">&darr;'.short_number($rv2['facebook'] - $rv['facebook']).'</small>':'').($rv2['facebook']<$rv['facebook']?'<small class="text-success">&uarr;'.short_number($rv['facebook'] - $rv2['facebook']).'</small>':''):'');?>
                   </span>
                   <span class="icon"><i class="i i-social social-facebook i-5x">social-facebook</i></span>
                 </div>
-                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
-                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-instagram`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_instagram`,`0`);"><i class="i">eraser</i></button>':'');?>
+                <div class="card stats col-11 col-sm p-1 m-1 text-center">
+                  <span class="h6 text-muted">Threads</span>
+                  <span class="px-0 py-2">
+                    <span class="text-3x" id="social-threads"><?=short_number($rv['threads']);?></span>
+                    <?=($rv2['threads']>0?($rv['threads']<$rv2['threads']?'<small class="text-danger">&darr;'.short_number($rv2['threads'] - $rv['threads']).'</small>':'').($rv2['threads']<$rv['threads']?'<small class="text-success">&uarr;'.short_number($rv['threads'] - $rv2['threads']).'</small>':''):'');?>
+                  </span>
+                  <span class="icon"><i class="i i-social social-threads i-5x">social-threads</i></span>
+                </div>
+                <div class="card stats col-11 col-sm p-1 m-1 text-center">
                   <span class="h6 text-muted">Instagram</span>
                   <span class="px-0 py-2">
-                    <span class="text-3x" id="social-instagram"><?=short_number($r['views_instagram']);?></span>
+                    <span class="text-3x" id="social-instagram"><?=short_number($rv['instagram']);?></span>
+                    <?=($rv2['instagram']>0?($rv['instagram']<$rv2['instagram']?'<small class="text-danger">&darr;'.short_number($rv2['instagram'] - $rv['instagram']).'</small>':'').($rv2['instagram']<$rv['instagram']?'<small class="text-success">&uarr;'.short_number($rv['instagram'] - $rv2['instagram']).'</small>':''):'');?>
                   </span>
                   <span class="icon"><i class="i i-social social-instagram i-5x">social-instagram</i></span>
                 </div>
-                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
-                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-twitter`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_twitter`,`0`);"><i class="i">eraser</i></button>':'');?>
+                <div class="card stats col-11 col-sm p-1 m-1 text-center">
                   <span class="h6 text-muted">Twitter</span>
                   <span class="px-0 py-2">
-                    <span class="text-3x" id="social-twitter"><?=short_number($r['views_twitter']);?></span>
+                    <span class="text-3x" id="social-twitter"><?=short_number($rv['twitter']);?></span>
+                    <?=($rv2['twitter']>0?($rv['twitter']<$rv2['twitter']?'<small class="text-danger">&darr;'.short_number($rv2['twitter'] - $rv['twitter']).'</small>':'').($rv2['twitter']<$rv['twitter']?'<small class="text-success">&uarr;'.short_number($rv['twitter'] - $rv2['twitter']).'</small>':''):'');?>
                   </span>
                   <span class="icon"><i class="i i-social social-twitter i-5x">social-twitter</i></span>
                 </div>
-                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
-                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#social-linkedin`).html(`0`);update(`'.$r['id'].'`,`menu`,`views_linkedin`,`0`);"><i class="i">eraser</i></button>':'');?>
+                <div class="card stats col-11 col-sm p-1 m-1 text-center">
                   <span class="h6 text-muted">Linkedin</span>
                   <span class="px-0 py-2">
-                    <span class="text-3x" id="social-linkedin"><?=short_number($r['views_linkedin']);?></span>
+                    <span class="text-3x" id="social-linkedin"><?=short_number($rv['linkedin']);?></span>
+                    <?=($rv2['linkedin']>0?($rv['linkedin']<$rv2['linkedin']?'<small class="text-danger">&darr;'.short_number($rv2['linkedin'] - $rv['linkedin']).'</small>':'').($rv2['linkedin']<$rv['linkedin']?'<small class="text-success">&uarr;'.short_number($rv['linkedin'] - $rv2['linkedin']).'</small>':''):'');?>
                   </span>
                   <span class="icon"><i class="i i-social social-linkedin i-5x">social-linkedin</i></span>
                 </div>
               </div>
-              <div class="row mt-3">
-                <div class="card stats col-11 col-sm m-0 p-2 m-1 text-center">
-                  <?=($user['options'][1]==1?'<button class="btn-sm trash d-inline" style="position:absolute;top:2px;right:2px;" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).html(`0`);update(`'.$r['id'].'`,`menu`,`views`,`0`);"><i class="i">eraser</i></button>':'');?>
-                  <span class="h6 text-muted">Views</span>
-                  <span class="px-0 py-2">
-                    <span class="text-3x" id="views"><?=short_number($r['views']);?></span>
-                  </span>
-                  <span class="icon"><i class="i i-5x">views</i></span>
-                </div>
-              </div>
             </div>
+          <?php }?>
           </div>
         </div>
       </div>

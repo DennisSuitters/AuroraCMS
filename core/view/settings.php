@@ -7,13 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-3
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 $rank=0;
 $show='';
-$currentPassCSS=$matchPassCSS='';
+$currentPassCSS=$matchPassCSS=$rosterNotification='';
 $currentPassHidden=$matchPassHidden=$successHidden=$success=$theme['settings']['hidden'];
 $successShow=$theme['settings']['show'];
 $act=filter_input(INPUT_POST,'act',FILTER_UNSAFE_RAW);
@@ -32,89 +32,104 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 	  $page['notes'],
 		''
 	],$html);
-	if(isset($act)&&$act=='updatePassword'){
-		if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
-			$password=filter_input(INPUT_POST,'newPass',FILTER_UNSAFE_RAW);
-			$hashpwd=password_hash($password,PASSWORD_DEFAULT);
-			$su=$db->prepare("UPDATE `".$prefix."login` SET `password`=:hash WHERE `id`=:id");
-			$su->execute([
-				':hash'=>$hashpwd,
+	if(isset($act)){
+		if($act=='updateRoster'){
+			$uid=filter_input(INPUT_POST,'uid',FILTER_UNSAFE_RAW);
+			$rES=filter_input(INPUT_POST,'rES',FILTER_UNSAFE_RAW);
+			$rDN=filter_input(INPUT_POST,'rDN',FILTER_UNSAFE_RAW);
+			$rTD=filter_input(INPUT_POST,'rTD',FILTER_UNSAFE_RAW);
+			$rSW=filter_input(INPUT_POST,'rSW',FILTER_UNSAFE_RAW);
+			$sr=$db->prepare("UPDATE `".$prefix."login` SET `rosterExtraShifts`=:rES, `rosterDayName`=:rDN, `rosterTimeDisplay`=:rTD, `rosterShowWeeks`=:rSW WHERE `id`=:uid");
+			$sr->execute([
+				':uid'=>$uid,
+				':rES'=>$rES,
+				':rDN'=>$rDN,
+				':rTD'=>$rTD,
+				':rSW'=>$rSW
+			]);
+			$rosterNotification='<div class="alert alert-success">Roster Settings Updated!</div>';
+			$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+			$s->execute([':id'=>$_SESSION['uid']]);
+			$user=$s->fetch(PDO::FETCH_ASSOC);
+		}
+		if($act=='updatePassword'){
+			if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
+				$password=filter_input(INPUT_POST,'newPass',FILTER_UNSAFE_RAW);
+				$hashpwd=password_hash($password,PASSWORD_DEFAULT);
+				$su=$db->prepare("UPDATE `".$prefix."login` SET `password`=:hash WHERE `id`=:id");
+				$su->execute([
+					':hash'=>$hashpwd,
+					':id'=>$user['id']
+				]);
+				$success='';
+			}
+		}
+		if($act=='updateAccount'){
+			$email=filter_input(INPUT_POST,'email',FILTER_UNSAFE_RAW);
+			$name=filter_input(INPUT_POST,'name',FILTER_UNSAFE_RAW);
+			$url=filter_input(INPUT_POST,'url',FILTER_UNSAFE_RAW);
+			$business=filter_input(INPUT_POST,'business',FILTER_UNSAFE_RAW);
+			$phone=filter_input(INPUT_POST,'phone',FILTER_UNSAFE_RAW);
+			$mobile=filter_input(INPUT_POST,'mobile',FILTER_UNSAFE_RAW);
+			$address=filter_input(INPUT_POST,'address',FILTER_UNSAFE_RAW);
+			$suburb=filter_input(INPUT_POST,'suburb',FILTER_UNSAFE_RAW);
+			$city=filter_input(INPUT_POST,'city',FILTER_UNSAFE_RAW);
+			$state=filter_input(INPUT_POST,'state',FILTER_UNSAFE_RAW);
+			$postcode=filter_input(INPUT_POST,'postcode',FILTER_UNSAFE_RAW);
+			$country=filter_input(INPUT_POST,'country',FILTER_UNSAFE_RAW);
+			$s=$db->prepare("UPDATE `".$prefix."login` SET `email`=:email,`name`=:name,`url`=:url,`business`=:business,`phone`=:phone,`mobile`=:mobile,`address`=:address,`suburb`=:suburb,`city`=:city,`state`=:state,`postcode`=:postcode,`country`=:country WHERE `id`=:id");
+			$s->execute([
+				':email'=>$email,
+				':name'=>$name,
+				':url'=>$url,
+				':business'=>$business,
+				':phone'=>$phone,
+				':mobile'=>$mobile,
+				':address'=>$address,
+				':suburb'=>$suburb,
+				':city'=>$city,
+				':state'=>$state,
+				':postcode'=>$postcode==''?0:$postcode,
+				':country'=>$country,
 				':id'=>$user['id']
 			]);
-			$success='';
-		}
-	}
-	if(isset($act)&&$act=='updateAccount'){
-		$email=filter_input(INPUT_POST,'email',FILTER_UNSAFE_RAW);
-		$name=filter_input(INPUT_POST,'name',FILTER_UNSAFE_RAW);
-		$url=filter_input(INPUT_POST,'url',FILTER_UNSAFE_RAW);
-		$business=filter_input(INPUT_POST,'business',FILTER_UNSAFE_RAW);
-		$phone=filter_input(INPUT_POST,'phone',FILTER_UNSAFE_RAW);
-		$mobile=filter_input(INPUT_POST,'mobile',FILTER_UNSAFE_RAW);
-		$address=filter_input(INPUT_POST,'address',FILTER_UNSAFE_RAW);
-		$suburb=filter_input(INPUT_POST,'suburb',FILTER_UNSAFE_RAW);
-		$city=filter_input(INPUT_POST,'city',FILTER_UNSAFE_RAW);
-		$state=filter_input(INPUT_POST,'state',FILTER_UNSAFE_RAW);
-		$postcode=filter_input(INPUT_POST,'postcode',FILTER_UNSAFE_RAW);
-		$country=filter_input(INPUT_POST,'country',FILTER_UNSAFE_RAW);
-		$s=$db->prepare("UPDATE `".$prefix."login` SET `email`=:email,`name`=:name,`url`=:url,`business`=:business,`phone`=:phone,`mobile`=:mobile,`address`=:address,`suburb`=:suburb,`city`=:city,`state`=:state,`postcode`=:postcode,`country`=:country WHERE `id`=:id");
-		$s->execute([
-			':email'=>$email,
-			':name'=>$name,
-			':url'=>$url,
-			':business'=>$business,
-			':phone'=>$phone,
-			':mobile'=>$mobile,
-			':address'=>$address,
-			':suburb'=>$suburb,
-			':city'=>$city,
-			':state'=>$state,
-			':postcode'=>$postcode==''?0:$postcode,
-			':country'=>$country,
-			':id'=>$user['id']
-		]);
-		$e=$db->errorInfo();
-		if(is_null($e[2])){
-			$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
-			$s->execute([':id'=>$user['id']]);
-			$user=$s->fetch(PDO::FETCH_ASSOC);
-			$html=str_replace([
-				'<success accountHidden>',
-				'<error accountHidden>'
-			],[
-				$theme['settings']['show'],
-				$theme['settings']['hidden']
-			],$html);
+			$e=$db->errorInfo();
+			if(is_null($e[2])){
+				$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+				$s->execute([':id'=>$user['id']]);
+				$user=$s->fetch(PDO::FETCH_ASSOC);
+				$html=preg_replace([
+					'/<success accountHidden>/',
+					'/<error accountHidden>/'
+				],[
+					' d-block',
+					' d-none'
+				],$html);
+			}else{
+				$html=preg_replace([
+					'/<success accountHidden>/',
+					'/<error accountHidden>/'
+				],[
+					' d-none',
+					' d-block'
+				],$html);
+			}
 		}else{
-			$html=str_replace([
-				'<success accountHidden>',
-				'<error accountHidden>'
-			],[
-				$theme['settings']['hidden'],
-				$theme['settings']['show']
-			],$html);
+			$html=preg_replace([
+				'/<success accountHidden>/',
+				'/<error accountHidden>/'
+			],
+				' d-none'
+			,$html);
 		}
 	}else{
-		$html=str_replace([
-			'<success accountHidden>',
-			'<error accountHidden>'
+		$html=preg_replace([
+			'/<success accountHidden>/',
+			'/<error accountHidden>/'
 		],
-			$theme['settings']['hidden']
-		,$html);
+			' d-none'
+		,$html);		
 	}
-	$html=str_replace([
-		'<error currentPassCSS>',
-		'<error currentPassHidden>',
-		'<error matchPassCSS>',
-		'<error matchPassHidden>',
-		'<success passUpdated>'
-	],[
-		$currentPassCSS,
-		$currentPassHidden,
-		$matchPassCSS,
-		$matchPassHidden,
-		$success
-	],$html);
 	$html=preg_replace([
 		'/<print user=[\"\']?avatar[\"\']?>/',
 		'/<print user=[\"\']?gravatar[\"\']?>/',
@@ -135,7 +150,18 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		'/<print user=[\"\']?city[\"\']?>/',
 		'/<print user=[\"\']?state[\"\']?>/',
 		'/<print user=[\"\']?postcode[\"\']?>/',
-		'/<print user=[\"\']?country[\"\']?>/'
+		'/<print user=[\"\']?country[\"\']?>/',
+		'/<error currentPassCSS>/',
+		'/<error currentPassHidden>/',
+		'/<error matchPassCSS>/',
+		'/<error matchPassHidden>/',
+		'/<success passUpdated>/',
+		($user['employee']==1?'/<[\/]?employeeroster>/':'~<employeeroster>.*?<\/employeeroster>~is'),
+		'/<rosterNotification>/',
+		'/<rosterExtraShiftsOptions>/',
+		'/<rosterDayNameOptions>/',
+		'/<rosterTimeDisplayOptions>/',
+		'/<rosterShowWeeksOptions>/'
 	],[
 		$user['avatar']!=''&&file_exists('media/avatar/'.$user['avatar'])?'media/avatar/'.$user['avatar']:NOAVATAR,
 		htmlspecialchars($user['gravatar'],ENT_QUOTES,'UTF-8'),
@@ -156,7 +182,27 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		htmlspecialchars($user['city'],ENT_QUOTES,'UTF-8'),
 		htmlspecialchars($user['state'],ENT_QUOTES,'UTF-8'),
 		$user['postcode']==0?'':htmlspecialchars($user['postcode'],ENT_QUOTES,'UTF-8'),
-		htmlspecialchars($user['country'],ENT_QUOTES,'UTF-8')
+		htmlspecialchars($user['country'],ENT_QUOTES,'UTF-8'),
+		$currentPassCSS,
+		$currentPassHidden,
+		$matchPassCSS,
+		$matchPassHidden,
+		$success,
+		'',
+		$rosterNotification,
+		'<option value="def"'.($user['rosterExtraShifts']=='def'?' selected':'').'>System Default ('.($config['rosterExtraShifts']=='true'?'Yes':'No').')</option>'.
+			'<option value="true"'.($user['rosterExtraShifts']=='true'?' selected':'').'>Yes</option>'.
+			'<option value="false"'.($user['rosterExtraShifts']=='false'?' selected':'').'>No</option>',
+		'<option value="def"'.($user['rosterDayName']=='def'?' selected':'').'>System Default  ('.($config['rosterDayName']=='l'?'Fullname':'Short name').')</option>'.
+			'<option value="l"'.($user['rosterDayName']=='l'?' selected':'').'>Fullname ('.date('l',time()).')</option>'.
+			'<option value="D"'.($user['rosterDayName']=='D'?' selected':'').'>Short name ('.date('D',time()).')</option>',
+		'<option value="def"'.($user['rosterTimeDisplay']=='def'?' selected':'').'>System Default ('.date($config['rosterTimeDisplay'],time()).')</option>'.
+			'<option value="H:i"'.($user['rosterTimeDisplay']=='H:i'?' selected':'').'>24-hour Format ('.date('H:i',time()).')</option>'.
+			'<option value="g:ia"'.($user['rosterTimeDisplay']=='g:ia'?' selected':'').'>12-hour Format ('.date('g:ia',time()).')</option>',
+		'<option value="0"'.($user['rosterShowWeeks']=='0'?' selected':'').'>System Default ('.$config['rosterShowWeeks'].')</option>'.
+			'<option value="1"'.($user['rosterShowWeeks']=='1'?' selected':'').'>1 Week</option>'.
+			'<option value="2"'.($user['rosterShowWeeks']=='2'?' selected':'').'>2 Weeks</option>'.
+			'<option value="4"'.($user['rosterShowWeeks']=='4'?' selected':'').'>4 Weeks</option>'
 	],$html);
 	if(stristr($html,'<orderitems')){
 		preg_match('/<orderitems>([\w\W]*?)<\/orderitems>/',$html,$match);

@@ -61,7 +61,7 @@ if(stristr($html,'<items>')){
   if($sb->rowCount()>0){
     $bookable='';
     while($rb=$sb->fetch(PDO::FETCH_ASSOC)){
-      $bookable.='<option value="'.$rb['id'].'"'.($rb['id']==$args[0]?' selected':'').'>'.ucwords($rb['contentType']).htmlspecialchars(($rb['code']!=''?':'.$rb['code']:$rb['title']),ENT_QUOTES,'UTF-8').'</option>';
+      $bookable.='<option value="'.$rb['id'].'"'.($rb['id']==$args[0]?' selected':'').'>'.ucwords((string)$rb['contentType']).htmlspecialchars(((string)$rb['code']!=''?':'.(string)$rb['code']:(string)$rb['title']),ENT_QUOTES,'UTF-8').'</option>';
     }
     $html=preg_replace([
       '/<serviceoptions>/',

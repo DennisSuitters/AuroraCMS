@@ -109,6 +109,8 @@
 
   --bg-white: #fff;
   --text-white: #fff;
+  --bg-black: #000;
+  --text-black: #000;
 
   --alert-danger-background-color: #f8d7da;
   --alert-danger-border-color: #f5c2c7;

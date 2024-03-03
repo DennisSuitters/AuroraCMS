@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.6-5
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -54,7 +54,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
         $length=filesize('media/'.$file);
       }else{
         $match=preg_match('/(src=["\'](.*?)["\'])/',rawurldecode($r['notes']),$match);
-        $split=preg_split('/["\']/',$match[0]);
+        $split=preg_split('/["\']/',(string)$match[0]);
         if($split[0]!=''){
           $img=$split[0];
           $filetype=image_type_to_mime_type(exif_imagetype($img));
@@ -73,10 +73,10 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
       }
     }
     echo'<item>'.
-      '<title>'.$r['title'].' - '.ucfirst($r['contentType']).' - '.$config['seoTitle'].'</title>'.
-      '<description>'.($r['seoCaption']==""?preg_replace('/\s+/',' ',strip_tags(rawurldecode($r['notes']))):$r['seoCaption']).'</description>'.
+      '<title>'.$r['title'].' - '.ucfirst((string)$r['contentType']).' - '.$config['seoTitle'].'</title>'.
+      '<description>'.($r['seoCaption']==""?preg_replace('/\s+/',' ',strip_tags(rawurldecode($r['notes']))):(string)$r['seoCaption']).'</description>'.
       '<link>'.URL.$r['contentType'].'/'.strtolower($r['urlSlug']).'/'.'</link>'.
-      '<pubDate>'.strftime("%a, %d %b %Y %T %Z",$r['ti']).'</pubDate>'.
+      '<pubDate>'.date('c',$r['ti']).'</pubDate>'.
       '<enclosure url="'.$img.'" length="'.$length.'" type="'.$filetype.'"/>'.
     '</item>';
   }

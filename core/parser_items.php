@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -33,8 +33,8 @@ $html=preg_replace([
 	'/<print search>/'
 ],[
 	$view,
-	isset($args[0])?($args[0]!=''?html_entity_decode($args[0]):''):'',
-	(isset($search)&&$search!=''?trim(str_replace('%',' ',$search),' '):'')
+	isset($args[0])?($args[0]!=''?html_entity_decode((string)$args[0]):''):'',
+	(isset($search)&&$search!=''?trim(str_replace('%',' ',(string)$search),' '):'')
 ],$html);
 require'view/inc-breadcrumbs.php';
 if(stristr($html,'<cover>')){
@@ -366,10 +366,10 @@ if(stristr($html,'<items')){
 			$itemQuantity='Coming Soon';
 		else{
 			if(is_numeric($r['quantity']))
-				$itemQuantity=$r['stockStatus']=='quantity'?($r['quantity']==0?'Out Of Stock':'In Stock'):($r['stockStatus']=='none'?'':ucwords($r['stockStatus']));
+				$itemQuantity=$r['stockStatus']=='quantity'?($r['quantity']==0?'Out Of Stock':'In Stock'):($r['stockStatus']=='none'?'':ucwords((string)$r['stockStatus']));
 		}
-		$r['file']=trim(rawurldecode($r['file']));
-		$r['thumb']=trim(rawurldecode($r['thumb']));
+		$r['file']=trim(rawurldecode((string)$r['file']));
+		$r['thumb']=trim(rawurldecode((string)$r['thumb']));
 		$items=preg_replace([
 			$r['contentType']=='inventory'&&$config['options'][5]==1?'/<[\/]?quickview>/':'~<quickview>.*?<\/quickview>~is',
 			'/<print content=[\"\']?srcset[\"\']?>/',
@@ -403,11 +403,11 @@ if(stristr($html,'<items')){
 			:''),
 			$r['thumb']!=''?$r['thumb']:NOIMAGESM,
 			$r['file']!=''?$r['file']:NOIMAGE,
-			htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),
+			htmlspecialchars($r['fileALT']!=''?(string)$r['fileALT']:(string)$r['title'],ENT_QUOTES,'UTF-8'),
 			$r['file']!=''?$r['file']:NOIMAGE,
 			$r['title'],
-			URL.'profile/'.strtolower(str_replace(' ','-',$r['login_user'])).'/',
-			URL.str_replace(' ','-',$r['contentType']),
+			URL.'profile/'.strtolower(str_replace(' ','-',(string)$r['login_user'])).'/',
+			URL.str_replace(' ','-',(string)$r['contentType']),
 			URL.$r['contentType'].'/'.$r['urlSlug'].'/',
 			(isset($ua['name'])&&$ua['name']!=''?$ua['name']:(isset($ua['username'])&&$ua['username']!=''?$ua['username']:'Anonymous')),
 			date($config['dateFormat'],$r['ti']),

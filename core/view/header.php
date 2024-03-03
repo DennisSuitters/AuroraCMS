@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -51,7 +51,6 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	$html=preg_replace([
 		$user['rank']>399?'/<[\/]?accountmenu>/':'/<[\/]?accountmenu>/',
 		$user['rank']>399?'/<[\/]?administration>/':'~<administration>.*?<\/administration>~is',
-		'/<seolook>/',
 		'/<print administrationLink>/',
 		'/<print user=[\"\']?name[\"\']?>/',
 		'/<print user=[\"\']?cssrank[\"\']?>/',
@@ -62,7 +61,6 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	],[
 		'',
 		'',
-		$user['rank']>899?'<div class="seolook-toggle" onclick="head.classList.toggle(`seo-in`);">View Meta-Tags</div>':'',
 		URL.$settings['system']['admin'].'/',
 		str_replace(' ','-',$user['name']),
 		rank($user['rank']),
@@ -234,7 +232,7 @@ if(stristr($html,'<buildMenu')){
 			$crtq->execute([':si'=>SESSIONID]);
 			$crtr=$crtq->fetch(PDO::FETCH_ASSOC);
 			$cart=$theme['settings']['cart_menu'];
-			$cart=preg_replace('/<print cart=[\"\']?quantity[\"\']?>/',$crtr['quantity'],$cart);
+			$cart=preg_replace('/<print cart=[\"\']?quantity[\"\']?>/',(string)$crtr['quantity'],$cart);
 		}
 		$menuItem=str_replace('<menuCart>',$cart,$menuItem);
 		$htmlMenu.=$menuItem;

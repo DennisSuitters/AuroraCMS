@@ -7,12 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
 <div class="item m-0 p-0 col-12 col-sm-12 col-md-12 col-lg-7 col-xl-6 col-xxl-4" id="l_<?=$rw['id'];?>">
-  <div id="weather-background" class="alert widget-weather background m-3 p-0">
+  <div id="weather-background" class="alert widget-weather background m-1 p-0">
     <div class="toolbar px-2 py-1 bg-transparent handle">
       <div class="btn-group">
         <button id="refreshButton" class="btn btn-sm btn-ghost" data-tooltip="left" aria-label="Refresh"><i class="i i-color-white i-spin">refresh</i></button>

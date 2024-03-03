@@ -11,7 +11,7 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-echo'<aside id="sidebar" class="'.(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?' navsmall':'').' shadow border border-radius">'.
+echo'<aside id="sidebar" class="'.(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?' navsmall':'').' shadow border border-top-0 border-radius">'.
   '<nav>'.
     '<ul>';
       $sb1=$db->prepare("SELECT * FROM `".$prefix."sidebar` WHERE `mid`=0 AND `active`=1 AND `rank`<=:r".($config['mediaOptions'][3]==1?" ORDER BY `pin` DESC, `views` DESC, `ord` ASC, `title` ASC":" ORDER BY `pin` DESC, `ord` ASC, `title` ASC"));

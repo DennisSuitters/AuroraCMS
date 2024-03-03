@@ -50,6 +50,7 @@ if($_SESSION['rank']>399){
   require'core/layout/sidebar.php';
   if($view=='add'||$view=='copy'){
     if($args[0]=='bookings')require'core/layout/bookings.php';
+    elseif($args[0]=='roster')require'core/layout/roster.php';    
     elseif($args[0]=='course')require'core/layout/course.php';
     elseif($args[0]=='adverts')require'core/layout/adverts.php';
     else require'core/layout/content.php';

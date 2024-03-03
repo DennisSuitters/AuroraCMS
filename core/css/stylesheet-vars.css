@@ -150,7 +150,7 @@
   --danger-border-color-hover: #c84a63;
   --danger-color: #fff;
   --danger-color-hover: #fff;
-  --danger-color-contrast: #fff;  
+  --danger-color-contrast: #fff;
   --danger-link: #6a1a21;
   --danger-shadow: 0 2px 6px 0 rgb(250 92 124 / 50%);
   --alert-dark-background-color: #d3d3d4;
@@ -698,8 +698,8 @@
 
   --note-font:sans-serif;
   --note-font-size:14px;
-  --note-font-size-large:calc(var(--note-font-size)*1.25);
-  --note-font-size-small:calc(var(--note-font-size)*0.85);
+  --note-font-size-large:calc(var(--note-font-size) * 1.25);
+  --note-font-size-small:calc(var(--note-font-size) * .85);
   --note-placeholder-color:#ddd;
 
   --note-icon-prefix:"note-icon";

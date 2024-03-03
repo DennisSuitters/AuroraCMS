@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-4
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -63,7 +63,6 @@ if($sort=="old")$sortOrder.="`ti` ASC ";
 if($sort=="namea")$sortOrder.="`title` ASC ";
 if($sort=="namez")$sortOrder.="`title` DESC ";
 if($sort=="best")$sortOrder.="`sold` DESC ";
-if($sort=="view")$sortOrder.="`views` DESC ";
 if($sort=="priceh")$sortOrder.="`cost` DESC ";
 if($sort=="pricel")$sortOrder.="`cost` ASC ";
 if($view=='page')$show='';
@@ -293,10 +292,10 @@ if($view=='testimonials')$show='';
 if($show=='categories')require'core/parser_items.php';
 if($show=='item'){
 	require'core/parser_item.php';
-	$args[0]=str_replace(' ','-',strtolower($r['category_1']));
-	$args[1]=str_replace(' ','-',strtolower($r['category_2']));
-	$args[2]=str_replace(' ','-',strtolower($r['category_3']));
-	$args[3]=str_replace(' ','-',strtolower($r['category_4']));
+	$args[0]=str_replace(' ','-',strtolower((string)$r['category_1']));
+	$args[1]=str_replace(' ','-',strtolower((string)$r['category_2']));
+	$args[2]=str_replace(' ','-',strtolower((string)$r['category_3']));
+	$args[3]=str_replace(' ','-',strtolower((string)$r['category_4']));
 }
 require'inc-categorynav.php';
 if(stristr($html,'<playlist')){

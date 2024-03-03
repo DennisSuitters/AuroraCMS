@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -453,16 +453,12 @@ class admin{
 		$view='bookings';
 		require'admin.php';
 	}
-	function copy($args=false){
-		$view='copy';
-		require'admin.php';
-	}
-	function livechat($args=false){
-		$view='livechat';
-		require'admin.php';
-	}
 	function cart($args=false){
 		$view='cart';
+		require'admin.php';
+	}
+	function copy($args=false){
+		$view='copy';
 		require'admin.php';
 	}
 	function comments($args=false){
@@ -509,6 +505,10 @@ class admin{
 		$view='joblist';
 		require'admin.php';
 	}
+	function livechat($args=false){
+		$view='livechat';
+		require'admin.php';
+	}
 	function logout($args=false){
 		$act='logout';
 		$view='';
@@ -534,14 +534,6 @@ class admin{
 		$view='orders';
 		require'admin.php';
 	}
-	function reviews($args=false){
-		$view='reviews';
-		require'admin.php';
-	}
-  function rewards($args=false){
-    $view='rewards';
-    require'admin.php';
-  }
 	function pages($args=false){
 		$view='pages';
 		require'admin.php';
@@ -558,10 +550,18 @@ class admin{
 		$view='preferences';
 		require'admin.php';
 	}
-	function settings($args=false){
-		$view='settings';
+	function reviews($args=false){
+		$view='reviews';
 		require'admin.php';
 	}
+  function rewards($args=false){
+    $view='rewards';
+    require'admin.php';
+  }
+	function roster($args=false){
+    $view='roster';
+    require'admin.php';
+  }
 	function search($args=false){
 		$view='search';
 		require'admin.php';
@@ -574,16 +574,20 @@ class admin{
 		$view='seo';
 		require'admin.php';
 	}
+	function settings($args=false){
+		$view='settings';
+		require'admin.php';
+	}
 	function system($args=false){
 		$view='system';
 		require'admin.php';
 	}
-	function templates($args=false){
-		$view='templates';
-		require'admin.php';
-	}
 	function theme($args=false){
 		$view='theme';
+		require'admin.php';
+	}
+	function templates($args=false){
+		$view='templates';
 		require'admin.php';
 	}
   function tracker($args=false){
@@ -702,12 +706,20 @@ class front{
 		$view='news';
 		require'process.php';
 	}
+	function newsletters($args=false){
+		$view='newsletters';
+		require'process.php';
+	}
 	function order($args=false){
 		$view='orders';
 		require'process.php';
 	}
 	function orders($args=false){
 		$view='orders';
+		require'process.php';
+	}
+	function page($args=false){
+		$view='page';
 		require'process.php';
 	}
 	function portfolio($args=false){
@@ -724,6 +736,10 @@ class front{
 	}
 	function proofs($args=false){
 		$view='proofs';
+		require'process.php';
+	}
+	function roster($args=false){
+		$view='roster';
 		require'process.php';
 	}
 	function search($args=false){
@@ -758,14 +774,6 @@ class front{
 		$view='tos';
 		require'process.php';
 	}
-	function newsletters($args=false){
-		$view='newsletters';
-		require'process.php';
-	}
-	function page($args=false){
-		$view='page';
-		require'process.php';
-	}
 }
 $route=new router();
 $routes=[
@@ -795,43 +803,44 @@ $routes=[
 	$settings['system']['admin'].'/newsletters'=>['admin','newsletters'],
 	$settings['system']['admin'].'/notification'=>['admin','notification'],
 	$settings['system']['admin'].'/orders'=>['admin','orders'],
-  $settings['system']['admin'].'/rewards'=>['admin','rewards'],
 	$settings['system']['admin'].'/pages'=>['admin','pages'],
 	$settings['system']['admin'].'/payments'=>['admin','payments'],
 	$settings['system']['admin'].'/playlist'=>['admin','playlist'],
 	$settings['system']['admin'].'/preferences'=>['admin','preferences'],
-	$settings['system']['admin'].'/settings'=>['admin','settings'],
+	$settings['system']['admin'].'/rewards'=>['admin','rewards'],
 	$settings['system']['admin'].'/reviews'=>['admin','reviews'],
+	$settings['system']['admin'].'/roster'=>['admin','roster'],
+	$settings['system']['admin'].'/settings'=>['admin','settings'],
 	$settings['system']['admin'].'/search'=>['admin','search'],
 	$settings['system']['admin'].'/security'=>['admin','security'],
 	$settings['system']['admin'].'/seo'=>['admin','seo'],
-	$settings['system']['admin'].'/system'=>['admin','system'],
 	$settings['system']['admin'].'/social'=>['admin','social'],
-	$settings['system']['admin'].'/theme'=>['admin','theme'],
+	$settings['system']['admin'].'/system'=>['admin','system'],
 	$settings['system']['admin'].'/templates'=>['admin','templates'],
+	$settings['system']['admin'].'/theme'=>['admin','theme'],
   $settings['system']['admin'].'/tracker'=>['admin','tracker'],
 	$settings['system']['admin']=>['admin','dashboard'],
 	$settings['system']['admin'].'/manifest.json'=>['internal','manifestadmin'],
-	'downloads'=>['internal','downloads'],
-	'humans.txt'=>['internal','humans'],
-	'sitemap.xml'=>['internal','sitemap'],
-	'robots.txt'=>['internal','robots'],
-	'rss'=>['internal','rss'],
-	'manifest.json'=>['internal','manifest'],
 	'activate'=>['front','activate'],
-	'error'=>['front','error'],
-	'offline'=>['front','error'],
-	'index'=>['front','index'],
-	'home'=>['front','index'],
-	'sitemap'=>['front','sitemap'],
-	'orders'=>['front','orders'],
 	'checkout'=>['front','checkout'],
 	'courses'=>['front','courses'],
-	'proofs'=>['front','proofs'],
-	'login'=>['front','login'],
-	'settings'=>['front','settings'],
-	'logout'=>['front','logout'],
+	'downloads'=>['internal','downloads'],
+	'error'=>['front','error'],
 	'home'=>['front','index'],
+	'humans.txt'=>['internal','humans'],
+	'index'=>['front','index'],
+	'login'=>['front','login'],
+	'logout'=>['front','logout'],
+	'manifest.json'=>['internal','manifest'],
+	'offline'=>['front','error'],
+	'orders'=>['front','orders'],
+	'proofs'=>['front','proofs'],
+	'sitemap.xml'=>['internal','sitemap'],
+	'robots.txt'=>['internal','robots'],
+	'roster'=>['front','roster'],
+	'rss'=>['internal','rss'],
+	'settings'=>['front','settings'],
+	'sitemap'=>['front','sitemap'],
   ''=>['front','index']
 ];
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `active`=1 AND `rank`<=:rank");
@@ -842,7 +851,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
   else$routes[$r['contentType']]=['front','index'];
 }
 $route->setRoutes($routes);
-$route->routeURL(preg_replace("|/$|","",filter_input(INPUT_GET,'url',FILTER_SANITIZE_URL)));
+$route->routeURL(preg_replace("|/$|","",(string)filter_input(INPUT_GET,'url',FILTER_SANITIZE_URL)));
 class router{
 	protected $route_match=false;
 	protected $route_call=false;

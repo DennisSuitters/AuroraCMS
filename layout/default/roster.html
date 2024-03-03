@@ -1,0 +1,116 @@
+<block include="meta_head.html">
+<block include="header.html">
+<block inbed="roster">
+	<section class="row my-3">
+		<rosternotice>
+			<article class="col-12 col-sm m-0 p-0 px-3">
+				<h1><print page="heading"></h1>
+				<print page="notes">
+			</article>
+		</rosternotice>
+		<article>
+			<div class="row justify-content-center">
+				<login>
+					<div class="col-12 col-sm-4">
+						<div class="card p-3 mx-5">
+							<form method="post" action="<print url>">
+								<h4>Login</h4>
+								<input type="hidden" name="act" value="login">
+								<label for="rosterusername">Username</label>
+								<div class="form-row">
+									<input type="text" id="rosterusername" name="username" value="" placeholder="Username..." autocomplete="username" enterkeyhint="next">
+								</div>
+								<label for="rosterpassword">Password</label>
+								<div class="form-row">
+									<input type="password" id="rosterpassword" name="password" placeholder="Password..." autocomplete="current-password" enterkeyhint="next">
+								</div>
+								<div class="text-right mt-3">
+									<button type="submit" enterkeyhint="done">Login</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</login>
+				<roster>
+					<div class="col-12 col-sm-7">
+						<rosteritems>
+							<div class="card border-dark mx-0 mx-sm-3 mb-3">
+								<div class="row bg-dark text-white p-2">
+									<div class="col-12 text-center">
+										<print roster="heading">
+									</div>
+								</div>
+								<div class="row bg-dark text-white p-2 d-none d-sm-flex">
+									<div class="col text-center"><print roster="daynamemonday"></div>
+									<div class="col text-center"><print roster="daynametuesday"></div>
+									<div class="col text-center"><print roster="daynamewednesday"></div>
+									<div class="col text-center"><print roster="daynamethursday"></div>
+									<div class="col text-center"><print roster="daynamefriday"></div>
+									<div class="col text-center"><print roster="daynamesaturday"></div>
+									<div class="col text-center"><print roster="daynamesunday"></div>
+								</div>
+								<div class="row d-none d-sm-flex">
+									<div class="col d-flex justify-content-center p-1 border-right border-dark align-self-normal<print roster=statusmonday>"><small><small><print roster="shiftmonday"></small></small></div>
+									<div class="col d-flex justify-content-center p-1 border-right border-dark align-self-normal<print roster=statustuesday>"><small><small><print roster="shifttuesday"></small></small></div>
+									<div class="col d-flex justify-content-center p-1 border-right border-dark align-self-normal<print roster=statuswednesday>"><small><small><print roster="shiftwednesday"></small></small></div>
+									<div class="col d-flex justify-content-center p-1 border-right border-dark align-self-normal<print roster=statusthursday>"><small><small><print roster="shiftthursday"></small></small></div>
+									<div class="col d-flex justify-content-center p-1 border-right border-dark align-self-normal<print roster=statusfriday>"><small><small><print roster="shiftfriday"></small></small></div>
+									<div class="col d-flex justify-content-center p-1 border-right border-dark align-self-normal<print roster=statussaturday>"><small><small><print roster="shiftsaturday"></small></small></div>
+									<div class="col d-flex justify-content-center p-1 align-self-normal<print roster=statussunday>"><small><small><print roster="shiftsunday"></small></small></div>
+								</div>
+								<div class="row d-flex d-sm-none">
+									<div class="col-3 bg-dark text-white text-right align-self-normal p-1 pr-2 border-top border-bottom border-black"><print roster="daynamemonday"></div>
+									<div class="col d-flex justify-content-start p-1 align-self-normal border-bottom border-dark<print roster=statusmonday>"><print roster="shiftmonday"></div>
+								</div>
+								<div class="row d-flex d-sm-none">
+									<div class="col-3 bg-dark text-white text-right align-self-normal p-1 pr-2 border-bottom border-black"><print roster="daynametuesday"></div>
+									<div class="col d-flex justify-content-start p-1 align-self-normal border-bottom border-dark<print roster=statustuesday>"><print roster="shifttuesday"></div>
+								</div>
+								<div class="row d-flex d-sm-none">
+									<div class="col-3 bg-dark text-white text-right align-self-normal p-1 pr-2 border-bottom border-black"><print roster="daynamewednesday"></div>
+									<div class="col d-flex justify-content-start p-1 align-self-normal border-bottom border-dark<print roster=statuswednesday>"><print roster="shiftwednesday"></div>
+								</div>
+								<div class="row d-flex d-sm-none">
+									<div class="col-3 bg-dark text-white text-right align-self-normal p-1 pr-2 border-bottom border-black"><print roster="daynamethursday"></div>
+									<div class="col d-flex justify-content-start p-1 align-self-normal border-bottom border-dark<print roster=statusthursday>"><print roster="shiftthursday"></div>
+								</div>
+								<div class="row d-flex d-sm-none">
+									<div class="col-3 bg-dark text-white text-right align-self-normal p-1 pr-2 border-bottom border-black"><print roster="daynamefriday"></div>
+									<div class="col d-flex justify-content-start p-1 align-self-normal border-bottom border-dark<print roster=statusfriday>"><print roster="shiftfriday"></div>
+								</div>
+								<div class="row d-flex d-sm-none">
+									<div class="col-3 bg-dark text-white text-right align-self-normal p-1 pr-2 border-bottom border-black"><print roster="daynamesaturday"></div>
+									<div class="col d-flex justify-content-start p-1 align-self-normal border-bottom border-dark<print roster=statussaturday>"><print roster="shiftsaturday"></div>
+								</div>
+								<div class="row d-flex d-sm-none">
+									<div class="col-3 bg-dark text-white text-right align-self-normal p-1 pr-2"><print roster="daynamesunday"></div>
+									<div class="col d-flex justify-content-start p-1 align-self-normal<print roster=statussunday>"><print roster="shiftsunday"></div>
+								</div>
+							</div>
+						</rosteritems>
+					</div>
+				</roster>
+				<shifts>
+					<div class="col-12 col-sm-5">
+						<shiftitems>
+							<div id="shift<print shift=id>" class="alert alert-info mb-3">
+								<div class="row">
+									<div class="col-8">
+										Extra Shift is available on <print shift="date"><br>
+										Time: <print shift="times"><br>
+										<p class="m-0 p-0 hidewhenempty"><print shift="notes"></p>
+									</div>
+									<div class="col-4 text-right">
+										<button class="btn-success" onclick="acceptShift('<print shift=id>','<print user=id>');">Accept Shift<i id="shiftbusy<print shift=id>" class="i i-spin ml-2 d-none">spinner</i></button>
+									</div>
+								</div>
+							</div>
+						</shiftitems>
+					</div>
+				</shifts>
+			</div>
+		</article>
+	</section>
+</block>
+<block include="footer.html">
+<block include="meta_footer.html">

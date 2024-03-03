@@ -529,24 +529,24 @@ else
         	var max=70;
         	$("#seoTitlecnt").text(length);
           $('#google-title').text($('#'+el).val());
-        	if(length<50){
-        		$("#seoTitlecnt").addClass('text-danger');
+        	if(length<20){
+            document.querySelector("#seoTitlecnt").classList.add('bg-danger','text-white');
         	}else if(length>max){
-            $("#seoTitlecnt").addClass('text-danger');
+            document.querySelector("#seoTitlecnt").classList.add('bg-danger','text-white');
           }else{
-        		$("#seoTitlecnt").removeClass('text-danger');
+            document.querySelector("#seoTitlecnt").classList.remove('bg-danger','text-white');
         	}
         }
         if(el=='seoDescription'){
           var length=$('#'+el).val().length;
         	var max=160;
         	$("#seoDescriptioncnt").text(length);
-        	if(length<1){
-        		$("#seoDescriptioncnt").addClass('text-danger');
+        	if(length<70){
+            document.querySelector("#seoDescriptioncnt").classList.add('bg-danger','text-white');
           }else if(length>max){
-            $("#seoDescriptioncnt").addClass('text-danger');
+            document.querySelector("#seoDescriptioncnt").classList.add('bg-danger','text-white');
         	}else{
-        		$("#seoDescriptioncnt").removeClass('text-danger');
+            document.querySelector("#seoDescriptioncnt").classList.remove('bg-danger','text-white');
         	}
         }
       });

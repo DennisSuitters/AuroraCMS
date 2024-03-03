@@ -1,6 +1,13 @@
 # Default Changelog
 
-### v0.2.3
+### v0.2.4
+- Add Roster template and parsing.
+- Fix form colours for selects.
+- Update Theme thumbnail.
+- Remove SEOLook dropdown.
+- Fix stylesheet preload missing "as" directive.
+
+#### v0.2.3
 - Fix shopping cart main menu interaction and class.
 - Add FAQ parsing markup.
 

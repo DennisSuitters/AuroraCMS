@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -94,6 +94,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <div class="col-12 col-md-6">
                 <label for="jobtitle">Job Title/Position</label>
                 <div class="form-row">
+                  <div class="input-text2 pl-0"><input id="employee" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="employee" data-dbb="0" type="checkbox"<?=($r['employee']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>><span class="ml-2">Employee</span></div>
                   <input class="textinput" id="jobtitle" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="jobtitle" type="text" value="<?=$r['jobtitle'];?>" placeholder="Enter a Job Title/Position..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savejobtitle" data-dbid="jobtitle" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
@@ -424,9 +425,9 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <?=$user['options'][5]==1?'<button class="save" id="savetags" data-dbid="tags" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
             <script>
-              var input = document.querySelector('#tags');
-              tagify = new Tagify(input, {
-                whitelist: [
+              var input=document.querySelector('#tags');
+              tagify=new Tagify(input,{
+                whitelist:[
                   <?php if($user['options'][1]==1){
                     $tags=array();
                     $st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
@@ -441,14 +442,14 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                     foreach($tags as $t)echo'"'.$t.'",';
                   }?>
                 ],
-                maxTags: 10,
-                dropdown: {
-                  maxItems: 20,           // <- mixumum allowed rendered suggestions
-                  classname: "tags-look", // <- custom classname for this dropdown, so it could be targeted
-                  enabled: 0,             // <- show suggestions on focus
-                  closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
+                maxTags:10,
+                dropdown:{
+                  maxItems:20,
+                  classname:"tags-look",
+                  enabled:0,
+                  closeOnSelect:false
                 },
-                originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+                originalInputValueFormat:valuesArr => valuesArr.map(item => item.value).join(',')
               });
             </script>
           </div>

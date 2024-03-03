@@ -1,3 +1,14 @@
+#### v0.2.26-6
+- Add Employee Roster System to add work shifts via calendar.
+- Add Roster parser for front end, template page, and login mechanism.
+- Reconfigure incomming links display on dashboard.
+- Add Reddit to incomming links counting.
+- Allow "Reviews" in Activities within Administration.
+- Fix deprecated functions throwing null errors.
+- Remove forgotten checks for existing images within content, which was making loading content in Administration take much longer.
+- Improve external links data collection (counts) to be able to view per day, week, month to more easily monitor progress of incoming content links.
+- Status dropdown delete colours.
+
 #### v0.2.26-5
 - Move AuroraCMS Changelog to "Settings/System/" area, to improve Dashboard page speed.
 - Remove Theme Changelog from Dashboard widgets, to improve Dashboard page speed. Theme Changelog is viewable from the Theme Selector.

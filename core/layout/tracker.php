@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -44,18 +44,18 @@ $weekend=strtotime("next saturday midnight this week");;?>
         <section class="content overflow-visible list" id="sortable">
           <article class="card m-0 p-0 py-2 overflow-visible card-list card-list-header bg-white shadow sticky-top d-none d-sm-block">
             <div class="row">
-              <div class="col-1 pl-2 pb-2">Date</div>
-              <div class="col-11 pl-2 pb-2">rID - Title</div>
-              <div class="col text-center" data-tooltip="bottom" aria-label="Direct"><i class="i">browser-general</i></div>
-              <div class="col text-center" data-tooltip="bottom" aria-label="Bing"><i class="i i-social social-bing">social-bing</i></div>
-              <div class="col text-center" data-tooltip="bottom" aria-label="DuckDuckGo"><i class="i i-social social-duckduckgo">social-duckduckgo</i></div>
-              <div class="col text-center" data-tooltip="bottom" aria-label="Facebook"><i class="i i-social social-facebook">social-facebook</i></div>
-              <div class="col text-center" data-tooltip="bottom" aria-label="Instagram"><i class="i i-social social-instagram">social-instagram</i></div>
-              <div class="col text-center" data-tooltip="bottom" aria-label="Google"><i class="i i-social social-google">social-google</i></div>
-              <div class="col text-center" data-tooltip="bottom" aria-label="Linkedin"><i class="i i-social social-linkedin">social-linkedin</i></div>
-              <div class="col text-center" data-tooltip="bottom" aria-label="Reddit"><i class="i i-social social-reddit">social-reddit</i></div>
-              <div class="col text-center" data-tooltip="bottom" aria-label="Threads"><i class="i i-social social-threads">social-threads</i></div>
-              <div class="col text-center" data-tooltip="bottom" aria-label="Twitter"><i class="i i-social social-twitter">social-twitter</i></div>
+              <div class="col-1 pl-2 pb-2"><small>Date</small></div>
+              <div class="col-11 pl-2 pb-2"><span class="badger badge-secondary">contentType</span> <small>Title</small></div>
+              <div class="col text-center"><i class="i">browser-general</i><div class="small font-weight-light"><small>Direct</small></div></div>
+              <div class="col text-center"><i class="i i-social social-bing">social-bing</i><div class="small font-weight-light"><small>Bing</small></div></div>
+              <div class="col text-center"><i class="i i-social social-duckduckgo">social-duckduckgo</i><div class="small font-weight-light"><small>Duck Duck Go</small></div></div>
+              <div class="col text-center"><i class="i i-social social-facebook">social-facebook</i><div class="small font-weight-light"><small>Facebook</small></div></div>
+              <div class="col text-center"><i class="i i-social social-instagram">social-instagram</i><div class="small font-weight-light"><small>Instagram</small></div></div>
+              <div class="col text-center"><i class="i i-social social-google">social-google</i><div class="small font-weight-light"><small>Google</small></div></div>
+              <div class="col text-center"><i class="i i-social social-linkedin">social-linkedin</i><div class="small font-weight-light"><small>Linkedin</small></div></div>
+              <div class="col text-center"><i class="i i-social social-reddit">social-reddit</i><div class="small font-weight-light"><small>Reddit</small></div></div>
+              <div class="col text-center"><i class="i i-social social-threads">social-threads</i><div class="small font-weight-light"><small>Threads</small></div></div>
+              <div class="col text-center"><i class="i i-social social-twitter">social-twitter</i><div class="small font-weight-light"><small>Twitter/X</small></div></div>
               <div class="col pr-2"></div>
             </div>
           </article>
@@ -69,14 +69,14 @@ $weekend=strtotime("next saturday midnight this week");;?>
               if($rv['type']=='page'){
                 $cs=$db->prepare("SELECT `id`,`title` FROM `".$prefix."menu` WHERE `id`=:id");
               }else{
-                $cs=$db->prepare("SELECT `id`,`title` FROM `".$prefix."content` WHERE `id`=:id");
+                $cs=$db->prepare("SELECT `id`,`contentType`,`title` FROM `".$prefix."content` WHERE `id`=:id");
               }
               $cs->execute([':id'=>$rv['rid']]);
               $rs=$cs->fetch(PDO::FETCH_ASSOC);?>
               <article id="l_<?=$rv['id'];?>" class="card zebra m-0 p-0 pt-2 overflow-visible card-list item shadow">
                 <div class="row pb-2">
                   <div class="col-2 pl-2 pb-2"><small><?=date($config['dateFormat'],$rv['ti']);?></small></div>
-                  <div class="col-10 pl-2 pb-2"><small><?=$rs['title'];?></small></div>
+                  <div class="col-10 pl-2 pb-2"><span class="badger badge-secondary"><?=($rv['type']=='page'?'Page':ucfirst($rs['contentType']));?></span> <small><?=$rs['title'];?></small></div>
                   <div class="col text-center"><button id="direct<?=$rv['id'];?>" class="btn trash" onclick="$(`#direct<?=$rv['id'];?>`).text(`0`);updateButtons(`<?=$rv['id'];?>`,`visit_tracker`,`direct`,`0`);"><?=short_number($rv['direct']);?></button></div>
                   <div class="col text-center"><button id="bing<?=$rv['id'];?>" class="btn trash" onclick="$(`#bing<?=$rv['id'];?>`).text(`0`);updateButtons(`<?=$rv['id'];?>`,`visit_tracker`,`bing`,`0`);"><?=short_number($rv['bing']);?></button></div>
                   <div class="col text-center"><button id="duckduckgo<?=$rv['id'];?>" class="btn trash" onclick="$(`#duckduckgo<?=$rv['id'];?>`).text(`0`);updateButtons(`<?=$rv['id'];?>`,`visit_tracker`,`duckduckgo`,`0`);"><?=short_number($rv['duckduckgo']);?></button></div>

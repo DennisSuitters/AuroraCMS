@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -105,8 +105,9 @@ if($r['heading']==''){
           '<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2"'.($seo['imagescnt']>0?' class="badge" data-badge="'.$seo['imagescnt'].'"':'').'>'.($seo['imagescnt']>0?'<span data-tooltip="tooltip" aria-label="There'.($seo['imagescnt']>1?' are '.$seo['imagescnt'].' SEO related issues!':' is 1 SEO related issue!').'">Media</span>':'Media').'</label>'.
           ($r['file']=='pricing'?'<input id="tab1-3" class="tab-control" name="tabs" type="radio"><label for="tab1-3">Price Items</label>':'').
           ($r['file']!='activate'&&$r['file']!='offline'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4"'.($seo['seocnt']>0?' class="badge" data-badge="'.$seo['seocnt'].'"':'').'>'.($seo['seocnt']>0?'<span data-tooltip="tooltip" aria-label="There'.($seo['seocnt']>1?' are '.$seo['seocnt'].' SEO related issues!':' is 1 SEO related issue!').'">SEO</span>':'SEO').'</label>':'').
-          ($r['id']!=1&&$r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'').
-          ($config['options'][11]==1?'<input id="tab1-6" class="tab-control" name="tabs" type="radio"><label for="tab1-6">Analytics</label>':'');?>
+          ($r['id']!=1&&$r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'');
+          //($config['options'][11]==1?'<input id="tab1-6" class="tab-control" name="tabs" type="radio"><label for="tab1-6">Analytics</label>':'');
+          ?>
 <?php /* Content */ ?>
           <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'&&$r['contentType']!='offline'){?>
@@ -782,7 +783,7 @@ if($r['heading']==''){
                 }?>
               </div>
             <?php }
-/* Analytics */
+/* Analytics
           if($config['options'][11]==1){?>
             <div class="tab1-6 border p-3" data-tabid="tab1-6" role="tabpanel">
 <?php         $week1start=strtotime("last sunday midnight this week");
@@ -889,7 +890,8 @@ if($r['heading']==''){
                 </div>
               </div>
             </div>
-          <?php }?>
+          <?php }
+*/ ?>
           </div>
         </div>
       </div>

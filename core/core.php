@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -201,6 +201,12 @@ function microid($identity,$service,$algorithm='sha1'){
 		}
 	}
 	if(function_exists($algorithm))return$microid.=$algorithm($algorithm($identity).$algorithm($service));
+}
+function uuidv4(){
+  $data=random_bytes(16);
+  $data[6]=chr(ord($data[6]) & 0x0f | 0x40);
+  $data[8]=chr(ord($data[8]) & 0x3f | 0x80);
+  return vsprintf('%s%s-%s-%s-%s-%s%s%s',str_split(bin2hex($data),4)).'@'.$_SERVER['HTTP_HOST'];
 }
 function requestSameDomain(){
   $myDomain=$_SERVER['SCRIPT_URI'];
@@ -402,7 +408,10 @@ function sluggify($url){
 	return$url;
 }
 function escaper($val){
-  $val=str_replace(array("\\","/","\"","\n","\r","\t","\x08","\x0c"),array("\\\\","\\/","\\\"","\\n","\\r","\\t","\\f","\\b"),$val);
+  $val=str_replace(
+		array("\\",  "/",  "\n", "\r", "\t", "\x08","\x0c"),
+		array("\\\\","\\/","\\n","\\r","\\t","\\f", "\\b"),$val);
+	$val=htmlentities($val,ENT_QUOTES,"UTF-8",false);
 	return$val;
 }
 function snippet($keyword,$txt,$span=15){
@@ -417,6 +426,7 @@ function snippet($keyword,$txt,$span=15){
   return$snip;
 }
 class internal{
+	function calendar($args=false){require'core/calendar.php';}
 	function downloads($args=false){require'core/downloads.php';}
 	function humans($args=false){require'core/humans.php';}
 	function sitemap($args=false){require'core/sitemap.php';}
@@ -429,351 +439,97 @@ class admin{
 	function favicon(){return FAVICON;}
 	function noimage(){return'core/images/noimage.jpg';}
 	function noavatar(){return'core/images/noavatar.jpg';}
-	function accounts($args=false){
-		$view='accounts';
-		require'admin.php';
-	}
-	function activity($args=false){
-		$view='activity';
-		require'admin.php';
-	}
-	function add($args=false){
-		$view='add';
-		require'admin.php';
-	}
-	function adverts($args=false){
-		$view='adverts';
-		require'admin.php';
-	}
-	function agronomy($args=false){
-		$view='agronomy';
-		require'admin.php';
-	}
-	function bookings($args=false){
-		$view='bookings';
-		require'admin.php';
-	}
-	function cart($args=false){
-		$view='cart';
-		require'admin.php';
-	}
-	function copy($args=false){
-		$view='copy';
-		require'admin.php';
-	}
-	function comments($args=false){
-		$view='comments';
-		require'admin.php';
-	}
-	function contact($args=false){
-		$view='contact';
-		require'admin.php';
-	}
-	function contacts($args=false){
-		$view='contacts';
-		require'admin.php';
-	}
-	function content($args=false){
-		$view='content';
-		require'admin.php';
-	}
-	function course($args=false){
-		$view='course';
-		require'admin.php';
-	}
-	function dashboard($args=false){
-		$view='dashboard';
-		require'admin.php';
-	}
-	function database($args=false){
-		$view='database';
-		require'admin.php';
-	}
-	function faq($args=false){
-		$view='faq';
-		require'admin.php';
-	}
-	function forum($args=false){
-		$view='forum';
-		require'admin.php';
-	}
-	function interface($args=false){
-		$view='interface';
-		require'admin.php';
-	}
-	function joblist($args=false){
-		$view='joblist';
-		require'admin.php';
-	}
-	function livechat($args=false){
-		$view='livechat';
-		require'admin.php';
-	}
-	function logout($args=false){
-		$act='logout';
-		$view='';
-		require'admin.php';
-	}
-	function media($args=false){
-		$view='media';
-		require'admin.php';
-	}
-	function messages($args=false){
-		$view='messages';
-		require'admin.php';
-	}
-	function newsletters($args=false){
-		$view='newsletters';
-		require'admin.php';
-	}
-	function notification($args=false){
-		$view='notification';
-		require'admin.php';
-	}
-	function orders($args=false){
-		$view='orders';
-		require'admin.php';
-	}
-	function pages($args=false){
-		$view='pages';
-		require'admin.php';
-	}
-	function payments($args=false){
-		$view='payments';
-		require'admin.php';
-	}
-	function playlist($args=false){
-		$view='playlist';
-		require'admin.php';
-	}
-	function preferences($args=false){
-		$view='preferences';
-		require'admin.php';
-	}
-	function reviews($args=false){
-		$view='reviews';
-		require'admin.php';
-	}
-  function rewards($args=false){
-    $view='rewards';
-    require'admin.php';
-  }
-	function roster($args=false){
-    $view='roster';
-    require'admin.php';
-  }
-	function search($args=false){
-		$view='search';
-		require'admin.php';
-	}
-	function security($args=false){
-		$view='security';
-		require'admin.php';
-	}
-	function seo($args=false){
-		$view='seo';
-		require'admin.php';
-	}
-	function settings($args=false){
-		$view='settings';
-		require'admin.php';
-	}
-	function system($args=false){
-		$view='system';
-		require'admin.php';
-	}
-	function theme($args=false){
-		$view='theme';
-		require'admin.php';
-	}
-	function templates($args=false){
-		$view='templates';
-		require'admin.php';
-	}
-  function tracker($args=false){
-    $view='tracker';
-    require'admin.php';
-  }
+	function accounts($args=false){$view='accounts';require'admin.php';}
+	function activity($args=false){$view='activity';require'admin.php';}
+	function add($args=false){$view='add';require'admin.php';}
+	function adverts($args=false){$view='adverts';require'admin.php';}
+	function agronomy($args=false){$view='agronomy';require'admin.php';}
+	function bookings($args=false){$view='bookings';require'admin.php';}
+	function cart($args=false){$view='cart';require'admin.php';}
+	function copy($args=false){$view='copy';require'admin.php';}
+	function comments($args=false){$view='comments';require'admin.php';}
+	function contact($args=false){$view='contact';require'admin.php';}
+	function contacts($args=false){$view='contacts';require'admin.php';}
+	function content($args=false){$view='content';require'admin.php';}
+	function course($args=false){$view='course';require'admin.php';}
+	function dashboard($args=false){$view='dashboard';require'admin.php';}
+	function database($args=false){$view='database';require'admin.php';}
+	function faq($args=false){$view='faq';require'admin.php';}
+	function forum($args=false){$view='forum';require'admin.php';}
+	function interface($args=false){$view='interface';require'admin.php';}
+	function joblist($args=false){$view='joblist';require'admin.php';}
+	function livechat($args=false){$view='livechat';require'admin.php';}
+	function logout($args=false){$act='logout';$view='';require'admin.php';}
+	function media($args=false){$view='media';require'admin.php';}
+	function messages($args=false){$view='messages';require'admin.php';}
+	function newsletters($args=false){$view='newsletters';require'admin.php';}
+	function notification($args=false){$view='notification';require'admin.php';}
+	function orders($args=false){$view='orders';require'admin.php';}
+	function pages($args=false){$view='pages';require'admin.php';}
+	function payments($args=false){$view='payments';require'admin.php';}
+	function playlist($args=false){$view='playlist';require'admin.php';}
+	function preferences($args=false){$view='preferences';require'admin.php';}
+	function reviews($args=false){$view='reviews';require'admin.php';}
+  function rewards($args=false){$view='rewards';require'admin.php';}
+	function roster($args=false){$view='roster';require'admin.php';}
+	function search($args=false){$view='search';require'admin.php';}
+	function security($args=false){$view='security';require'admin.php';}
+	function seo($args=false){$view='seo';require'admin.php';}
+	function settings($args=false){$view='settings';require'admin.php';}
+	function system($args=false){$view='system';require'admin.php';}
+	function theme($args=false){$view='theme';require'admin.php';}
+	function templates($args=false){$view='templates';require'admin.php';}
+  function tracker($args=false){$view='tracker';require'admin.php';}
 }
 class front{
-	function about($args=false){
-		$view='aboutus';
-		require'process.php';
-	}
-	function aboutus($args=false){
-		$view='aboutus';
-		require'process.php';
-	}
-	function activate($args=false){
-		$view='activate';
-		require'process.php';
-	}
-	function activities($args=false){
-		$view='activities';
-		require'process.php';
-	}
-	function article($args=false){
-		$view='article';
-		require'process.php';
-	}
-	function articles($args=false){
-		$view='article';
-		require'process.php';
-	}
-	function bio($args=false){
-		$view='biography';
-		require'process.php';
-	}
-	function biography($args=false){
-		$view='biography';
-		require'process.php';
-	}
-	function booking($args=false){
-		$view='bookings';
-		require'process.php';
-	}
-	function bookings($args=false){
-		$view='bookings';
-		require'process.php';
-	}
-	function cart($args=false){
-		$view='cart';
-		require'process.php';
-	}
-	function checkout($args=false){
-		$view='checkout';
-		require'process.php';
-	}
-	function contactus($args=false){
-		$view='contactus';
-		require'process.php';
-	}
-	function course($args=false){
-		$view='course';
-		require'process.php';
-	}
-	function courses($args=false){
-		$view='courses';
-		require'process.php';
-	}
-  function distributors($args=false){
-    $view='distributors';
-    require'process.php';
-  }
+	function about($args=false){$view='aboutus';require'process.php';}
+	function aboutus($args=false){$view='aboutus';require'process.php';}
+	function activate($args=false){$view='activate';require'process.php';}
+	function activities($args=false){$view='activities';require'process.php';}
+	function article($args=false){$view='article';require'process.php';}
+	function articles($args=false){$view='article';require'process.php';}
+	function bio($args=false){$view='biography';require'process.php';}
+	function biography($args=false){$view='biography';require'process.php';}
+	function booking($args=false){$view='bookings';require'process.php';}
+	function bookings($args=false){$view='bookings';require'process.php';}
+	function cart($args=false){$view='cart';require'process.php';}
+	function checkout($args=false){$view='checkout';require'process.php';}
+	function contactus($args=false){$view='contactus';require'process.php';}
+	function course($args=false){$view='course';require'process.php';}
+	function courses($args=false){$view='courses';require'process.php';}
+  function distributors($args=false){$view='distributors';require'process.php';}
 	function error($args=false){
 		$view='error';
 		$headerType=$_SERVER["SERVER_PROTOCOL"]." 404 Not Found";
 		require'process.php';
 	}
-	function event($args=false){
-		$view='events';
-		require'process.php';
-	}
-	function events($args=false){
-		$view='events';
-		require'process.php';
-	}
-	function faq($args=false){
-		$view='faq';
-		require'process.php';
-	}
-	function forum($args=false){
-		$view='forum';
-		require'process.php';
-	}
-	function gallery($args=false){
-		$view='gallery';
-		require'process.php';
-	}
-	function index($args=false){
-		$view='index';
-		require'process.php';
-	}
-	function inventory($args=false){
-		$view='inventory';
-		require'process.php';
-	}
-	function login($args=false){
-		$view='login';
-		require'process.php';
-	}
-	function logout($args=false){
-		$act='logout';
-		$view='index';
-		require'process.php';
-	}
-	function news($args=false){
-		$view='news';
-		require'process.php';
-	}
-	function newsletters($args=false){
-		$view='newsletters';
-		require'process.php';
-	}
-	function order($args=false){
-		$view='orders';
-		require'process.php';
-	}
-	function orders($args=false){
-		$view='orders';
-		require'process.php';
-	}
-	function page($args=false){
-		$view='page';
-		require'process.php';
-	}
-	function portfolio($args=false){
-		$view='portfolio';
-		require'process.php';
-	}
-	function pricing($args=false){
-		$view='pricing';
-		require'process.php';
-	}
-	function proof($args=false){
-		$view='proofs';
-		require'process.php';
-	}
-	function proofs($args=false){
-		$view='proofs';
-		require'process.php';
-	}
-	function roster($args=false){
-		$view='roster';
-		require'process.php';
-	}
-	function search($args=false){
-		$view='search';
-		require'process.php';
-	}
-	function service($args=false){
-		$view='service';
-		require'process.php';
-	}
-	function services($args=false){
-		$view='service';
-		require'process.php';
-	}
-	function settings($args=false){
-		$view='settings';
-		require'process.php';
-	}
-	function sitemap($args=false){
-		$view='sitemap';
-		require'process.php';
-	}
-	function testimonial($args=false){
-		$view='testimonials';
-		require'process.php';
-	}
-	function testimonials($args=false){
-		$view='testimonials';
-		require'process.php';
-	}
-	function tos($args=false){
-		$view='tos';
-		require'process.php';
-	}
+	function event($args=false){$view='events';require'process.php';}
+	function events($args=false){$view='events';require'process.php';}
+	function faq($args=false){$view='faq';require'process.php';}
+	function forum($args=false){$view='forum';require'process.php';}
+	function gallery($args=false){$view='gallery';require'process.php';}
+	function index($args=false){$view='index';require'process.php';}
+	function inventory($args=false){$view='inventory';require'process.php';}
+	function login($args=false){$view='login';require'process.php';}
+	function logout($args=false){$act='logout';$view='index';require'process.php';}
+	function news($args=false){$view='news';require'process.php';}
+	function newsletters($args=false){$view='newsletters';require'process.php';}
+	function order($args=false){$view='orders';require'process.php';}
+	function orders($args=false){$view='orders';require'process.php';}
+	function page($args=false){$view='page';require'process.php';}
+	function portfolio($args=false){$view='portfolio';require'process.php';}
+	function pricing($args=false){$view='pricing';require'process.php';}
+	function proof($args=false){$view='proofs';require'process.php';}
+	function proofs($args=false){$view='proofs';require'process.php';}
+	function roster($args=false){$view='roster';require'process.php';}
+	function search($args=false){$view='search';require'process.php';}
+	function service($args=false){$view='service';require'process.php';}
+	function services($args=false){$view='service';require'process.php';}
+	function settings($args=false){$view='settings';require'process.php';}
+	function sitemap($args=false){$view='sitemap';require'process.php';}
+	function testimonial($args=false){$view='testimonials';require'process.php';}
+	function testimonials($args=false){$view='testimonials';require'process.php';}
+	function tos($args=false){$view='tos';require'process.php';}
 }
 $route=new router();
 $routes=[
@@ -822,6 +578,7 @@ $routes=[
 	$settings['system']['admin']=>['admin','dashboard'],
 	$settings['system']['admin'].'/manifest.json'=>['internal','manifestadmin'],
 	'activate'=>['front','activate'],
+	'calendar.ics'=>['internal','calendar'],
 	'checkout'=>['front','checkout'],
 	'courses'=>['front','courses'],
 	'downloads'=>['internal','downloads'],

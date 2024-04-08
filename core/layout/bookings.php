@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -179,6 +179,9 @@ else{
       dayMaxEvents:true,
       events:[
         <?php while($r=$s2->fetch(PDO::FETCH_ASSOC)){
+          $sb=$db->prepare("SELECT `id`,`title` FROM `".$prefix."content` WHERE `id`=:id");
+          $sb->execute([':id'=>$r['rid']]);
+          $rb=$sb->fetch(PDO::FETCH_ASSOC);
           $eColor='danger';
           if($r['status']=='confirmed')
             $eColor='success';
@@ -194,7 +197,8 @@ else{
             start:'<?= date("Y-m-d H:i:s",$r['tis']);?>',
             <?=$r['tie']>$r['tis']?'end: \''.date("Y-m-d H:i:s",$r['tie']).'\',':'';?>
             allDay:false,
-            customHtml:`<div class="badger badge-<?=$eColor;?> events-layer text-left"><?=($r['business']!=''?$r['business']:'').($r['name']!=''?($r['business']!=''?' | ':'').$r['name']:'').($r['business']==''&&$r['name']==''?'Booking '.$r['id']:'');?><div class="events-buttons" role="toolbar"><div class="btn-group" role="group">` +
+            customHtml:`<div class="badger badge-<?=$eColor;?> events-layer text-left m-0" onclick="showInfo(\`event<?=$r['id'];?>\`);">`+
+            `<?=($r['business']!=''?$r['business']:'').($r['name']!=''?($r['business']!=''?' | ':'').$r['name']:'').($r['business']==''&&$r['name']==''?'Booking '.$r['id']:'');?><div class="events-buttons" role="toolbar"><div class="btn-group" role="group">` +
             <?php if($user['options'][2]==1){?>
               `<button class="btn-sm" id="prbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Print Booking" onclick="$('#sp').load('core/print_booking.php?id=<?=$r['id'];?>');"><i class="i">print</i></button>`+
               `<a class="btn-sm" id="edbut<?=$r['id'];?>" data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" role="button" aria-label="Edit"><i class="i">edit</i></a>`+
@@ -204,7 +208,22 @@ else{
             <?php }else{?>
               '<a class="btn btn-sm" id="edbut<?=$r['id'];?>" data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" aria-label="View"><i class="i">view</i></a>'+
             <?php }?>
-            `</div></div></div>`
+            `</div></div></div>`+
+            <?php $poppos=date('D',$r['tis']);
+            $popoverpos='';
+            if($poppos=='Sun')$popoverpos=' left';
+            if($poppos=='Sat')$popoverpos=' right';?>
+            `<div id="event<?=$r['id'];?>" class="popover<?=$popoverpos;?> border shadow-lg">`+
+              `<i class="i" style="position:absolute;top:0;right:0;" onclick="hideInfo(\`event<?=$r['id'];?>\`);">close</i>`+
+              `<?=($r['business']!=''?'<strong>Business:</strong> '.$r['business'].'<br>':'');?>`+
+              `<strong>Name:</strong> <?=$r['name'];?><br>`+
+              `<strong>Address:</strong> <?=$r['address'].', '.$r['suburb'].', '.$r['state'].($r['country']!=''?', '.$r['country']:'').($r['postcode']>0?', '.$r['postcode']:'');?><br>`+
+              `<strong>Email:</strong> <a href="mailto:<?$r['email'];?>"><?=$r['email'];?></a><br>`+
+              `<strong>Mobile:</strong> <a href="tel:<?=$r['mobile'];?>"><?=$r['mobile'];?></a><br>`+
+              `<strong>Phone</strong> <a href="tel:<?=$r['phone'];?>"><?=$r['phone'];?></a><br>`+
+              `<strong>Booked:</strong> <?=$rb['title'];?><br>`+
+              `<?=($r['tis']!=0?'<strong>Time:</strong> '.date('H:i',$r['tis']).($r['tie']!=$r['tis']?' - '.date('H:i',$r['tie']):''):'');?>`+
+            `</div>`
           },
           <?php	}?>
         ],
@@ -219,6 +238,12 @@ else{
       function deleteEvent(id){
         var event=calendar.getEventById(id);
         event.remove();
+      }
+      function showInfo(el){
+        document.getElementById(el).classList.toggle('show');
+      }
+      function hideInfo(el){
+        document.getElementById(el).classList.remove('show');
       }
     </script>
   <?php }

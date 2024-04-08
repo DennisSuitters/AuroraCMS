@@ -15,10 +15,12 @@ namespace Stripe\Service;
  * @property Apps\AppsServiceFactory $apps
  * @property BalanceService $balance
  * @property BalanceTransactionService $balanceTransactions
+ * @property Billing\BillingServiceFactory $billing
  * @property BillingPortal\BillingPortalServiceFactory $billingPortal
  * @property ChargeService $charges
  * @property Checkout\CheckoutServiceFactory $checkout
  * @property Climate\ClimateServiceFactory $climate
+ * @property ConfirmationTokenService $confirmationTokens
  * @property CountrySpecService $countrySpecs
  * @property CouponService $coupons
  * @property CreditNoteService $creditNotes
@@ -31,6 +33,7 @@ namespace Stripe\Service;
  * @property FileLinkService $fileLinks
  * @property FileService $files
  * @property FinancialConnections\FinancialConnectionsServiceFactory $financialConnections
+ * @property Forwarding\ForwardingServiceFactory $forwarding
  * @property Identity\IdentityServiceFactory $identity
  * @property InvoiceItemService $invoiceItems
  * @property InvoiceService $invoices
@@ -61,6 +64,7 @@ namespace Stripe\Service;
  * @property SubscriptionScheduleService $subscriptionSchedules
  * @property Tax\TaxServiceFactory $tax
  * @property TaxCodeService $taxCodes
+ * @property TaxIdService $taxIds
  * @property TaxRateService $taxRates
  * @property Terminal\TerminalServiceFactory $terminal
  * @property TestHelpers\TestHelpersServiceFactory $testHelpers
@@ -87,10 +91,12 @@ class CoreServiceFactory extends \Stripe\Service\AbstractServiceFactory
         'apps' => Apps\AppsServiceFactory::class,
         'balance' => BalanceService::class,
         'balanceTransactions' => BalanceTransactionService::class,
+        'billing' => Billing\BillingServiceFactory::class,
         'billingPortal' => BillingPortal\BillingPortalServiceFactory::class,
         'charges' => ChargeService::class,
         'checkout' => Checkout\CheckoutServiceFactory::class,
         'climate' => Climate\ClimateServiceFactory::class,
+        'confirmationTokens' => ConfirmationTokenService::class,
         'countrySpecs' => CountrySpecService::class,
         'coupons' => CouponService::class,
         'creditNotes' => CreditNoteService::class,
@@ -103,6 +109,7 @@ class CoreServiceFactory extends \Stripe\Service\AbstractServiceFactory
         'fileLinks' => FileLinkService::class,
         'files' => FileService::class,
         'financialConnections' => FinancialConnections\FinancialConnectionsServiceFactory::class,
+        'forwarding' => Forwarding\ForwardingServiceFactory::class,
         'identity' => Identity\IdentityServiceFactory::class,
         'invoiceItems' => InvoiceItemService::class,
         'invoices' => InvoiceService::class,
@@ -133,6 +140,7 @@ class CoreServiceFactory extends \Stripe\Service\AbstractServiceFactory
         'subscriptionSchedules' => SubscriptionScheduleService::class,
         'tax' => Tax\TaxServiceFactory::class,
         'taxCodes' => TaxCodeService::class,
+        'taxIds' => TaxIdService::class,
         'taxRates' => TaxRateService::class,
         'terminal' => Terminal\TerminalServiceFactory::class,
         'testHelpers' => TestHelpers\TestHelpersServiceFactory::class,

@@ -44,15 +44,31 @@ if(stristr($html,'<items>')){
       ],$items);
       $output.=$items;
     }
+    $questions='';
+    if(isset($args[0])&&$args[0]>0){
+      $scq=$db->prepare("SELECT * FROM `".$prefix."contentQuestions` WHERE `rid`=:rid ORDER BY `ti` ASC");
+      $scq->execute([':rid'=>$args[0]]);
+      if($scq->rowCount()>0){
+        while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){
+          $questions.='<div class="col-12"><label for="question'.$rcq['id'].'">'.$rcq['question'].'</div>'.
+          '<div class="row">'.
+            '<input id="question'.$rcq['id'].'" name="answer'.$rcq['id'].'" type="text" value="" placeholder="'.$rcq['question'].'">'.
+          '</div></div>';
+        }
+      }else
+        $questions='<input type="hidden" name="answer" value="none">';
+    }else
+      $questions='<input type="hidden" name="answer" value="none">';
     $html=preg_replace([
       '~<items>.*?<\/items>~is',
       '~<serviceselect>.*?<\/serviceselect>~is',
-      '/<[\/]?bookservices>/'
+      '/<[\/]?bookservices>/',
+      '/<questions>/'
     ],[
       $output,
       '',
       '',
-      ''
+      $questions
     ],$html);
   }else
 		$html=preg_replace('~<bookservices>.*?<\/bookservices>~is','<input type="hidden" name="service" value="0">',$html,1);

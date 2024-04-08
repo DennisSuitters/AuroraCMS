@@ -2,12 +2,12 @@
 /**
  * AuroraCMS - Copyright (C) Diemen Design 2019
  *
- * @category   Administration - Core - Add Blacklist
- * @package    core/add_blacklist.php
+ * @category   Administration - Core - Sitemap
+ * @package    core/sitemap.php
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.21
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    Fix URL Slug reference going to brokwn URL.

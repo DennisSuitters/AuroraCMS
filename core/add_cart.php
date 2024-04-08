@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -79,7 +79,7 @@ if($add==true){
       if(is_numeric($r['cost'])||is_numeric($r['rCost'])||is_numeric($r['dCost'])){
         if($r['rCost']!=0)$r['cost']=$r['rCost'];
         if($rank>300||$rank<400){
-          if($ru['options'][19]==1){
+          if(isset($ru['options'])&&$ru['options'][19]==1){
             if($r['dCost']!=0)$r['cost']=$r['dCost'];
           }
         }
@@ -94,6 +94,22 @@ if($add==true){
           ':si'=>SESSIONID,
           ':ti'=>$ti
         ]);
+        $qid=$db->lastInsertId();
+
+        if(!isset($_POST['answer'])){
+          $scq=$db->prepare("SELECT * FROM `".$prefix."contentQuestions` WHERE `rid`=:rid ORDER BY `ti` ASC");
+          $scq->execute([':rid'=>$iid]);
+          while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){
+            $scb=$db->prepare("INSERT IGNORE INTO `".$prefix."orderQuestions` (`cid`,`rid`,`question`,`answer`,`ti`) VALUE (:cid,:rid,:question,:answer,:ti)");
+            $scb->execute([
+              ':cid'=>$iid,
+              ':rid'=>$qid,
+              ':question'=>$rcq['question'],
+              ':answer'=>(isset($_POST['answer'.$rcq['id']])?$_POST['answer'.$rcq['id']]:''),
+              ':ti'=>time()
+            ]);
+          }
+        }
         if($opt!=''){
           $opts=explode(",",$opt);
           foreach($opts as $oid){

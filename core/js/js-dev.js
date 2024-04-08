@@ -157,10 +157,17 @@ document.addEventListener('click',function(event){
       }
       opt=opt.replace(/[, ]+$/,"").trim();
     }
+    var questions=document.querySelectorAll('.contentanswer');
+    let q='';
+    if(questions.length>0){
+      for(var i=0;i<questions.length;i++){
+        q+='&'+questions[i].getAttribute('name')+'='+questions[i].value;
+      }
+    }
     fetch('core/add_cart.php',{
 			method:"POST",
 			headers:{"Content-type":"application/x-www-form-urlencoded; charset=UTF-8"},
-	  	body:'id='+document.querySelector('.addCart').getAttribute("data-cartid")+'&opt='+opt
+	  	body:'id='+document.querySelector('.addCart').getAttribute("data-cartid")+'&opt='+opt+q
 		}).then(function(response){
 			return response.json();
 		}).then(function(j){

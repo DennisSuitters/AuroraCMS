@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -205,6 +205,9 @@ else{
                 </div>
               </div>
               <div class="card-header overflow-visible mt-0 pt-0 line-clamp">
+                <?= !isset($args[1])?'<div class="list-hidden my-1"><a class="badger badge-success small text-white" href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'">'.ucfirst($r['contentType']).'</a></div>':'';?>
+                <small class="small text-muted d-block"><small>Created: <?=date($config['dateFormat'],$r['ti']);?></small></small>
+                <small class="small text-muted d-block"><small>Published: <?=date($config['dateFormat'],$r['pti']);?></small></small>
                 <a data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/course/edit/'.$r['id'];?>" aria-label="Edit <?=$r['title'];?>"><?php echo$r['thumb']!=''&&file_exists($r['thumb'])?'<img src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
                 <?=($user['options'][1]==1&&$r['suggestions']==1?'<span data-tooltip="tooltip" aria-label="Editing Suggestions"><i class="i text-success">lightbulb</i></span><br>':'').
                 '<small class="text-muted d-block" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'<span class="badger badge-secondary">Everyone</span>':'<span class="badger badge-'.rank($r['rank']).'">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</small>';?>

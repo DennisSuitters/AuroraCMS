@@ -31,7 +31,7 @@ if($config['options'][11]==1){
   $rm2=$sm2->fetch(PDO::FETCH_ASSOC);?>
   <div class="row justify-content-center">
     <div class="card stats col-11 col-sm-5 p-1 m-1">
-      <div class="h6 text-muted text-center">Incoming Links (this week)</div>
+      <div class="h6 text-muted text-center"><a href="<?=URL.$settings['system']['admin'].'/tracker/settings';?>">Incoming Links (this week)</a></div>
       <div class="row">
         <div class="col-12 col-sm zebra">
           <div class="row p-2">

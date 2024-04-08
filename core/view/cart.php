@@ -240,6 +240,12 @@ if(isset($args[0])&&$args[0]=='confirm'){
 					':points'=>$r['points'],
 					':ti'=>$ti
 				]);
+				$orid=$db->lastInsertId();
+				$scq=$db->prepare("UPDATE `".$prefix."orderQuestions` SET `rid`=:oid WHERE `rid`=:rid");
+				$scq->execute([
+					':oid'=>$orid,
+					':rid'=>$r['id']
+				]);
 			}
 			$q=$db->prepare("UPDATE `".$prefix."orders` SET `total`=:total WHERE `id`=:id");
 			$q->execute([

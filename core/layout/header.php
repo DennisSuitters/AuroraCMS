@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -19,7 +19,7 @@
           <span class="line line-1"></span>
           <span class="line line-2"></span>
           <span class="line line-3"></span>
-        </a>
+        </button>
       </li>
       <li>
         <a href="<?= URL.$settings['system']['admin'];?>/" data-tooltip="right" aria-label="AuroraCMS"><i class="i i-5x mb-3 i-color-black">auroracms</i></a>

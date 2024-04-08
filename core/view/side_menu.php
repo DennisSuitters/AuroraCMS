@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -128,6 +128,28 @@ if(file_exists(THEME.'/side_menu.html')){
 			'',
 			number_format((float)$r['points'])
 		],$sideTemp);
+		if(stristr($sideTemp,'<questions>')){
+			$questions='';
+			if($r['contentType']=='inventory'){
+				$scq=$db->prepare("SELECT * FROM `".$prefix."contentQuestions` WHERE `rid`=:rid ORDER BY `ti` ASC");
+				$scq->execute([':rid'=>$r['id']]);
+				if($scq->rowCount()>0){
+					$questions='<div class="col-12 my-3 text-left">';
+					while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){
+						$questions.=
+							'<label for="question'.$rcq['id'].'">'.$rcq['question'].'</label>'.
+							'<div class="row">'.
+								'<div class="col-12 m-0 p-0 text-left">'.
+									'<input class="contentanswer" id="question'.$rcq['id'].'" name="answer'.$rcq['id'].'" type="text" value="" placeholder="'.$rcq['question'].'">'.
+								'</div>'.
+							'</div>';
+					}
+					$questions.='</div>';
+				}else
+					$questions='<input class="contentanswer" type="hidden" name="answer" value="none">';
+			}
+			$sideTemp=preg_replace('/<questions>/',$questions,$sideTemp);
+		}
 		if(isset($r['contentType'])&&$r['contentType']=='inventory'){
 			if(stristr($sideTemp,'<brand>')){
 				if($r['brand']!=0){

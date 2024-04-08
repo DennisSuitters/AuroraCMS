@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -76,7 +76,7 @@ if(isset($h1[1])){
                 <ol class="breadcrumb m-0 pl-0 pt-0">
                   <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/course';?>">Course</a></li>
                   <li class="breadcrumb-item active"><?=$user['options'][1]==1?'Edit':'View';?></li>
-                  <li class="breadcrumb-item active"><?=$r['title'];?></li>
+                  <li class="breadcrumb-item active"><?=$r['title'].'<small id="status'.$r['id'].'" class="badger badge-'.$r['status'].' ml-1 text-uppercase">'.$r['status'].'</small>';?></li>
                 </ol>
               </div>
               <div class="col-12 col-sm-6 text-right">
@@ -504,7 +504,7 @@ if(isset($h1[1])){
                 <div class="col-12 col-sm-6 pr-md-3">
                   <label for="status" class="mt-0">Status</label>
                   <div class="form-row">
-                    <select id="status"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Status"':' disabled';?> onchange="update('<?=$r['id'];?>','content','status',$(this).val(),'select');changeShareStatus($(this).val());">
+                    <select id="status"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Status"':' disabled';?> onchange="update('<?=$r['id'];?>','content','status',$(this).val(),'select');changeShareStatus($(this).val());changeStatus($(this).val());">
                       <option value="unpublished"<?=$r['status']=='unpublished'?' selected':'';?>>Unpublished</option>
                       <option value="autopublish"<?=$r['status']=='autopublish'?' selected':'';?>>AutoPublish</option>
                       <option value="published"<?=$r['status']=='published'?' selected':'';?>>Published</option>
@@ -514,6 +514,15 @@ if(isset($h1[1])){
                   </div>
                 </div>
                 <script>
+                  function changeStatus(status){
+                    $("#status<?=$r['id'];?>").removeClass('badger badge-unpublished');
+                    $("#status<?=$r['id'];?>").removeClass('badger badge-autopublish');
+                    $("#status<?=$r['id'];?>").removeClass('badger badge-published');
+                    $("#status<?=$r['id'];?>").removeClass('badger badge-delete');
+                    $("#status<?=$r['id'];?>").removeClass('badger badge-archive');
+                    $("#status<?=$r['id'];?>").addClass('badger badge-'+status);
+                    $("#status<?=$r['id'];?>").html(status);
+                  }
                   function changeShareStatus(status){
                     if(status==='published'){
                       $("[data-social-share]").removeClass('hidden').data("social-share",$('#genurl').attr('href'));

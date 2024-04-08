@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -453,11 +453,11 @@ else{?>
                   $sc->execute([':id'=>$oi['cid']]);
                   $c=$sc->fetch(PDO::FETCH_ASSOC);?>
                   <tr class="<?=($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?'bg-warning':'');?>">
-                    <td class="align-middle d-table-cell">
+                    <td class="align-top d-table-cell pt-3">
                       <input type="checkbox" class="orderitems" name="item" value="<?=$oi['id'];?>">
                     </td>
-                    <td class="text-left align-middle d-table-cell small px-0"><?=(isset($i['code'])?$i['code']:'');?></td>
-                    <td class="text-left align-middle d-table-cell px-0">
+                    <td class="text-left align-top d-table-cell small px-0"><?=(isset($i['code'])?$i['code']:'');?></td>
+                    <td class="text-left align-top d-table-cell px-0">
                       <?php if($r['iid_ti']!=0)
                         echo($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?ucwords($oi['status']).': ':'').$oi['title'];
                       else{?>
@@ -468,10 +468,20 @@ else{?>
                           <input name="c" type="hidden" value="title">
                           <input name="da" type="text" value="<?=($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?ucwords($oi['status']).': ':'').$oi['title'];?>">
                         </form>
-                      <?php }?>
+                      <?php }
+                      $scq=$db->prepare("SELECT * FROM `".$prefix."orderQuestions` WHERE `rid`=:rid ORDER BY `ti` ASC");
+                      $scq->execute([':rid'=>$oi['id']]);
+                      if($scq->rowCount()>0){
+                        while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){
+                          echo'<div class="small">'.
+                            '<strong>'.$rcq['question'].'</strong>'.
+                            ' '.$rcq['answer'].
+                          '</div>';
+                        }
+                      }?>
                     </td>
-                    <td class="text-left align-middle d-table-cell px-0"><?= isset($c['title'])?$c['title']:'';?></td>
-                    <td class="text-center align-middle d-table-cell px-0">
+                    <td class="text-left align-top d-table-cell px-0"><?= isset($c['title'])?$c['title']:'';?></td>
+                    <td class="text-center align-top d-table-cell px-0">
                       <form target="sp" method="post" action="core/updateorder.php">
                         <input name="act" type="hidden" value="quantity">
                         <input name="id" type="hidden" value="<?=$oi['id'];?>">
@@ -484,7 +494,7 @@ else{?>
                         $total=number_format((float)$total,2,'.','');
                       }?>
                     </td>
-                    <td class="text-right align-middle d-table-cell px-0">
+                    <td class="text-right align-top d-table-cell px-0">
                       <?php if($r['iid_ti']!=0){
                         echo number_format((float)$oi['cost'],2,'.','');
                       }else{?>
@@ -497,7 +507,7 @@ else{?>
                         </form>
                       <?php }?>
                     </td>
-                    <td class="text-right align-middle d-table-cell px-0">
+                    <td class="text-right align-top d-table-cell px-0">
                       <?php $gst=0;
                       if($oi['status']!='pre order'||$oi['status']!='back order'){
                         if($config['gst']>0){
@@ -508,7 +518,7 @@ else{?>
                         echo$gst>0?$gst:'';
                       }?>
                     </td>
-                    <td class="text-right align-middle d-table-cell px-0">
+                    <td class="text-right align-top d-table-cell pt-3 px-0">
                       <?php // if($oi['status']!='pre order'||$oi['status']!='back order'){
                         echo number_format((float)$oi['cost']*$oi['quantity']+$gst,2,'.','');
                       //}else{
@@ -516,7 +526,7 @@ else{?>
                       //}
                       ?>
                     </td>
-                    <td class="align-middle text-right d-table-cell px-0">
+                    <td class="align-top text-right d-table-cell px-0">
                       <form target="sp" method="post" action="core/updateorder.php">
                         <input name="act" type="hidden" value="trash">
                         <input name="id" type="hidden" value="<?=$oi['id'];?>">

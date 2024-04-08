@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-3
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -189,10 +189,22 @@ if(isset($args[0])&&$args[0]!=''){
           $gst=number_format((float)$gst, 2, '.', '');
         }
       }
+      $questions='';
+      $scq=$db->prepare("SELECT * FROM `".$prefix."orderQuestions` WHERE `rid`=:rid ORDER BY `ti` ASC");
+      $scq->execute([':rid'=>$oir['id']]);
+      if($scq->rowCount()>0){
+        while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){
+          $questions.='<div class="small ml-2"><small>'.
+            '<strong>'.$rcq['question'].'</strong>'.
+            ' '.$rcq['answer'].
+          '</small></div>';
+        }
+      }
       $item=preg_replace([
         '/<print zebra>/',
         '/<print orderitem=[\"\']?code[\"\']?>/',
         '/<print orderitem=[\"\']?title[\"\']?>/',
+        '/<print orderitem=[\"\']?questions[\"\']?>/',
         '/<print weight>/',
         '/<print size>/',
         '/<print choice>/',
@@ -204,6 +216,7 @@ if(isset($args[0])&&$args[0]!=''){
         'zebra'.$zebra.' '.($oir['status']=='back order'||$oir['status']=='pre order'?'bg-warning':''),
         htmlspecialchars($i['code'],ENT_QUOTES,'UTF-8'),
         ($oir['status']=='back order'||$oir['status']=='pre order'?ucwords($oir['status']).': ':'').htmlspecialchars($i['title'],ENT_QUOTES,'UTF-8'),
+        $questions,
         (isset($i['weight'])&&$i['weight']==''?'':'<br><small>Weight: '.$i['weight'].$i['weightunit']),
         (isset($i['width'])&&$i['width']==''?'':'<br><small>W: '.$i['width'].$i['widthunit'].' L: '.$i['length'].$i['lengthunit'].' H: '.$i['height'].$i['heightunit'].'</small>'),
         isset($c['title'])?htmlspecialchars($c['title'],ENT_QUOTES,'UTF-8'):'',

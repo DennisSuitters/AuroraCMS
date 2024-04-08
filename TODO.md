@@ -6,6 +6,7 @@ This is a quick list of things what need to be fixed or worked on to help those 
 - Explore adding Referral Codes on SignUp forms.
 - Explore allowing user to set price/tip/buy me a coffee.
 - Administration.
+  - Create the ability to allow iCal, Google Calendar sync using an .ics output.
   - Add instructional walk through on pages explaining what fields do, step by step.
   - Config database, add how to adjust total costs for items, by percentage, fixed value, or multiplying value.
   - Explore update Livechat Layout.

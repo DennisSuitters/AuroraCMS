@@ -1,3 +1,20 @@
+#### v0.2.26-7
+- Add status to breadcrumb on content editing page.
+- Add Created and Published Date to Content Items.
+- Fix preg_match causing 500 error.
+- Add ability to add Questions to Inventory and Services.
+- Fix missing parser replacement for downloads, courses, and links when email orders.
+- Fix Cost displaying as "Free" on Pricing page.
+- Add .ics calendar output for Roster, Events and Bookings.
+- Add function for generating unique UUID's, specifically for .ics output for Calendar integration.
+- Fix schema quote escaping.
+- Fix font icons that were missing for the Accessibility Widget.
+- Add check when displaying Cost for non-numerical data when editing content.
+- Fix error thrown for non string data type in meta_footer when parsing FOMO Notifications.
+- Change inbound link tracking to weekly rather than daily to reduce database size.
+- Fix missing closing tag in Administration header hide menu option & side menu.
+- Upgrade Stripe Processing to 13.17.0
+
 #### v0.2.26-6
 - Add Employee Roster System to add work shifts via calendar.
 - Add Roster parser for front end, template page, and login mechanism.

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2021 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -198,12 +198,19 @@ if($tbl=='login'&&$col=='password'){
   $log['newda']='';
 }
 if($tbl=='content'||$tbl=='menu'){
-  $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET `eti`=:ti,`login_user`=:login_user WHERE `id`=:id");
+  $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET `eti`=:ti,`login_user`=:login_user,`sid`=`sid`+1 WHERE `id`=:id");
   $q->execute([
     ':ti'=>$ti,
     ':login_user'=>$login_user,
     ':id'=>$id
   ]);
+}
+if($tbl=='roster'){
+	$q=$db->prepare("UPDATE `".$prefix."roster` SET `eti`=:ti,`sid`=`sid`+1 WHERE `id`=:id");
+	$q->execute([
+		':ti'=>$ti,
+		':id'=>$id
+	]);
 }
 if($tbl=='seo'){
   $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET `ti`=:ti WHERE `id`=:id");

@@ -2,7 +2,7 @@
 
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.26-6
+Current version is v0.2.26-7
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
@@ -69,6 +69,7 @@ Current version is v0.2.26-6
   - Convert booking to invoice.
   - Print booking.
   - Signature taking and storage for confirmation of Services.
+  - Integrate Calendar to update iCal, Google Calendar, etc.
 - Messaging.
   - Whenever a message is created via the Contact Us page, it can be stored in the messages system as well as emailed.
   - Live Chat. Choose between the built in Live Chat, or easily integrate Facebook Messenger.
@@ -88,6 +89,10 @@ Current version is v0.2.26-6
   - Post, Reply as per other Forums.
   - Integrated Help Tickets as Forum Posts.
   - Upvote or Downvote posts and comments.
+- Roster
+  - Add/Edit work shifts.
+  - Users able to view Roster up to 4 weeks ahead.
+  - Users able to agree to extra shifts, with approval editing in Administration.
 - Course Management.
   - Add/Edit Courses.
     - Add Multiple-Choice Questions.

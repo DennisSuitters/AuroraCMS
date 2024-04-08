@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-3
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -54,6 +54,6 @@ echo'<aside id="sidebar" class="'.(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar
           echo'<li class="'.($acheck3!='settings'&&$view==$rb1['view']?'active':'').'"><a href="'.URL.$settings['system']['admin'].'/'.$rb1['view'].'" data-tooltip="right" aria-label="'.$rb1['title'].'"><i class="i i-3x mr-3">'.$rb1['icon'].'</i> <span>'.$rb1['title'].'</span></a></li>';
         }
       }
-    echo'</ul>'.
+    echo'</li></ul>'.
   '</nav>'.
 '</aside>';

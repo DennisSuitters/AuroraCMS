@@ -15,10 +15,12 @@ namespace Stripe;
  * @property \Stripe\Service\Apps\AppsServiceFactory $apps
  * @property \Stripe\Service\BalanceService $balance
  * @property \Stripe\Service\BalanceTransactionService $balanceTransactions
+ * @property \Stripe\Service\Billing\BillingServiceFactory $billing
  * @property \Stripe\Service\BillingPortal\BillingPortalServiceFactory $billingPortal
  * @property \Stripe\Service\ChargeService $charges
  * @property \Stripe\Service\Checkout\CheckoutServiceFactory $checkout
  * @property \Stripe\Service\Climate\ClimateServiceFactory $climate
+ * @property \Stripe\Service\ConfirmationTokenService $confirmationTokens
  * @property \Stripe\Service\CountrySpecService $countrySpecs
  * @property \Stripe\Service\CouponService $coupons
  * @property \Stripe\Service\CreditNoteService $creditNotes
@@ -31,6 +33,7 @@ namespace Stripe;
  * @property \Stripe\Service\FileLinkService $fileLinks
  * @property \Stripe\Service\FileService $files
  * @property \Stripe\Service\FinancialConnections\FinancialConnectionsServiceFactory $financialConnections
+ * @property \Stripe\Service\Forwarding\ForwardingServiceFactory $forwarding
  * @property \Stripe\Service\Identity\IdentityServiceFactory $identity
  * @property \Stripe\Service\InvoiceItemService $invoiceItems
  * @property \Stripe\Service\InvoiceService $invoices
@@ -61,6 +64,7 @@ namespace Stripe;
  * @property \Stripe\Service\SubscriptionScheduleService $subscriptionSchedules
  * @property \Stripe\Service\Tax\TaxServiceFactory $tax
  * @property \Stripe\Service\TaxCodeService $taxCodes
+ * @property \Stripe\Service\TaxIdService $taxIds
  * @property \Stripe\Service\TaxRateService $taxRates
  * @property \Stripe\Service\Terminal\TerminalServiceFactory $terminal
  * @property \Stripe\Service\TestHelpers\TestHelpersServiceFactory $testHelpers

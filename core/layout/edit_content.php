@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -79,7 +79,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                   <li class="breadcrumb-item active"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
                   <li class="breadcrumb-item active"><?=($r['contentType']!='list'?'<a href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'">'.ucfirst($r['contentType']).(in_array($r['contentType'],array('article'))?'s':'').'</a>':'List');?></li>
                   <li class="breadcrumb-item active"><?=$user['options'][1]==1?'Edit':'View';?></li>
-                  <li class="breadcrumb-item active"><?=$r['title'];?></li>
+                  <li class="breadcrumb-item active"><?=$r['title'].'<small id="status'.$r['id'].'" class="badger badge-'.$r['status'].' ml-1 text-uppercase">'.$r['status'].'</small>';?></li>
                 </ol>
               </div>
               <div class="col-12 col-sm-6 text-right">
@@ -96,6 +96,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
           <div class="tabs" role="tablist">
             <?='<input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>'.
             '<label for="tab1-1"'.($seo['contentcnt']>0?' class="badge" data-badge="'.$seo['contentcnt'].'"':'').'>'.($seo['contentcnt']>0?'<span data-tooltip="tooltip" title aria-label="There'.($seo['contentcnt']>1?' are '.$seo['contentcnt'].' SEO related issues!':' is 1 SEO related issue!').'">Content</span>':'Content').'</label>'.
+            (in_array($r['contentType'],['service','inventory'])?'<input class="tab-control" id="tab1-16" name="tabs" type="radio"><label for="tab1-16">Questions</label>':'').
             (in_array($r['contentType'],['event','inventory','service','events','activities'])?'<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2">Pricing</label>':'').
             '<input class="tab-control" id="tab1-3" name="tabs" type="radio"><label for="tab1-3"'.($seo['imagescnt']>0?' class="badge" data-badge="'.$seo['imagescnt'].'"':'').'>'.($seo['imagescnt']>0?'<span data-tooltip="tooltip" aria-label="There'.($seo['imagescnt']>1?' are '.$seo['imagescnt'].' SEO related issues!':' is 1 SEO related issue!').'">Media</span>':'Media').'</label>'.
             ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">Options</label>':'').
@@ -109,7 +110,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
             ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-12" name="tabs" type="radio"><label for="tab1-12">Purchases</label>':'').
             (in_array($r['contentType'],['events','inventory','service','course','article'])?'<input class="tab-control" id="tab1-15" name="tabs" type="radio"><label for="tab1-15" data-tooltip="tooltip" aria-label="Frequently Asked Questions">FAQ</label>':'').
             ($r['contentType']=='article'?'<input class="tab-control" id="tab1-13" name="tabs" type="radio"><label for="tab1-13">List</label>':'').
-            (in_array($r['contentType'],['inventory','courses'])?'<input class="tab-control" id="tab1-14" name="tabs" type="radio"><label for="tab1-14">Analytics</label>':'');?>
+            ($config['options'][11]==1?'<input class="tab-control" id="tab1-14" name="tabs" type="radio"><label for="tab1-14">Analytics</label>':'');?>
 <?php /* Content */?>
             <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
               <label for="title" class="mt-0">Title</label>
@@ -602,6 +603,53 @@ if(!in_array($r['contentType'],['testimonials','list'])){
               </div>
               <div class="form-text small text-muted">Edited: <?=($r['eti']==0?'Never':date($config['dateFormat'],$r['eti']).' by '.$r['login_user']);?></div>
             </div>
+<?php /* Questions */?>
+            <?php if(in_array($r['contentType'],['service','inventory'])){?>
+              <div class="tab1-16 border" data-tabid="tab1-16" role="tabpanel">
+                <div class="sticky-top">
+                  <div class="row">
+                    <article class="card mb-0 p-0 overflow-visible card-list card-list-header bg-white shadow">
+                      <div class="row py-2">
+                        <div class="col-12 pl-2">Question</div>
+                      </div>
+                      <?php if($user['options'][1]==1){?>
+                        <form target="sp" method="post" action="core/add_contentquestion.php">
+                          <input name="rid" type="hidden" value="<?=$r['id'];?>">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class="form-row">
+                                <input name="q" type="text" value="" placeholder="Enter a Question...">
+                                <button class="add" type="submit"><i class="i">add</i></button>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                      <?php }?>
+                    </article>
+                  </div>
+                </div>
+                <div id="questions">
+                  <?php $sq=$db->prepare("SELECT * FROM `".$prefix."contentQuestions` WHERE `rid`=:rid ORDER BY `ti` ASC");
+                  $sq->execute([':rid'=>$r['id']]);
+                  while($rq=$sq->fetch(PDO::FETCH_ASSOC)){?>
+                    <div id="l_<?=$rq['id'];?>" class="row">
+                      <div class="col-12">
+                        <div class="form-row">
+                          <div class="input-text col-12"><?=$rq['question'];?></div>
+                          <?php if($user['options'][1]==1){?>
+                            <form target="sp" action="core/purge.php">
+                              <input name="id" type="hidden" value="<?=$rq['id'];?>">
+                              <input name="t" type="hidden" value="contentQuestions">
+                              <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                            </form>
+                          <?php }?>
+                        </div>
+                      </div>
+                    </div>
+                  <?php }?>
+                </div>
+              </div>
+            <?php }?>
 <?php /* Pricing */?>
             <?php if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='events'||$r['contentType']=='activities'){?>
               <div class="tab1-2 border p-3" data-tabid="tab1-2" role="tabpanel">
@@ -621,15 +669,18 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                         <div class="form-row">
                           <div class="input-text">$</div>
                           <input class="textinput" id="cost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="cost" type="text" value="<?=$r['cost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Cost..."':' readonly';?>>
-                          <?php if($r['cost']==0)
-                            $gst=0;
-                          else{
-                            if(isset($config['gst'])&&is_numeric($config['gst'])){
-                              $gst=$r['cost'] * ($config['gst'] / 100);
-                              $gst=$r['cost'] + $gst;
-                              $gst=number_format((float)$gst,2,'.','');
-                            }else
+                          <?php
+                          if(is_numeric($r['cost'])){
+                            if($r['cost']==0)
                               $gst=0;
+                            else{
+                              if(isset($config['gst'])&&is_numeric($config['gst'])){
+                                $gst=$r['cost'] * ($config['gst'] / 100);
+                                $gst=$r['cost'] + $gst;
+                                $gst=number_format((float)$gst,2,'.','');
+                              }else
+                                $gst=0;
+                            }
                           }?>
                           <div class="input-text<?=$config['gst']==0?' d-none':'';?>" id="gstcost" data-gst="Incl. GST"><?=$gst;?></div>
                           <?=($user['options'][1]==1?
@@ -1943,7 +1994,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                 <div class="col-12 col-sm-6 pr-md-3">
                   <label for="status" class="mt-0">Status</label>
                   <div class="form-row">
-                    <select id="status"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Status"':' disabled';?> onchange="update('<?=$r['id'];?>','content','status',$(this).val(),'select');changeShareStatus($(this).val());">
+                    <select id="status"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Status"':' disabled';?> onchange="update('<?=$r['id'];?>','content','status',$(this).val(),'select');changeShareStatus($(this).val());changeStatus($(this).val());">
                       <option value="unpublished"<?=$r['status']=='unpublished'?' selected':'';?>>Unpublished</option>
                       <option value="autopublish"<?=$r['status']=='autopublish'?' selected':'';?>>AutoPublish</option>
                       <option value="published"<?=$r['status']=='published'?' selected':'';?>>Published</option>
@@ -1953,6 +2004,15 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                   </div>
                 </div>
                 <script>
+                  function changeStatus(status){
+                    $("#status<?=$r['id'];?>").removeClass('badger badge-unpublished');
+                    $("#status<?=$r['id'];?>").removeClass('badger badge-autopublish');
+                    $("#status<?=$r['id'];?>").removeClass('badger badge-published');
+                    $("#status<?=$r['id'];?>").removeClass('badger badge-delete');
+                    $("#status<?=$r['id'];?>").removeClass('badger badge-archive');
+                    $("#status<?=$r['id'];?>").addClass('badger badge-'+status);
+                    $("#status<?=$r['id'];?>").html(status);
+                  }
                   function changeShareStatus(status){
                     if(status==='published'){
                       $("[data-social-share]").removeClass('hidden').data("social-share",$('#genurl').attr('href'));

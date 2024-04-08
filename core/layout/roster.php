@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -15,8 +15,9 @@ $sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='67
 $sv->execute();
 if($view=='add'){
   $ti=time();
-  $q=$db->prepare("INSERT IGNORE INTO `".$prefix."roster` (`title`,`tis`,`tie`,`status`,`ti`) VALUES (:title,:tis,:tie,'available',:ti)");
+  $q=$db->prepare("INSERT IGNORE INTO `".$prefix."roster` (`UUID`,`title`,`tis`,`tie`,`status`,`ti`) VALUES (:title,:tis,:tie,'available',:ti)");
   $q->execute([
+    ':UUID'=>uuidv4(),
     ':title'=>date('l',$ti).' Shift',
     ':tis'=>$ti,
     ':tie'=>$ti,
@@ -82,11 +83,14 @@ else{
           $ru=[
             'id' => 0,
             'username' => '',
-            'name' => 'Shift Available',
+            'name' => '',
+            'email' => '',
+            'phone' => '',
+            'mobile' => '',
             'rank' => ''
           ];
           if($r['uid']!=0){
-            $su=$db->prepare("SELECT `id`,`username`,`name`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
+            $su=$db->prepare("SELECT `id`,`username`,`name`,`email`,`phone`,`mobile`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
             $su->execute([':id'=>$r['uid']]);
             $ru=$su->fetch(PDO::FETCH_ASSOC);
           }
@@ -97,18 +101,39 @@ else{
             $eColor='secondary';?>
           {
             id:'<?=$r['id'];?>',
-            title:`<?=($ru['name']!=''?$ru['name']:$ru['username']);?>`,
+            title:`<?=($ru['name']!=''?$ru['name']:'Shift Unassigned');?>`,
             start:'<?= date("Y-m-d H:i:s",$r['tis']);?>',
             <?=$r['tie']>$r['tis']?'end: \''.date("Y-m-d H:i:s",$r['tie']).'\',':'';?>
             allDay:false,
-            customHtml:`<div class="badger badge-<?=$eColor;?> events-layer text-left" data-tooltip="tooltip" aria-label="<?=date('H:s',$r['tis']).'-'.date('H:s',$r['tie']);?>"><?=($ru['name']!=''?$ru['name']:$ru['username']);?><div class="events-buttons" role="toolbar"><div class="btn-group" role="group">` +
+            customHtml:`<div class="badger badge-<?=$eColor;?> events-layer text-left m-0" data-tooltip="tooltip" aria-label="<?=date('H:s',$r['tis']).'-'.date('H:s',$r['tie']);?>" onclick="showInfo(\`roster<?=$r['id'];?>\`);"><?=($ru['name']!=''?$ru['name']:$ru['username']);?><div class="events-buttons" role="toolbar"><div class="btn-group" role="group">` +
             <?php if($user['options'][2]==1){?>
               `<a class="btn-sm" id="edbut<?=$r['id'];?>" data-tooltip="bottom" href="<?=$settings['system']['admin'].'/roster/edit/'.$r['id'];?>" role="button" aria-label="Edit"><i class="i">edit</i></a>`+
               `<button class="btn-sm trash" id="delbut<?=$r['id'];?>" data-tooltip="bottom" aria-label="Delete" onclick="purge('<?=$r['id'];?>','roster');$(this).closest('.events-layer').remove();"><i class="i">trash</i></button>`+
             <?php }else{?>
               '<a class="btn btn-sm" id="edbut<?=$r['id'];?>" data-tooltip="bottom" href="<?=$settings['system']['admin'].'/roster/edit/'.$r['id'];?>" aria-label="View"><i class="i">view</i></a>'+
             <?php }?>
-            `</div></div></div>`
+            `</div></div></div>`+
+            <?php $poppos=date('D',$r['tis']);
+            $popoverpos='';
+            if($poppos=='Sun')$popoverpos=' left';
+            if($poppos=='Sat')$popoverpos=' right';?>
+            `<div id="roster<?=$r['id'];?>" class="popover<?=$popoverpos;?> border shadow-lg">`+
+              `<i class="i" style="position:absolute;top:0;right:0;cursor:default;" onclick="hideInfo(\`roster<?=$r['id'];?>\`);">close</i>`+
+              `<strong>Shift:</strong> <?=$r['title'];?><br>`+
+              `<strong>Time:</strong> <?=date('H:s',$r['tis']).' - '.date('H:s',$r['tie']);?><br>`+
+              <?php if($r['status']=='rostered'||$r['status']=='accepted'){
+                if($r['status']=='accepted'){?>
+                  `<div class="bg-success"><strong>Status:</strong> Accepted by <?=$ru['name'];?></div>`+
+                <?php }else{?>
+                  `<strong>Assigned to:</strong> <?=$ru['name'];?><br>`+
+                <?php }?>
+                `<strong>Email:</strong> <a href="mailto:<?=$ru['email'];?>"><?=$ru['email'];?></a><br>`+
+                `<strong>Phone:</strong> <a href="tel:<?=$ru['phone'];?>"><?=$ru['phone'];?></a><br>`+
+                `<strong>Mobile:</strong> <a href="tel:<?=$ru['mobile'];?>"><?=$ru['mobile'];?></a><br>`+
+              <?php }else{?>
+                `<div class="bg-info"><strong>Status: Unassigned</div>`+
+              <?php }?>
+            `</div>`
           },
           <?php	}?>
         ],
@@ -123,6 +148,12 @@ else{
       function deleteEvent(id){
         var event=calendar.getEventById(id);
         event.remove();
+      }
+      function showInfo(el){
+        document.getElementById(el).classList.toggle('show');
+      }
+      function hideInfo(el){
+        document.getElementById(el).classList.remove('show');
       }
     </script>
   <?php }

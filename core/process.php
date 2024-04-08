@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -290,15 +290,19 @@ $head=preg_replace([
   $schemaOrg
 ],$head);
 print$head.$content;
+/*
 if($npi!=true&&$config['options'][11]==1){
-  if(isset($page['metaRobots'])&&($page['metaRobots']==''||preg_match("/(index|follow)/i",$page['metaRobots'],'noindex'))){
+  if(isset($page['metaRobots'])&&($page['metaRobots']==''||preg_match("/(index|follow)/is",$page['metaRobots']))){
     $current_ref=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
     if(str_contains($_SERVER['HTTP_REFERER'],URL)){$current_ref='';}
-    $today=date('d-m-Y',$ti);
-    $vs=$db->prepare("SELECT `id` FROM `".$prefix."visit_tracker` WHERE `type`='page' AND `rid`=:rid AND `textdate`=:textdate");
+    $sw=strtotime('midnight next Sunday -1 week');
+    $sw=date('w',$sw)==date('w')?strtotime(date("Y-m-d",$sw)." +7 days"):$sw;
+    $ew=strtotime(date("Y-m-d",$sw)." +6 days");
+    $vs=$db->prepare("SELECT `id` FROM `".$prefix."visit_tracker` WHERE `type`='page' AND `rid`=:rid AND `ti`>=:sw AND `ti`<=:ew");
     $vs->execute([
       ':rid'=>$page['id'],
-      ':textdate'=>$today
+      ':sw'=>$sw,
+      ':ew'=>$ew
     ]);
     if($vs->rowCount()==1){
       $vr=$vs->fetch(PDO::FETCH_ASSOC);
@@ -332,7 +336,7 @@ if($npi!=true&&$config['options'][11]==1){
         if(stristr($current_ref,'duckduckgo.com'))$smi="duckduckgo";
         if(stristr($current_ref,'bing.com'))$smi="bing";
       }
-      $su=$db->prepare("INSERT IGNORE INTO `".$prefix."visit_tracker` (`rid`,`type`,`direct`,`google`,`reddit`,`facebook`,`instagram`,`threads`,`twitter`,`linkedin`,`duckduckgo`,`bing`,`textdate`,`ti`) VALUES (:rid,'page',:direct,:google,:reddit,:facebook,:instagram,:threads,:twitter,:linkedin,:duckduckgo,:bing,:today,:ti)");
+      $su=$db->prepare("INSERT IGNORE INTO `".$prefix."visit_tracker` (`rid`,`type`,`direct`,`google`,`reddit`,`facebook`,`instagram`,`threads`,`twitter`,`linkedin`,`duckduckgo`,`bing`,`ti`) VALUES (:rid,'page',:direct,:google,:reddit,:facebook,:instagram,:threads,:twitter,:linkedin,:duckduckgo,:bing,:ti)");
       $su->execute([
         ':rid'=>$page['id'],
         ':direct'=>($smi=='direct'?1:0),
@@ -345,12 +349,11 @@ if($npi!=true&&$config['options'][11]==1){
         ':linkedin'=>($smi=='linkedin'?1:0),
         ':duckduckgo'=>($smi=='duckduckgo'?1:0),
         ':bing'=>($smi=='bing'?1:0),
-        ':today'=>$today,
         ':ti'=>$ti
       ]);
     }
   }
-}
+} */
 $ws=$db->prepare("SELECT `options` FROM `".$prefix."login` WHERE `userIP`=:ip");
 $ws->execute([':ip'=>$ip]);
 if($ws->rowCount()>0)$wr=$ws->fetch(PDO::FETCH_ASSOC);

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -26,8 +26,9 @@ else{
     $q->execute();
     $id=$db->lastInsertId();
     $args[0]=ucfirst($rc['title'].' '.$id);
-    $s=$db->prepare("UPDATE `".$prefix."content` SET `title`=:title,`urlSlug`=:urlslug,`status`='unpublished',`ti`=:ti WHERE `id`=:id");
+    $s=$db->prepare("UPDATE `".$prefix."content` SET `UUID`=:UUID,`title`=:title,`urlSlug`=:urlslug,`status`='unpublished',`ti`=:ti WHERE `id`=:id");
     $s->execute([
+      ':UUID'=>uuidv4(),
       ':id'=>$id,
       ':title'=>$args[0],
       ':urlslug'=>str_replace(' ','-',$args[0]),
@@ -59,11 +60,12 @@ else{
       $schema='CreativeWork';
       $comments=1;
     }
-    $q=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`options`,`uid`,`login_user`,`contentType`,`schemaType`,`status`,`active`,`stockStatus`,`ti`,`eti`,`pti`) VALUES ('0000000000000000',:uid,:login_user,:contentType,:schemaType,'unpublished','1',:stockStatus,:ti,:ti,:ti)");
+    $q=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`options`,`UUID`,`uid`,`login_user`,`contentType`,`schemaType`,`status`,`active`,`stockStatus`,`ti`,`eti`,`pti`) VALUES ('0000000000000000',:UUID,:uid,:login_user,:contentType,:schemaType,'unpublished','1',:stockStatus,:ti,:ti,:ti)");
     $uid=isset($user['id'])?$user['id']:0;
     $login_user=$user['name']!=''?$user['name']:$user['username'];
     $q->execute([
       ':contentType'=>$args[0],
+      ':UUID'=>uuidv4(),
       ':uid'=>$uid,
       ':login_user'=>$login_user,
       ':schemaType'=>$schema,
@@ -410,7 +412,9 @@ else{
                       </div>
                       <div class="card-header overflow-visible mt-0 pt-0 line-clamp<?=($seoerrors>0?' pt-3 badge" data-badge="There are '.$seoerrors.' SEO issues!':'');?>">
                         <div class="code small hidewhenempty"><?=$r['code'];?></div>
-                        <?= !isset($args[1])?'<span class="d-block"><a class="badger badge-success small text-white" href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'">'.ucfirst($r['contentType']).'</a></span>':'';?>
+                        <?= !isset($args[1])?'<div class="list-hidden my-1"><a class="badger badge-success small text-white" href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'">'.ucfirst($r['contentType']).'</a></div>':'';?>
+                        <small class="small text-muted d-block"><small>Created: <?=date($config['dateFormat'],$r['ti']);?></small></small>
+                        <small class="small text-muted d-block"><small>Published: <?=date($config['dateFormat'],$r['pti']);?></small></small>
                         <a data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="Edit <?=$r['title'];?>"><?= $r['thumb']!=''&&file_exists($r['thumb'])?'<img src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
                         <?php if($user['options'][1]==1){
                           echo$r['suggestions']==1?'<span data-tooltip="tooltip" aria-label="Editing Suggestions"><i class="i text-success">lightbulb</i></span>':'';

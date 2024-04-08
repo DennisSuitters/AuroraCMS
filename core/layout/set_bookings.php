@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -71,6 +71,12 @@ $sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id` IN 
             <div class="form-row mt-3 mb-2">
               <input id="setArchiveBookings" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="25" type="checkbox"<?=($config['options'][25]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
               <label for="setArchiveBookings">Archive Bookings when Converted to Invoice</label>
+            </div>
+            <label for="bookingsyncurl">Bookings Sync URL for iCal or Google Calendar</label>
+            <div class="form-row">
+              <div class="input-text col-12">
+                <?=URL.'calendar.ics?type=bookings';?>
+              </div>
             </div>
           </div>
 <?php /* Agreement */ ?>

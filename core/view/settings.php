@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -128,7 +128,7 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 			'/<error accountHidden>/'
 		],
 			' d-none'
-		,$html);		
+		,$html);
 	}
 	$html=preg_replace([
 		'/<print user=[\"\']?avatar[\"\']?>/',
@@ -161,7 +161,8 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		'/<rosterExtraShiftsOptions>/',
 		'/<rosterDayNameOptions>/',
 		'/<rosterTimeDisplayOptions>/',
-		'/<rosterShowWeeksOptions>/'
+		'/<rosterShowWeeksOptions>/',
+		'/<print url>/'
 	],[
 		$user['avatar']!=''&&file_exists('media/avatar/'.$user['avatar'])?'media/avatar/'.$user['avatar']:NOAVATAR,
 		htmlspecialchars($user['gravatar'],ENT_QUOTES,'UTF-8'),
@@ -202,7 +203,8 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		'<option value="0"'.($user['rosterShowWeeks']=='0'?' selected':'').'>System Default ('.$config['rosterShowWeeks'].')</option>'.
 			'<option value="1"'.($user['rosterShowWeeks']=='1'?' selected':'').'>1 Week</option>'.
 			'<option value="2"'.($user['rosterShowWeeks']=='2'?' selected':'').'>2 Weeks</option>'.
-			'<option value="4"'.($user['rosterShowWeeks']=='4'?' selected':'').'>4 Weeks</option>'
+			'<option value="4"'.($user['rosterShowWeeks']=='4'?' selected':'').'>4 Weeks</option>',
+		URL
 	],$html);
 	if(stristr($html,'<orderitems')){
 		preg_match('/<orderitems>([\w\W]*?)<\/orderitems>/',$html,$match);

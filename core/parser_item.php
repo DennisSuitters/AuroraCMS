@@ -7,18 +7,26 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
+$r=$s->fetch(PDO::FETCH_ASSOC);
 $html=preg_replace([
   '~<contentitems>.*?<\/contentitems>~is',
   '~<section data-content="content-items">.*?<\/section>~is',
   '~<pagenotes>.*?<\/pagenotes>~is',
   '~<sort>.*?<\/sort>~is',
-  '~<items>.*?<\/items>~is'
-],'',$html,1);
-$r=$s->fetch(PDO::FETCH_ASSOC);
+  '~<items>.*?<\/items>~is',
+  '/<print contentType>/'
+],[
+  '',
+  '',
+  '',
+  '',
+  '',
+  $r['contentType']
+],$html);
 $skip=false;
 if($r['rank']-1 < $_SESSION['rank'])
   $skip=false;
@@ -46,64 +54,68 @@ if($skip==false){
   $seoCaption=escaper($r['seoCaption']==''?$r['seoCaption']:$page['seoCaption']);
   $seoDescription=escaper($r['seoDescription']!=''?$r['seoDescription']:($r['seoCaption']!=''?$r['seoCaption']:substr(strip_tags($r['notes']),0,160)));
   $seoKeywords=$r['seoKeywords']==''?$r['seoKeywords']:$page['seoKeywords'];
-  $current_ref=$_SERVER['HTTP_REFERER'];
-  if(str_contains($_SERVER['HTTP_REFERER'],URL)){$current_ref='';}
-  $today=date('d-m-Y',$ti);
+  $current_ref=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
+  if(str_contains($current_ref,URL)){$current_ref='';}
+  $sw=strtotime('midnight next Sunday -1 week');
+  $sw=date('w',$sw)==date('w')?strtotime(date("Y-m-d",$sw)." +7 days"):$sw;
+  $ew=strtotime(date("Y-m-d",$sw)." +6 days");
   if($config['options'][11]==1){
-    $npi=true;
-    $vs=$db->prepare("SELECT `id` FROM `".$prefix."visit_tracker` WHERE `type`='content' AND `rid`=:rid AND `textdate`=:textdate");
-    $vs->execute([
-      ':rid'=>$r['id'],
-      ':textdate'=>$today
-    ]);
-    if($vs->rowCount()==1){
-      $vr=$vs->fetch(PDO::FETCH_ASSOC);
-      $smi=" `direct`=`direct` + 1";
-      if($current_ref!=''){
-        if(stristr($current_ref,'google.com',))$smi=" `google`=`google` + 1";
-        if(stristr($current_ref,'reddit.com',))$smi=" `reddit`=`reddit` + 1";
-        if(stristr($current_ref,'facebook.com'))$smi=" `facebook`=`facebook` + 1";
-        if(stristr($current_ref,'threads.net'))$smi=" `threads`=`threads` + 1";
-        if(stristr($current_ref,'instagram.com'))$smi=" `instagram`=`instagram` + 1";
-        if(stristr($current_ref,'twitter.com'))$smi=" `twitter`=`twitter` + 1";
-        if(stristr($current_ref,'x.com'))$smi=" `twitter`=`twitter` + 1";
-        if(stristr($current_ref,'linkedin.com'))$smi=" `linkedin`=`linkedin` + 1";
-        if(stristr($current_ref,'duckduckgo.com'))$smi=" `duckduckgo`=`duckduckgo` + 1";
-        if(stristr($current_ref,'bing.com'))$smi=" `bing`=`bing` + 1";
-      }
-      $su=$db->prepare("UPDATE `".$prefix."visit_tracker` SET".$smi." WHERE `id`=:id");
-      $su->execute([
-        ':id'=>$vr['id']
-      ]);
-    }else{
-      $smi="direct";
-      if($current_ref!=''){
-        if(stristr($current_ref,'google.com',))$smi="google";
-        if(stristr($current_ref,'reddit.com',))$smi="reddit";
-        if(stristr($current_ref,'facebook.com')||stristr($current_ref,'fblid='))$smi="facebook";
-        if(stristr($current_ref,'threads.net'))$smi="threads";
-        if(stristr($current_ref,'instagram.com'))$smi="instagram";
-        if(stristr($current_ref,'twitter.com')||stristr($current_ref,'x.com'))$smi="twitter";
-        if(stristr($current_ref,'linkedin.com'))$smi="linkedin";
-        if(stristr($current_ref,'duckduckgo.com'))$smi="duckduckgo";
-        if(stristr($current_ref,'bing.com'))$smi="bing";
-      }
-      $su=$db->prepare("INSERT IGNORE INTO `".$prefix."visit_tracker` (`rid`,`type`,`direct`,`google`,`reddit`,`facebook`,`instagram`,`threads`,`twitter`,`linkedin`,`duckduckgo`,`bing`,`textdate`,`ti`) VALUES (:rid,'content',:direct,:google,:reddit,:facebook,:instagram,:threads,:twitter,:linkedin,:duckduckgo,:bing,:today,:ti)");
-      $su->execute([
+    if(in_array($r['contentType'],['activities','article','events','inventory','news','newsletters','portfolio','service'])&&$r['title']!=''){
+      $npi=true;
+      $vs=$db->prepare("SELECT `id` FROM `".$prefix."visit_tracker` WHERE `type`='content' AND `rid`=:rid AND `ti`>=:sw AND `ti`<=:ew");
+      $vs->execute([
         ':rid'=>$r['id'],
-        ':direct'=>($smi=='direct'?1:0),
-        ':google'=>($smi=='google'?1:0),
-        ':reddit'=>($smi=='reddit'?1:0),
-        ':facebook'=>($smi=='facebook'?1:0),
-        ':instagram'=>($smi=='instagram'?1:0),
-        ':threads'=>($smi=='threads'?1:0),
-        ':twitter'=>($smi=='twitter'?1:0),
-        ':linkedin'=>($smi=='linkedin'?1:0),
-        ':duckduckgo'=>($smi=='duckduckgo'?1:0),
-        ':bing'=>($smi=='bing'?1:0),
-        ':today'=>$today,
-        ':ti'=>$ti
+        ':sw'=>$sw,
+        ':ew'=>$ew
       ]);
+      if($vs->rowCount()==1){
+        $vr=$vs->fetch(PDO::FETCH_ASSOC);
+        $smi=" `direct`=`direct`+1";
+        if($current_ref!=''){
+          if(stristr($current_ref,'google.com',))$smi=" `google`=`google`+1";
+          if(stristr($current_ref,'reddit.com',))$smi=" `reddit`=`reddit`+1";
+          if(stristr($current_ref,'facebook.com'))$smi=" `facebook`=`facebook`+1";
+          if(stristr($current_ref,'threads.net'))$smi=" `threads`=`threads`+1";
+          if(stristr($current_ref,'instagram.com'))$smi=" `instagram`=`instagram`+1";
+          if(stristr($current_ref,'twitter.com'))$smi=" `twitter`=`twitter`+1";
+          if(stristr($current_ref,'x.com'))$smi=" `twitter`=`twitter`+1";
+          if(stristr($current_ref,'linkedin.com'))$smi=" `linkedin`=`linkedin`+1";
+          if(stristr($current_ref,'duckduckgo.com'))$smi=" `duckduckgo`=`duckduckgo`+1";
+          if(stristr($current_ref,'bing.com'))$smi=" `bing`=`bing`+1";
+        }
+        $su=$db->prepare("UPDATE `".$prefix."visit_tracker` SET".$smi." WHERE `id`=:id");
+        $su->execute([
+          ':id'=>$vr['id']
+        ]);
+      }else{
+        $smi="direct";
+        if($current_ref!=''){
+          if(stristr($current_ref,'google.com',))$smi="google";
+          if(stristr($current_ref,'reddit.com',))$smi="reddit";
+          if(stristr($current_ref,'facebook.com')||stristr($current_ref,'fblid='))$smi="facebook";
+          if(stristr($current_ref,'threads.net'))$smi="threads";
+          if(stristr($current_ref,'instagram.com'))$smi="instagram";
+          if(stristr($current_ref,'twitter.com')||stristr($current_ref,'x.com'))$smi="twitter";
+          if(stristr($current_ref,'linkedin.com'))$smi="linkedin";
+          if(stristr($current_ref,'duckduckgo.com'))$smi="duckduckgo";
+          if(stristr($current_ref,'bing.com'))$smi="bing";
+        }
+        $su=$db->prepare("INSERT IGNORE INTO `".$prefix."visit_tracker` (`rid`,`type`,`direct`,`google`,`reddit`,`facebook`,`instagram`,`threads`,`twitter`,`linkedin`,`duckduckgo`,`bing`,`ti`) VALUES (:rid,'content',:direct,:google,:reddit,:facebook,:instagram,:threads,:twitter,:linkedin,:duckduckgo,:bing,:ti)");
+        $su->execute([
+          ':rid'=>$r['id'],
+          ':direct'=>($smi=='direct'?1:0),
+          ':google'=>($smi=='google'?1:0),
+          ':reddit'=>($smi=='reddit'?1:0),
+          ':facebook'=>($smi=='facebook'?1:0),
+          ':instagram'=>($smi=='instagram'?1:0),
+          ':threads'=>($smi=='threads'?1:0),
+          ':twitter'=>($smi=='twitter'?1:0),
+          ':linkedin'=>($smi=='linkedin'?1:0),
+          ':duckduckgo'=>($smi=='duckduckgo'?1:0),
+          ':bing'=>($smi=='bing'?1:0),
+          ':ti'=>$ti
+        ]);
+      }
     }
   }
   $us=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:uid");
@@ -1462,7 +1474,7 @@ if($skip==false){
       '',
       '',
       ucwords($config['business']),
-      $view,
+      $view
     ],$html);
     if($view=='article'||$view=='events'||$view=='news'||$view=='proofs'){
       $sc=$db->prepare("SELECT * FROM `".$prefix."comments` WHERE `contentType`=:contentType AND `rid`=:rid AND `status`!='unapproved' ORDER BY `ti` ASC");

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -20,6 +20,9 @@ if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT
 }
 require'projecthoneypot/class.projecthoneypot.php';
 require'spamfilter/class.spamfilter.php';
+require'phpmailer/PHPMailer.php';
+require'phpmailer/SMTP.php';
+require'phpmailer/Exception.php';
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $theme=parse_ini_file('../layout/'.$config['theme'].'/theme.ini',true);
 $paylink='';
@@ -136,6 +139,22 @@ if($not['spammer']==false){
 							':ti'=>$ti
 						]);
             $bid=$db->lastInsertId();
+
+            if(!isset($_POST['answer'])){
+              $scq=$db->prepare("SELECT * FROM `".$prefix."contentQuestions` WHERE `rid`=:rid ORDER BY `ti` ASC");
+              $scq->execute([':rid'=>$rid]);
+              while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){
+                $scb=$db->prepare("INSERT IGNORE INTO `".$prefix."orderQuestions` (`cid`,`rid`,`question`,`answer`,`ti`) VALUE (:cid,:rid,:question,:answer,:ti)");
+                $scb->execute([
+                  ':cid'=>$bid,
+                  ':rid'=>$rcq['id'],
+                  ':question'=>$rcq['question'],
+                  ':answer'=>(isset($_POST['answer'.$rcq['id']])?$_POST['answer'.$rcq['id']]:''),
+                  ':ti'=>time()
+                ]);
+              }
+            }
+
             if($config['options'][6]==1&&$r['contentType']=='events'){
 /* If an Event is being booked, check if User exists with details given via form. */
               $qc=$db->prepare("SELECT `id` FROM `".$prefix."login` WHERE `email`=:email");
@@ -200,9 +219,6 @@ if($not['spammer']==false){
               $not=['spammer'=>false,'target'=>'booking','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'A Booking has been created for your attendance. A confirmation email has been sent to the email address you provided with details of how to access the Event.','reason'=>''];
             }
 						if($config['email']!=''){
-              require'phpmailer/PHPMailer.php';
-              require'phpmailer/SMTP.php';
-              require'phpmailer/Exception.php';
 							$mail = new PHPMailer\PHPMailer\PHPMailer;
 							$mail->isSendmail();
 							$mail->SetFrom($email,$name);
@@ -241,7 +257,7 @@ if($not['spammer']==false){
               }
 						}
 						if($email!=''){
-							$mail2=new PHPMailer;
+              $mail2 = new PHPMailer\PHPMailer\PHPMailer;
 							$mail2->isSendmail();
 							$mail2->SetFrom($config['email'], $config['business']);
 							$toname=$email;

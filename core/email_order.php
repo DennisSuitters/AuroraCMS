@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -179,18 +179,29 @@ $html='<div style="width:800px;height:30px;text-align:right;">'.
       }
     }
 
-
   	$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
   	$sc->execute([':id'=>$ro['cid']]);
   	$ch=$sc->fetch(PDO::FETCH_ASSOC);
     $st=$ro['cost']*$ro['quantity'];
   	$html.='<tr style="'.($zeb==1?'background-color:#f4f4f4;':'backgroound-color:#fff;').($ro['status']=='back order'||$ro['status']=='pre order'?'background-color:#ffc107;':'').'">'.
-  	         '<td><small>'.$i['code'].'</small></td>'.
-  	         '<td><small>'.($ro['title']==''?$i['title']:$ro['title']).'</small></td>'.
-             '<td><small>'.(isset($ch['title'])?$ch['title']:'').'</small></td>'.
-             '<td style="text-align:center;"><small>'.$ro['quantity'].'</small></td>'.
-             '<td style="text-align:right;"><small>'.$ro['cost'].'</small></td>'.
-             '<td style="text-align:center;"><small>';
+      '<td style="vertical-align:top;"><small>'.$i['code'].'</small></td>'.
+      '<td style="vertical-align:top;"><small>'.
+        ($ro['title']==''?$i['title']:$ro['title']);
+        $scq=$db->prepare("SELECT * FROM `".$prefix."orderQuestions` WHERE `rid`=:rid ORDER BY `ti` ASC");
+        $scq->execute([':rid'=>$ro['id']]);
+        if($scq->rowCount()>0){
+          while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){
+            $html.='<div class="small">'.
+              '<strong>'.$rcq['question'].'</strong>'.
+              ' '.$rcq['answer'].
+            '</div>';
+          }
+        }
+      $html.='</small></td>'.
+      '<td style="vertical-align:top;"><small>'.(isset($ch['title'])?$ch['title']:'').'</small></td>'.
+      '<td style="text-align:center;vertical-align:top;"><small>'.$ro['quantity'].'</small></td>'.
+      '<td style="text-align:right;vertical-align:top;"><small>'.$ro['cost'].'</small></td>'.
+      '<td style="text-align:center;vertical-align:top;"><small>';
              $gst=0;
              if($ro['status']!='pre order'||$ro['status']!='back order'){
                if($config['gst']>0){
@@ -201,7 +212,7 @@ $html='<div style="width:800px;height:30px;text-align:right;">'.
                $html.=($gst>0?$gst:'').'</small>';
              }
              $html.='</td>'.
-             '<td style="text-align:right;">';
+             '<td style="text-align:right;vertical-align:top;">';
              if($ro['status']!='pre order'||$ro['status']!='back order'){
                $html.=number_format((float)$st+$gst,2,'.','');
                $ot=$ot+$st+$gst;
@@ -339,7 +350,9 @@ if($act=='print'){
     $mail->ConfirmReadingTo=$config['email'];
   }
   $namee=explode(' ',$c['name']);
-  $subject=isset($config['orderEmailSubject'])&&$config['orderEmailSubject']!=''?$config['orderEmailSubject']:'Order {order_number} from {business}';
+  $subject=(isset($config['orderEmailSubject'])&&$config['orderEmailSubject']!=''?
+    $config['orderEmailSubject']:
+    'Order {order_number} from {business}');
   $subject=str_replace([
     '{business}',
     '{name}',
@@ -356,7 +369,9 @@ if($act=='print'){
     $oid
   ],$subject);
 	$mail->Subject=$subject;
-	$msg=isset($config['orderEmailLayout'])&&$config['orderEmailLayout']!=''?rawurldecode($config['orderEmailLayout']):'<p>Hello {first},</p><p>Please find below Order {order_number} for payment.</p><p>To make a payment, refer to the Bank Details, or click the link directly below to pay via a Payment Gateway through our Website.</p><p><a href="{order_link}">{order_link}</a></p><hr>';
+	$msg=(isset($config['orderEmailLayout'])&&$config['orderEmailLayout']!=''?
+    rawurldecode($config['orderEmailLayout']):
+    '<p>Hello {first},</p><p>Please find below Order {order_number} for payment.</p><p>To make a payment, refer to the Bank Details, or click the link directly below to pay via a Payment Gateway through our Website.</p><p><a href="{order_link}">{order_link}</a></p><hr>');
   $msg.=$msgd.$msgl.$msge;
   $msg=str_replace([
     '{business}',
@@ -365,7 +380,10 @@ if($act=='print'){
     '{last}',
     '{date}',
     '{order_number}',
-    '{order_link}'
+    '{order_link}',
+    '{downloads}',
+    '{courses}',
+    '{links}'
   ],[
     $config['business'],
     $c['name'],
@@ -373,7 +391,10 @@ if($act=='print'){
     end($namee),
     date($config['dateFormat'],$r['ti']),
     $oid,
-    URL.'orders/'.$oid
+    URL.'orders/'.$oid,
+    $msgd,
+    $msgc,
+    $msgl
   ],$msg);
 	$mail->Body=$head.$msg.$html;
 	$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));

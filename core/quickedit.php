@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-3
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -467,12 +467,24 @@ if($t=='content'||$t=='login'||$t=='orders'||$t=='agronomy_data'||$t=='contacts'
                 $sc->execute([':id'=>$oi['cid']]);
                 $c=$sc->fetch(PDO::FETCH_ASSOC);
                 echo'<tr class="'.($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?'bg-warning':'').'">'.
-                  '<td class="text-left align-middle d-table-cell small px-0">'.(isset($i['code'])?$i['code']:'').'</td>'.
-                  '<td class="text-left align-middle d-table-cell px-0">'.($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?ucwords($oi['status']).': ':'').$oi['title'].'</td>'.
-                  '<td class="text-left align-middle d-table-cell px-0">'.(isset($c['title'])?$c['title']:'').'</td>'.
-                  '<td class="text-center align-middle d-table-cell px-0">'.($r['iid']!=0?$oi['quantity']:'').'</td>'.
-                  '<td class="text-right align-middle">'.($r['iid_ti']!=0?number_format((float)$oi['cost'],2,'.',''):'').'</td>'.
-                  '<td class="text-right align-middle d-table-cell">';
+                  '<td class="text-left align-top d-table-cell small px-0">'.(isset($i['code'])?$i['code']:'').'</td>'.
+                  '<td class="text-left align-top d-table-cell px-0">'.
+                    ($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?ucwords($oi['status']).': ':'').$oi['title'];
+                    $scq=$db->prepare("SELECT * FROM `".$prefix."orderQuestions` WHERE `rid`=:rid ORDER BY `ti` ASC");
+                    $scq->execute([':rid'=>$oi['id']]);
+                    if($scq->rowCount()>0){
+                      while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){
+                        echo'<div class="small"><small>'.
+                          '<strong>'.$rcq['question'].'</strong>'.
+                          ' '.$rcq['answer'].
+                        '</small></div>';
+                      }
+                    }
+                  echo'</td>'.
+                  '<td class="text-left align-top d-table-cell px-0">'.(isset($c['title'])?$c['title']:'').'</td>'.
+                  '<td class="text-center align-top d-table-cell px-0">'.($r['iid']!=0?$oi['quantity']:'').'</td>'.
+                  '<td class="text-right align-top">'.($r['iid_ti']!=0?number_format((float)$oi['cost'],2,'.',''):'').'</td>'.
+                  '<td class="text-right align-top d-table-cell">';
                   $gst=0;
                   if($oi['status']!='pre order'||$oi['status']!='back order'){
                     if($config['gst']>0){
@@ -483,7 +495,7 @@ if($t=='content'||$t=='login'||$t=='orders'||$t=='agronomy_data'||$t=='contacts'
                     echo$gst>0?$gst:'';
                   }
                   echo'</td>'.
-                  '<td class="text-right align-middle d-table-cell">';
+                  '<td class="text-right align-top d-table-cell">';
                     if($oi['status']!='pre order'||$oi['status']!='back order'){
                       echo$oi['iid']!=0?number_format((float)$oi['cost']*$oi['quantity']+$gst,2,'.',''):'';
                     }else{

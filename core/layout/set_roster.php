@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -71,6 +71,12 @@ $sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id` IN 
                     <option value="4"<?=($user['rosterShowWeeks']=='4'?' selected':'');?>>4 Weeks</option>
                   </select>
                 </div>
+              </div>
+            </div>
+            <label for="rostersyncurl">Events Sync URL for iCal or Google Calendar</label>
+            <div class="form-row">
+              <div class="input-text col-12">
+                <?=URL.'calendar.ics?type=roster&uid=0';?>
               </div>
             </div>
           </div>

@@ -116,6 +116,12 @@
 				<div class="card mb-3 p-3">
 					<h4 class="mb-4">Employee Roster Settings</h4>
 					<rosterNotification>
+					<label for="rostersyncurl">Roster Sync URL for iCal or Google Calendar</label>
+					<div class="form-row">
+						<div class="input-text col-12">
+							<print url>calendar.ics?type=roster&uid=<print user="id">
+						</div>
+					</div>
 					<form method="post" action="settings">
 						<input type="hidden" name="act" value="updateRoster">
 						<input type="hidden" name="uid" value="<print user=id>">

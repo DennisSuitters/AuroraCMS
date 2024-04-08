@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -175,6 +175,22 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
                 }?>
               </select>
             </div>
+            <?php $scq=$db->prepare("SELECT * FROM `".$prefix."orderQuestions` WHERE `cid`=:cid ORDER BY `ti` ASC");
+            $scq->execute([':cid'=>$r['id']]);
+            if($scq->rowCount()>0){
+              echo'<div class="card mt-3 p-3">'.
+                '<h6>Questions Associated with the selected service when Booked</h6>';
+              while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){?>
+              <label for="answer<?=$rcq['id'];?>"><?=$rcq['question'];?></label>
+              <div class="row">
+                <div class="input-text"><?= linkify($rcq['answer']);?>&nbsp;</div>
+              </div>
+            <?php }
+              echo'</div>';
+            }
+            function linkify($text) {
+              return preg_replace('/(http[s]{0,1}\:\/\/\S{4,})\s{0,}/ims', '<a href="$1" target="_blank">$1</a> ', $text);
+            }?>
             <div class="row">
               <div class="col-12 col-sm-6 pr-md-3">
                 <label for="notes">Notes</label>
